@@ -1,12 +1,8 @@
 const SHOPIFY_STORE_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string;
 const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN as string;
-const API_VERSION = '2026-01';
+const API_VERSION = '2024-10';
 
-// Use the Vite dev proxy during local development to avoid CORS restrictions.
-// In production builds, call the Shopify Storefront API directly (CORS is allowed from real domains).
-export const STOREFRONT_ENDPOINT = import.meta.env.DEV
-  ? '/api/shopify'
-  : `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`;
+export const STOREFRONT_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

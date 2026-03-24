@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
         '/api/shopify': {
           target: 'https://shopleuco.com',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/shopify/, '/api/2026-01/graphql.json'),
+          rewrite: (path) => path.replace(/^\/api\/shopify/, '/api/2024-10/graphql.json'),
         },
       },
     },

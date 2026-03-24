@@ -2,7 +2,12 @@ const SHOPIFY_STORE_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string
 const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN as string;
 const API_VERSION = '2026-01';
 
-export const STOREFRONT_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`;
+// In the browser, route through the Vite dev proxy to avoid CORS.
+// In production, the build serves from the same origin or a configured server.
+export const STOREFRONT_ENDPOINT =
+  typeof window !== 'undefined'
+    ? '/api/shopify'
+    : `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

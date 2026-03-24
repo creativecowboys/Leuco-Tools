@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import CartDrawer from './CartDrawer';
+import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     Search,
@@ -90,6 +92,7 @@ export default function Layout({ children }: LayoutProps) {
     const [scrolled, setScrolled] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
+    const { cartCount, openCart } = useCart();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -110,7 +113,7 @@ export default function Layout({ children }: LayoutProps) {
             {/* Top Utility Nav */}
             <div className="bg-leuco-black text-white text-[10px] font-bold tracking-widest py-2 px-4 md:px-12 flex justify-between items-center border-b border-white/10">
                 <div className="flex gap-6">
-                    <Link to="/pages/tools" className="hover:text-leuco-purple transition-colors">WHERE TO BUY</Link>
+                    <Link to="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">WHERE TO BUY</Link>
                     <Link to="/pages/sharpening-services" className="hover:text-leuco-purple transition-colors">RE-SHARPENING</Link>
                     <Link to="/blogs/leuco-solutions" className="hover:text-leuco-purple transition-colors">EDUCATION</Link>
                 </div>
@@ -170,10 +173,14 @@ export default function Layout({ children }: LayoutProps) {
                             <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                                 <User size={22} />
                             </button>
-                            <a href="https://shopleuco.com/cart" target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+                            <button onClick={openCart} className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
                                 <ShoppingCart size={22} />
-                                <span className="absolute top-0 right-0 bg-leuco-purple text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                            </a>
+                                {cartCount > 0 && (
+                                    <span className="absolute top-0 right-0 bg-leuco-purple text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                                        {cartCount > 9 ? '9+' : cartCount}
+                                    </span>
+                                )}
+                            </button>
                             <button
                                 className="lg:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
                                 onClick={() => setIsMenuOpen(true)}
@@ -230,6 +237,9 @@ export default function Layout({ children }: LayoutProps) {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Cart Drawer */}
+            <CartDrawer />
 
             {/* Page Content */}
             <main className="flex-1">
@@ -301,7 +311,7 @@ export default function Layout({ children }: LayoutProps) {
                                     { label: 'Careers', href: '/pages/leuco-careers' },
                                     { label: 'News', href: '/blogs/leuco-news' },
                                     { label: 'Catalogs', href: '/pages/catalogs' },
-                                    { label: 'Locations', href: '/pages/about-leuco' },
+                                    { label: 'Locations', href: '/pages/georgia' },
                                 ],
                             },
                         ].map((col, i) => (

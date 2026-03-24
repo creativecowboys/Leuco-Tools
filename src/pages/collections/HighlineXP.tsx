@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight, Zap, ShieldCheck, Award } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useShopifyProducts } from '../../hooks/useShopifyProducts';
+import { useShopifyCollection } from '../../hooks/useShopifyCollection';
+import ProductCard from '../../components/ProductCard';
 
 export default function HighlineXP() {
-    const { products, loading } = useShopifyProducts(8);
+    const { products, loading } = useShopifyCollection('highlinexp-industrial-series');
 
     return (
         <div>
@@ -62,19 +63,9 @@ export default function HighlineXP() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map(product => {
-                            const image = product.images.edges[0]?.node;
-                            const productUrl = product.onlineStoreUrl ?? `https://shopleuco.com/products/${product.handle}`;
-                            return (
-                                <a key={product.id} href={productUrl} target="_blank" rel="noopener noreferrer"
-                                    className="group border border-gray-100 hover:border-leuco-purple/30 hover:shadow-xl transition-all p-6 block">
-                                    <div className="aspect-square bg-gray-50 mb-4 overflow-hidden">
-                                        {image && <img src={image.url} alt={product.title} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />}
-                                    </div>
-                                    <h4 className="font-black text-sm leading-tight group-hover:text-leuco-purple transition-colors">{product.title}</h4>
-                                </a>
-                            );
-                        })}
+                        {products.slice(0, 8).map(product => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
                     </div>
                 )}
             </div>

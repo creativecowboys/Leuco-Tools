@@ -7,7 +7,6 @@ import {
     ShieldCheck,
     Wrench,
     Globe,
-    ShoppingCart,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyProducts } from '../hooks/useShopifyProducts';
@@ -150,14 +149,12 @@ export default function Home() {
                             <h2 className="text-4xl font-black tracking-tighter mb-2 uppercase">Featured Tooling</h2>
                             <div className="h-1.5 w-24 bg-leuco-purple" />
                         </div>
-                        <a
-                            href="https://shopleuco.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <Link
+                            to="/pages/tools"
                             className="font-black text-sm flex items-center gap-2 hover:text-leuco-purple transition-colors"
                         >
                             SHOP ALL <ChevronRight size={20} />
-                        </a>
+                        </Link>
                     </div>
 
                     {productsError && (
@@ -192,13 +189,10 @@ export default function Home() {
                                 const formattedPrice = price
                                     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: price.currencyCode }).format(parseFloat(price.amount))
                                     : null;
-                                const productUrl = product.onlineStoreUrl ?? `https://shopleuco.com/products/${product.handle}`;
                                 return (
-                                    <a
+                                    <Link
                                         key={product.id}
-                                        href={productUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                        to={`/products/${product.handle}`}
                                         className="bg-white p-6 group cursor-pointer hover:shadow-2xl transition-all duration-300 border border-transparent hover:border-leuco-purple/20 block"
                                     >
                                         <div className="relative aspect-square mb-6 overflow-hidden bg-gray-50">
@@ -213,11 +207,6 @@ export default function Home() {
                                                     <Wrench size={48} />
                                                 </div>
                                             )}
-                                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button className="p-2 bg-white shadow-md rounded-full hover:text-leuco-purple">
-                                                    <ShoppingCart size={18} />
-                                                </button>
-                                            </div>
                                         </div>
                                         {product.productType && (
                                             <div className="text-[10px] font-black text-leuco-purple tracking-widest mb-1 uppercase">
@@ -233,7 +222,7 @@ export default function Home() {
                                                 VIEW DETAILS <ChevronRight size={14} />
                                             </span>
                                         </div>
-                                    </a>
+                                    </Link>
                                 );
                             })}
                         </div>

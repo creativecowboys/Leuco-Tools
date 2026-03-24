@@ -1,10 +1,11 @@
 import React from 'react';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useShopifyProducts } from '../../hooks/useShopifyProducts';
+import { useShopifyCollection } from '../../hooks/useShopifyCollection';
+import ProductCard from '../../components/ProductCard';
 
 export default function Spirals() {
-    const { products, loading } = useShopifyProducts(8);
+    const { products, loading } = useShopifyCollection('spiral-tools');
 
     return (
         <div>
@@ -40,19 +41,9 @@ export default function Spirals() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map(product => {
-                            const image = product.images.edges[0]?.node;
-                            const productUrl = product.onlineStoreUrl ?? `https://shopleuco.com/products/${product.handle}`;
-                            return (
-                                <motion.a key={product.id} href={productUrl} target="_blank" rel="noopener noreferrer" whileHover={{ y: -4 }}
-                                    className="group border border-gray-100 hover:border-leuco-purple/30 hover:shadow-xl transition-all p-6 block">
-                                    <div className="aspect-square bg-gray-50 mb-4 overflow-hidden">
-                                        {image && <img src={image.url} alt={product.title} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />}
-                                    </div>
-                                    <h4 className="font-black text-sm leading-tight group-hover:text-leuco-purple transition-colors">{product.title}</h4>
-                                </motion.a>
-                            );
-                        })}
+                        {products.slice(0, 8).map(product => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
                     </div>
                 )}
             </div>

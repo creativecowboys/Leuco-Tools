@@ -1,5 +1,5 @@
-const SHOPIFY_STORE_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string;
-const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN as string;
+const SHOPIFY_STORE_DOMAIN = (import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string) || 'shopleuco.com';
+const SHOPIFY_STOREFRONT_TOKEN = (import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN as string) || '4c63f364024c9f77e57d965ffd9be499';
 const API_VERSION = '2024-10';
 
 export const STOREFRONT_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`;

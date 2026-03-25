@@ -11,9 +11,14 @@ export default function HighlineXP() {
     return (
         <div>
             {/* Hero */}
-            <div className="bg-leuco-black py-24 px-4 md:px-12 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-leuco-purple/20 to-transparent" />
-                <div className="max-w-[1440px] mx-auto relative">
+            <div className="bg-leuco-black py-24 px-4 md:px-12 relative overflow-hidden min-h-[500px] flex items-center">
+                <img
+                    src="/highlinexp-hero-bg.jpg"
+                    className="absolute inset-0 w-full h-full object-cover opacity-40"
+                    alt="HighlineXP Saw Blade in Cabinetry Workshop"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-leuco-black via-leuco-black/70 to-transparent" />
+                <div className="max-w-[1440px] mx-auto relative w-full">
                     <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">ALL NEW</span>
                     <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
                         HIGHLINE<span className="text-leuco-purple">XP</span>

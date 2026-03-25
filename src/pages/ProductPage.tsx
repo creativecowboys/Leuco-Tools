@@ -353,37 +353,28 @@ export default function ProductPage() {
                                         {option.name}:{' '}
                                         <span className="text-gray-900">{selectedOptions[option.name] ?? option.values[0]}</span>
                                     </label>
-                                    <div className="flex flex-wrap gap-2">
+                                    {/* Variant Dropdown */}
+                                    <select
+                                        value={selectedOptions[option.name] ?? option.values[0]}
+                                        onChange={(e) =>
+                                            setSelectedOptions((prev) => ({ ...prev, [option.name]: e.target.value }))
+                                        }
+                                        className="w-full border border-gray-300 bg-white text-gray-900 text-sm font-bold px-4 py-3 focus:outline-none focus:border-leuco-purple transition-colors appearance-none cursor-pointer"
+                                        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center' }}
+                                    >
                                         {option.values.map((val) => {
-                                            const isSelected =
-                                                (selectedOptions[option.name] ?? option.values[0]) === val;
-                                            // Check if this option value is available in any variant
                                             const hasStock = variants.some(
                                                 (v) =>
                                                     v.availableForSale &&
-                                                    v.selectedOptions.some(
-                                                        (o) => o.name === option.name && o.value === val
-                                                    )
+                                                    v.selectedOptions.some((o) => o.name === option.name && o.value === val)
                                             );
                                             return (
-                                                <button
-                                                    key={val}
-                                                    onClick={() =>
-                                                        setSelectedOptions((prev) => ({ ...prev, [option.name]: val }))
-                                                    }
-                                                    disabled={!hasStock}
-                                                    className={`px-4 py-2 text-xs font-black border transition-all ${isSelected
-                                                        ? 'bg-leuco-black text-white border-leuco-black'
-                                                        : hasStock
-                                                            ? 'border-gray-300 hover:border-leuco-purple text-gray-700'
-                                                            : 'border-gray-200 text-gray-300 line-through cursor-not-allowed'
-                                                        }`}
-                                                >
-                                                    {val}
-                                                </button>
+                                                <option key={val} value={val} disabled={!hasStock}>
+                                                    {val}{!hasStock ? ' (Out of Stock)' : ''}
+                                                </option>
                                             );
                                         })}
-                                    </div>
+                                    </select>
                                 </div>
                             ))}
 

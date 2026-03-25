@@ -12,13 +12,14 @@ export default function ClampingSystems() {
                     <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">ACCESSORIES</span>
                     <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">CLAMPING SYSTEMS</h1>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">Professional clamping and holding systems for secure, precise tool mounting in all LEUCO tooling configurations.</p>
-                    <a href="https://shopleuco.com/collections/clamping-systems" target="_blank" rel="noopener noreferrer"
+                    <button
+                        onClick={() => document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth' })}
                         className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
                         SHOP CLAMPING SYSTEMS <ArrowRight size={18} />
-                    </a>
+                    </button>
                 </div>
             </div>
-            <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
+            <div id="products-grid" className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="mb-10">
                     <h2 className="text-4xl font-black tracking-tighter mb-2">Clamping Systems</h2>
                     <div className="h-1.5 w-24 bg-leuco-purple" />
@@ -29,7 +30,7 @@ export default function ClampingSystems() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map(product => (
+                        {products.map(product => (
                             <ProductCard key={product.id} product={product} />
                         ))}
                     </div>

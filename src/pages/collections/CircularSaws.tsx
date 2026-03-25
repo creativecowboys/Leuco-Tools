@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useShopifyCollection } from '../../hooks/useShopifyCollection';
 import ProductCard from '../../components/ProductCard';
 
@@ -23,10 +22,11 @@ export default function CircularSaws() {
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
                         LEUCO circular saw blades deliver superior surface quality and extended tool life for ripping, crosscutting, and panel sizing operations.
                     </p>
-                    <a href="https://shopleuco.com/collections/circular-saw-blades" target="_blank" rel="noopener noreferrer"
+                    <button
+                        onClick={() => document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth' })}
                         className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
                         SHOP ALL SAW BLADES <ArrowRight size={18} />
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -41,16 +41,10 @@ export default function CircularSaws() {
                 </div>
             </div>
 
-            <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
-                <div className="flex justify-between items-end mb-10">
-                    <div>
-                        <h2 className="text-4xl font-black tracking-tighter mb-2">Circular Saw Blades</h2>
-                        <div className="h-1.5 w-24 bg-leuco-purple" />
-                    </div>
-                    <a href="https://shopleuco.com/collections/circular-saw-blades" target="_blank" rel="noopener noreferrer"
-                        className="font-black text-sm flex items-center gap-2 hover:text-leuco-purple">
-                        VIEW ALL ON LEUCO SHOP <ChevronRight size={16} />
-                    </a>
+            <div id="products-grid" className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
+                <div className="mb-10">
+                    <h2 className="text-4xl font-black tracking-tighter mb-2">Circular Saw Blades</h2>
+                    <div className="h-1.5 w-24 bg-leuco-purple" />
                 </div>
                 {loading ? (
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -58,7 +52,7 @@ export default function CircularSaws() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map(product => (
+                        {products.map(product => (
                             <ProductCard key={product.id} product={product} />
                         ))}
                     </div>

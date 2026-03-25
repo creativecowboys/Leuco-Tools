@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight, Zap, ShieldCheck, Award } from 'lucide-react';
+import { ArrowRight, Zap, ShieldCheck, Award } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyCollection } from '../../hooks/useShopifyCollection';
 import ProductCard from '../../components/ProductCard';
@@ -26,10 +25,11 @@ export default function HighlineXP() {
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
                         The HighlineXP Industrial Series represents the pinnacle of LEUCO engineering — precision-engineered for the most demanding industrial applications.
                     </p>
-                    <a href="https://shopleuco.com/collections/highlinexp-industrial-series" target="_blank" rel="noopener noreferrer"
+                    <button
+                        onClick={() => document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth' })}
                         className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
                         SHOP HIGHLINEXP <ArrowRight size={18} />
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -49,15 +49,9 @@ export default function HighlineXP() {
                     ))}
                 </div>
 
-                <div className="flex justify-between items-end mb-10">
-                    <div>
-                        <h2 className="text-4xl font-black tracking-tighter mb-2">HighlineXP Products</h2>
-                        <div className="h-1.5 w-24 bg-leuco-purple" />
-                    </div>
-                    <a href="https://shopleuco.com/collections/highlinexp-industrial-series" target="_blank" rel="noopener noreferrer"
-                        className="font-black text-sm flex items-center gap-2 hover:text-leuco-purple">
-                        VIEW ALL <ChevronRight size={16} />
-                    </a>
+                <div id="products-grid" className="mb-10">
+                    <h2 className="text-4xl font-black tracking-tighter mb-2">HighlineXP Products</h2>
+                    <div className="h-1.5 w-24 bg-leuco-purple" />
                 </div>
 
                 {loading ? (
@@ -68,7 +62,7 @@ export default function HighlineXP() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map(product => (
+                        {products.map(product => (
                             <ProductCard key={product.id} product={product} />
                         ))}
                     </div>

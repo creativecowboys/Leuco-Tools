@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyCollection } from '../../hooks/useShopifyCollection';
 import ProductCard from '../../components/ProductCard';
@@ -17,23 +17,18 @@ export default function Spirals() {
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
                         HP+ spiral and drill tooling for CNC routing and machining centers — engineered for composite, solid surface, and wood applications.
                     </p>
-                    <a href="https://shopleuco.com/collections/spiral-tools" target="_blank" rel="noopener noreferrer"
+                    <button
+                        onClick={() => document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth' })}
                         className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
                         SHOP SPIRALS & DRILLS <ArrowRight size={18} />
-                    </a>
+                    </button>
                 </div>
             </div>
 
-            <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
-                <div className="flex justify-between items-end mb-10">
-                    <div>
-                        <h2 className="text-4xl font-black tracking-tighter mb-2">Spiral Tools</h2>
-                        <div className="h-1.5 w-24 bg-leuco-purple" />
-                    </div>
-                    <a href="https://shopleuco.com/collections/spiral-tools" target="_blank" rel="noopener noreferrer"
-                        className="font-black text-sm flex items-center gap-2 hover:text-leuco-purple">
-                        VIEW ALL <ChevronRight size={16} />
-                    </a>
+            <div id="products-grid" className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
+                <div className="mb-10">
+                    <h2 className="text-4xl font-black tracking-tighter mb-2">Spiral Tools</h2>
+                    <div className="h-1.5 w-24 bg-leuco-purple" />
                 </div>
                 {loading ? (
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -41,7 +36,7 @@ export default function Spirals() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map(product => (
+                        {products.map(product => (
                             <ProductCard key={product.id} product={product} />
                         ))}
                     </div>

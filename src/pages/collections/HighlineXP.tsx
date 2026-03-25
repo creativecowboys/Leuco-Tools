@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight, Zap, ShieldCheck, Award } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyCollection } from '../../hooks/useShopifyCollection';
-import ProductCard from '../../components/ProductCard';
+import CollectionGrid from '../../components/CollectionGrid';
 
 export default function HighlineXP() {
     const { products, loading } = useShopifyCollection('highlinexp-industrial-series');
@@ -50,23 +50,8 @@ export default function HighlineXP() {
                 </div>
 
                 <div id="products-grid" className="mb-10">
-                    <h2 className="text-4xl font-black tracking-tighter mb-2">HighlineXP Products</h2>
-                    <div className="h-1.5 w-24 bg-leuco-purple" />
+                    <CollectionGrid products={products} loading={loading} title="HighlineXP Products" />
                 </div>
-
-                {loading ? (
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="animate-pulse bg-gray-100 aspect-square rounded" />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.map(product => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
-                )}
             </div>
         </div>
     );

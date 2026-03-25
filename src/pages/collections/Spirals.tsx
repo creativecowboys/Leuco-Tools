@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyCollection } from '../../hooks/useShopifyCollection';
-import ProductCard from '../../components/ProductCard';
+import CollectionGrid from '../../components/CollectionGrid';
 
 export default function Spirals() {
     const { products, loading } = useShopifyCollection('spiral-tools');
@@ -26,21 +26,7 @@ export default function Spirals() {
             </div>
 
             <div id="products-grid" className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
-                <div className="mb-10">
-                    <h2 className="text-4xl font-black tracking-tighter mb-2">Spiral Tools</h2>
-                    <div className="h-1.5 w-24 bg-leuco-purple" />
-                </div>
-                {loading ? (
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                        {Array.from({ length: 4 }).map((_, i) => <div key={i} className="animate-pulse bg-gray-100 aspect-square rounded" />)}
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {products.map(product => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
-                )}
+                <CollectionGrid products={products} loading={loading} title="Spiral Tools" />
             </div>
         </div>
     );

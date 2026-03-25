@@ -46,8 +46,8 @@ export default function Home() {
             <section className="relative h-[85vh] bg-leuco-black overflow-hidden">
                 <div className="absolute inset-0">
                     <img
-                        src="https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=2000"
-                        className="w-full h-full object-cover opacity-40"
+                        src="/leuco-hero-bg.jpg"
+                        className="w-full h-full object-cover opacity-50"
                         alt="Industrial Tooling"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-leuco-black via-leuco-black/60 to-transparent" />

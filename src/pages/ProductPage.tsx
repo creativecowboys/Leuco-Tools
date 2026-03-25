@@ -24,11 +24,12 @@ interface ParsedSpecs {
 
 function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
     if (!sizeString) return null;
-    const s = sizeString.trim();
+
+    // Normalise separators: replace Unicode × with ASCII x for simpler matching
+    const s = sizeString.trim().replace(/×/g, 'x');
 
     // ── CUT prefix: Cutter Heads ─────────────────────────────────────────────
-    // e.g. "CUT 70 x 15 x 23 x 25 Z4 LH"  → ØD x B x b x bore Zteeth hand
-    // e.g. "100 x 42.8 x 40.6 x 30 Z=3+3 LH"  (no prefix, DIAMAX style)
+    // e.g. "CUT 70 x 15 x 23 x 25 Z4 LH"
     const cutPattern = /^(?:CUT\s+)?(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+Z=?(\d+(?:[+]\d+)?)\s+([A-Z]+)$/i;
     const mCut = s.match(cutPattern);
     if (mCut) {
@@ -43,7 +44,7 @@ function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
     }
 
     // ── BOR prefix: Boring / Spiral Tools ────────────────────────────────────
-    // e.g. "BOR 8 x 10 x 35 x 70 RH"  → shankDia x boreDia x cuttingLen x overallLen hand
+    // e.g. "BOR 8 x 10 x 35 x 70 RH"
     const borPattern = /^BOR\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+([A-Z]+)$/i;
     const mBor = s.match(borPattern);
     if (mBor) {
@@ -57,8 +58,7 @@ function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
     }
 
     // ── KNI prefix: Knives & Inserts ─────────────────────────────────────────
-    // e.g. "KNI 7.6 x 12 x 1.5 HLB 05"           → height x width x thickness system
-    // e.g. "KNI 12 x 20 x 2 HLB 05 R=0.8"         → + radius
+    // e.g. "KNI 7.6 x 12 x 1.5 HLB 05" or "KNI 12 x 20 x 2 HLB 05 R=0.8"
     const kniPattern = /^KNI\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+(\S+\s+\S+)(.*)?$/i;
     const mKni = s.match(kniPattern);
     if (mKni) {
@@ -77,7 +77,7 @@ function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
     }
 
     // ── CLA prefix: Clamping Systems ─────────────────────────────────────────
-    // e.g. "CLA 2-25 x 60 x 101 HSK 63F X18 462E"  → colletRange x colletDia x length shank type
+    // e.g. "CLA 2-25 x 60 x 101 HSK 63F X18 462E"
     const claPattern = /^CLA\s+([\d/-]+)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+(.+)$/i;
     const mCla = s.match(claPattern);
     if (mCla) {
@@ -89,8 +89,8 @@ function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
         };
     }
 
-    // ── ACC prefix: Parts & Accessories (Precision Collets) ──────────────────
-    // e.g. "ACC 1/8 x 34.8 x 52 462E"  → colletSize x colletDia x length type
+    // ── ACC prefix: Parts & Accessories ──────────────────────────────────────
+    // e.g. "ACC 1/8 x 34.8 x 52 462E"
     const accPattern = /^ACC\s+([\d/]+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+(.+)$/i;
     const mAcc = s.match(accPattern);
     if (mAcc) {
@@ -102,8 +102,7 @@ function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
         };
     }
 
-    // ── Pattern: HighlineXP / modern saw blade format ─────────────────────────
-    // e.g. "10 x 2.5 x 1.8 x 5/8" Z=60: 30° ATB"
+    // ── HighlineXP format: "10 x 2.5 x 1.8 x 5/8" Z=60: 30° ATB" ────────────
     const hlxpPattern = /^(\d+(?:[./]\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+([\d/]+"?)\s*Z=(\d+):\s*(-?\d+)°?\s*(.+)?$/i;
     const m2 = s.match(hlxpPattern);
     if (m2) {
@@ -119,19 +118,22 @@ function parseVariantSpecs(sizeString: string): ParsedSpecs | null {
         return specs;
     }
 
-    // ── Pattern: Standard LEUCO saw blade format ─────────────────────────────
-    // e.g. "CIR 10 x 3.2 x 2.2 x 5/8 Z24 20"
-    const standardPattern = /^(?:CIR|SAW|HL|HLP|HLB)?\s*(\d+(?:[./]\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+([\d/]+"?)\s*Z(\d+)\s+(-?\d+)/i;
+    // ── Standard CIR / saw blade format ──────────────────────────────────────
+    // e.g. "CIR 10 x 3.2 x 2.2 x 5/8 Z80 ATB 15 5"
+    // Tooth style (ATB, etc.) is optional between Z-count and hook angle
+    const standardPattern = /^(?:CIR|SAW|HL|HLP|HLB)?\s*(\d+(?:[./]\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+(\d+(?:\.\d+)?)\s+x\s+([\d/]+"?)\s*Z(\d+)\s+(?:([A-Z][A-Z\s]*)?\s+)?(-?\d+)/i;
     const m1 = s.match(standardPattern);
     if (m1) {
-        return {
+        const specs: ParsedSpecs = {
             'Cutting Circle Diameter (Ø D)': m1[1].trim() + '"',
             'Cut Width (B)': m1[2] + 'mm',
             'Body Thickness (b)': m1[3] + 'mm',
             'Bore Diameter (Ø d)': m1[4].trim().replace(/"+$/, '') + '"',
             'Number of Teeth (z)': m1[5],
-            'Hook Angle': m1[6] + '°',
+            'Hook Angle': m1[7] + '°',
         };
+        if (m1[6]?.trim()) specs['Tooth Shape'] = m1[6].trim();
+        return specs;
     }
 
     // Fallback: return null → raw option values shown instead

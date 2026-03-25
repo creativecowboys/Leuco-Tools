@@ -46,7 +46,7 @@ export default function Home() {
             <section className="relative h-[85vh] bg-leuco-black overflow-hidden">
                 <div className="absolute inset-0">
                     <img
-                        src="/leuco-hero-bg.jpg"
+                        src="/Leuco Hero Image 2.png"
                         className="w-full h-full object-cover opacity-50"
                         alt="Industrial Tooling"
                     />

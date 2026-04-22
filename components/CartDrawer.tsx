@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ShoppingCart, Plus, Minus, ArrowRight, Trash2 } from 'lucide-react';
-import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { useCart } from '@/context/CartContext';
+import Link from 'next/link';
 
 function formatMoney(amount: string, currencyCode: string): string {
     return new Intl.NumberFormat('en-US', {
@@ -70,7 +72,7 @@ export default function CartDrawer() {
                                         <p className="text-gray-500 text-sm font-medium">Add a product to get started.</p>
                                     </div>
                                     <Link
-                                        to="/pages/tools"
+                                        href="/pages/tools"
                                         onClick={closeCart}
                                         className="bg-leuco-purple text-white font-black text-sm px-8 py-4 inline-flex items-center gap-2 hover:bg-leuco-black transition-colors"
                                     >

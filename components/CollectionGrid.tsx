@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import { Search, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
-import ProductCard from './ProductCard';
-import { ShopifyProduct } from '../lib/shopify';
+import ProductCard from '@/components/ProductCard';
+import { ShopifyProduct } from '@/lib/shopify';
 
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
 

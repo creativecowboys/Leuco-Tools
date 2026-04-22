@@ -1,7 +1,10 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import CartDrawer from './CartDrawer';
-import { useCart } from '../context/CartContext';
-import { Link, useNavigate } from 'react-router-dom';
+import CartDrawer from '@/components/CartDrawer';
+import { useCart } from '@/context/CartContext';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
     Search,
     MapPin,
@@ -91,7 +94,7 @@ export default function Layout({ children }: LayoutProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const navigate = useNavigate();
+    const router = useRouter();
     const { cartCount, openCart } = useCart();
 
     useEffect(() => {
@@ -103,7 +106,7 @@ export default function Layout({ children }: LayoutProps) {
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
             setSearchQuery('');
         }
     };
@@ -113,16 +116,16 @@ export default function Layout({ children }: LayoutProps) {
             {/* Top Utility Nav */}
             <div className="bg-leuco-black text-white text-[10px] font-bold tracking-widest py-2 px-4 md:px-12 flex justify-between items-center border-b border-white/10">
                 <div className="flex gap-6">
-                    <Link to="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">WHERE TO BUY</Link>
-                    <Link to="/pages/sharpening-services" className="hover:text-leuco-purple transition-colors">RE-SHARPENING</Link>
-                    <Link to="/blogs/leuco-solutions" className="hover:text-leuco-purple transition-colors">EDUCATION</Link>
+                    <Link href="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">WHERE TO BUY</Link>
+                    <Link href="/pages/sharpening-services" className="hover:text-leuco-purple transition-colors">RE-SHARPENING</Link>
+                    <Link href="/blogs/leuco-solutions" className="hover:text-leuco-purple transition-colors">EDUCATION</Link>
                 </div>
                 <div className="flex gap-6 items-center">
                     <div className="flex items-center gap-1 cursor-pointer hover:text-leuco-purple transition-colors">
                         <Globe size={12} />
                         <span>EN / US</span>
                     </div>
-                    <Link to="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">CONTACT</Link>
+                    <Link href="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">CONTACT</Link>
                 </div>
             </div>
 
@@ -130,12 +133,12 @@ export default function Layout({ children }: LayoutProps) {
             <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-xl py-2' : 'bg-white py-4'} border-b border-gray-100`}>
                 <div className="max-w-[1440px] mx-auto px-4 md:px-12 flex justify-between items-center">
                     <div className="flex items-center gap-12">
-                        <Link to="/"><LeucoLogo /></Link>
+                        <Link href="/"><LeucoLogo /></Link>
                         <div className="hidden lg:flex gap-8">
                             {navLinks.map((link) => (
                                 <div key={link.name} className="group relative py-4">
                                     <Link
-                                        to={link.href}
+                                        href={link.href}
                                         className="text-sm font-extrabold tracking-tight hover:text-leuco-purple transition-colors flex items-center gap-1"
                                     >
                                         {link.name}
@@ -145,7 +148,7 @@ export default function Layout({ children }: LayoutProps) {
                                             {link.items.map(item => (
                                                 <Link
                                                     key={item.href}
-                                                    to={item.href}
+                                                    href={item.href}
                                                     className="block px-6 py-2 text-xs font-bold hover:bg-gray-50 hover:text-leuco-purple"
                                                 >
                                                     {item.label}
@@ -202,7 +205,7 @@ export default function Layout({ children }: LayoutProps) {
                         className="fixed inset-0 z-[60] bg-white lg:hidden overflow-y-auto"
                     >
                         <div className="p-6 flex justify-between items-center border-b">
-                            <Link to="/" onClick={() => setIsMenuOpen(false)}><LeucoLogo /></Link>
+                            <Link href="/" onClick={() => setIsMenuOpen(false)}><LeucoLogo /></Link>
                             <button onClick={() => setIsMenuOpen(false)}>
                                 <X size={28} />
                             </button>
@@ -211,7 +214,7 @@ export default function Layout({ children }: LayoutProps) {
                             {navLinks.map(link => (
                                 <div key={link.name} className="space-y-3">
                                     <Link
-                                        to={link.href}
+                                        href={link.href}
                                         onClick={() => setIsMenuOpen(false)}
                                         className="text-xl font-black text-leuco-purple block"
                                     >
@@ -222,7 +225,7 @@ export default function Layout({ children }: LayoutProps) {
                                             {link.items.map(item => (
                                                 <Link
                                                     key={item.href}
-                                                    to={item.href}
+                                                    href={item.href}
                                                     onClick={() => setIsMenuOpen(false)}
                                                     className="text-sm font-bold text-gray-600 hover:text-leuco-purple"
                                                 >
@@ -251,7 +254,7 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="max-w-[1440px] mx-auto px-4 md:px-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
                         <div className="lg:col-span-2 space-y-8">
-                            <Link to="/"><LeucoLogo /></Link>
+                            <Link href="/"><LeucoLogo /></Link>
                             <p className="text-gray-400 font-medium max-w-sm">
                                 North America's highest quality precision tooling and re-sharpening service provider for over 40 years.
                             </p>
@@ -320,7 +323,7 @@ export default function Layout({ children }: LayoutProps) {
                                 <ul className="space-y-4">
                                     {col.links.map(link => (
                                         <li key={link.href}>
-                                            <Link to={link.href} className="text-gray-400 font-bold text-sm hover:text-white transition-colors">
+                                            <Link href={link.href} className="text-gray-400 font-bold text-sm hover:text-white transition-colors">
                                                 {link.label}
                                             </Link>
                                         </li>
@@ -335,9 +338,9 @@ export default function Layout({ children }: LayoutProps) {
                             © 2026 LEUCO TOOL CORPORATION. ALL RIGHTS RESERVED.
                         </div>
                         <div className="flex gap-8 text-gray-500 text-xs font-bold">
-                            <Link to="/pages/privacy-policy" className="hover:text-white">PRIVACY POLICY</Link>
-                            <Link to="/pages/terms-of-use" className="hover:text-white">TERMS OF USE</Link>
-                            <Link to="/search" className="hover:text-white">SEARCH</Link>
+                            <Link href="/pages/privacy-policy" className="hover:text-white">PRIVACY POLICY</Link>
+                            <Link href="/pages/terms-of-use" className="hover:text-white">TERMS OF USE</Link>
+                            <Link href="/search" className="hover:text-white">SEARCH</Link>
                         </div>
                     </div>
                 </div>

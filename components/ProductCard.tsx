@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { ShoppingCart, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { ShopifyProduct } from '../lib/shopify';
+import Link from 'next/link';
+import { useCart } from '@/context/CartContext';
+import { ShopifyProduct } from '@/lib/shopify';
 
 interface ProductCardProps {
     product: ShopifyProduct;
@@ -29,7 +31,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
             {/* Image / Link to internal product page */}
             <Link
-                to={`/products/${product.handle}`}
+                href={`/products/${product.handle}`}
                 className="block p-6 flex-1"
             >
                 <div className="aspect-square bg-gray-50 mb-4 overflow-hidden">

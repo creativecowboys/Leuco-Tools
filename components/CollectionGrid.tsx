@@ -8,8 +8,7 @@ import { ShopifyProduct } from '@/lib/shopify';
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
 
 interface CollectionGridProps {
-    products: ShopifyProduct[];
-    loading: boolean;
+    initialProducts: ShopifyProduct[];
     title: string;
 }
 
@@ -21,14 +20,14 @@ const SORT_LABELS: Record<SortOption, string> = {
     'name-desc': 'Name: Z → A',
 };
 
-export default function CollectionGrid({ products, loading, title }: CollectionGridProps) {
+export default function CollectionGrid({ initialProducts, title }: CollectionGridProps) {
     const [search, setSearch] = useState('');
     const [sort, setSort] = useState<SortOption>('featured');
     const [inStockOnly, setInStockOnly] = useState(false);
     const [sortOpen, setSortOpen] = useState(false);
 
     const filtered = useMemo(() => {
-        let result = [...products];
+        let result = [...initialProducts];
 
         // Text search
         if (search.trim()) {
@@ -67,7 +66,7 @@ export default function CollectionGrid({ products, loading, title }: CollectionG
         }
 
         return result;
-    }, [products, search, sort, inStockOnly]);
+    }, [initialProducts, search, sort, inStockOnly]);
 
     const hasActiveFilters = search.trim() || inStockOnly || sort !== 'featured';
 
@@ -154,20 +153,12 @@ export default function CollectionGrid({ products, loading, title }: CollectionG
             </div>
 
             {/* Results count */}
-            {!loading && (
-                <p className="text-xs font-black text-gray-400 tracking-widest uppercase mb-6">
-                    {filtered.length} of {products.length} {products.length === 1 ? 'product' : 'products'}
-                </p>
-            )}
+            <p className="text-xs font-black text-gray-400 tracking-widest uppercase mb-6">
+                {filtered.length} of {initialProducts.length} {initialProducts.length === 1 ? 'product' : 'products'}
+            </p>
 
             {/* Grid */}
-            {loading ? (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    {Array.from({ length: 8 }).map((_, i) => (
-                        <div key={i} className="animate-pulse bg-gray-100 aspect-square rounded" />
-                    ))}
-                </div>
-            ) : filtered.length === 0 ? (
+            {filtered.length === 0 ? (
                 <div className="py-24 text-center">
                     <p className="text-2xl font-black text-gray-300 mb-2">No products found</p>
                     <p className="text-sm text-gray-400 font-medium mb-6">Try adjusting your search or filters.</p>

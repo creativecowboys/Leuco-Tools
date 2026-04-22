@@ -532,3 +532,52 @@ export async function fetchCategoryImages(): Promise<CategoryImages> {
     sawBlades: data.sawBlades?.image?.url ?? null,
   };
 }
+
+// ─── Structured Data Helpers ──────────────────────────────────────────────────
+
+/**
+ * Generates Schema.org Product structured data (JSON-LD) for a Shopify product.
+ * This enables Google rich results in search (price, availability, image).
+ * https://developers.google.com/search/docs/appearance/structured-data/product
+ */
+export function productToJsonLd(product: ShopifyProductDetail, canonicalUrl: string): object {
+  const variants = product.variants.edges.map((e) => e.node);
+  const allInStock = variants.some((v) => v.availableForSale);
+  const minPrice = product.priceRange.minVariantPrice;
+  const maxPrice = product.priceRange.maxVariantPrice;
+  const isPriceRange = minPrice.amount !== maxPrice.amount;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: product.images.edges.map((e) => e.node.url),
+    sku: variants[0]?.sku || undefined,
+    brand: {
+      '@type': 'Brand',
+      name: product.vendor || 'LEUCO',
+    },
+    offers: isPriceRange
+      ? {
+          '@type': 'AggregateOffer',
+          priceCurrency: minPrice.currencyCode,
+          lowPrice: minPrice.amount,
+          highPrice: maxPrice.amount,
+          offerCount: variants.length,
+          availability: allInStock
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          url: canonicalUrl,
+        }
+      : {
+          '@type': 'Offer',
+          priceCurrency: minPrice.currencyCode,
+          price: minPrice.amount,
+          availability: allInStock
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          url: canonicalUrl,
+        },
+  };
+}

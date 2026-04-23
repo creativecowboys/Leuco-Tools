@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import CartDrawer from '@/components/CartDrawer';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
@@ -96,7 +95,6 @@ export default function Layout({ children }: LayoutProps) {
     const [scrolled, setScrolled] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
-    const pathname = usePathname();
     const { cartCount, openCart } = useCart();
 
     useEffect(() => {
@@ -112,11 +110,6 @@ export default function Layout({ children }: LayoutProps) {
             setSearchQuery('');
         }
     };
-
-    // /edits is a standalone internal tool — render bare, no nav/footer
-    if (pathname?.startsWith('/edits')) {
-        return <>{children}</>;
-    }
 
     return (
         <div className="min-h-screen bg-white flex flex-col">

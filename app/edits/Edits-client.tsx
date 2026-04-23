@@ -203,7 +203,7 @@ function LoginScreen({ onLogin }: { onLogin: (role: Role) => void }) {
       }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <img src="/leuco-logo.png" alt="LEUCO" style={{ height: '40px', filter: 'brightness(0) invert(1)', marginBottom: '1rem' }} />
+          <img src="/leuco-logo.png" alt="LEUCO" style={{ height: '40px', display: 'block', margin: '0 auto 1rem' , filter: 'brightness(0) invert(1)' }} />
           <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: 800, margin: 0 }}>Edit Requests</h1>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '6px', marginBottom: 0 }}>Internal dashboard — enter your access password</p>
         </div>

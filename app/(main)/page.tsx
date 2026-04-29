@@ -9,6 +9,7 @@ import {
     ShieldCheck,
     Wrench,
     Globe,
+    Sparkles,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyProducts } from '@/hooks/useShopifyProducts';
@@ -76,9 +77,13 @@ export default function Home() {
                             <Link href="/collections/highlinexp-industrial-series" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group">
                                 SHOP THE LINE <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                             </Link>
-                            <Link href="/pages/tools" className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300">
-                                LEARN MORE
-                            </Link>
+                            <button
+                                onClick={() => window.postMessage({ type: 'leuco-embed:open' }, '*')}
+                                className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                            >
+                                <Sparkles size={18} className="group-hover:text-leuco-purple transition-colors" />
+                                SEARCH WITH AI
+                            </button>
                         </div>
                     </motion.div>
                 </div>

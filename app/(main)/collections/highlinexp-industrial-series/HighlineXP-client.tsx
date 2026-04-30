@@ -26,6 +26,7 @@ export default function HighlineXPClient({ initialProducts }: Props) {
                     <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
                         HIGHLINE<span className="text-leuco-purple">XP</span>
                     </h1>
+                    <p className="text-xs font-black tracking-widest text-leuco-purple mb-4">ENGINEERED PERFORMANCE. EVERYDAY PRICE.</p>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
                         Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.
                     </p>
@@ -41,9 +42,9 @@ export default function HighlineXPClient({ initialProducts }: Props) {
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
                     {[
-                        { icon: Zap, title: 'High Performance', desc: 'Get the most out of your machine with our specialized edge geometries and high-grade carbide.' },
-                        { icon: ShieldCheck, title: 'Stability and Balance', desc: 'Designed for vibration-free operation and high-feed processing in demanding industrial environments.' },
-                        { icon: Award, title: 'Superior Finish', desc: 'Deliver paint-ready or laminate-ready edges directly from the machine, reducing secondary processes.' },
+                        { icon: Zap, title: 'High Performance', desc: 'Engineered for consistent cutting performance, shift after shift.' },
+                        { icon: ShieldCheck, title: 'Stability and Balance', desc: 'Tight tolerances that deliver clean rips and crosscuts on hardwood, softwood, and laminated panels.' },
+                        { icon: Award, title: 'Superior Finish', desc: 'Production-ready durability for shops that don’t slow down.' },
                     ].map(({ icon: Icon, title, desc }, i) => (
                         <motion.div key={i} whileHover={{ y: -4 }} className="p-8 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-lg transition-all">
                             <Icon className="text-leuco-purple mb-4" size={40} />

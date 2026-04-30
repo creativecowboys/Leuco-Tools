@@ -8,11 +8,12 @@ export const metadata: Metadata = {
 
 export default function CatalogsPage() {
     const catalogs = [
-        { title: 'LEUCO Main Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2024' },
-        { title: 'HighlineXP Industrial Series', desc: 'Full product catalog for the HighlineXP industrial tooling line.', year: '2024' },
-        { title: 'HP+ Spirals & Drills', desc: 'Complete HP+ spiral and drill tooling range for CNC routing and machining centers.', year: '2024' },
-        { title: 'Circular Saw Blades', desc: 'Complete circular saw blade range including specifications, applications, and ordering information.', year: '2024' },
-        { title: 'Resharpening Services Guide', desc: 'How to work with LEUCO service centers to maximize tool performance and life.', year: '2024' },
+        { title: 'LEUCO General Program Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2024', comingSoon: false },
+        { title: 'LEUCO Mini Catalog', desc: 'Most popular North American products for quick lookup.', year: '2024', comingSoon: false },
+        { title: 'HighlineXP Industrial Series', desc: 'Full product catalog for the HighlineXP industrial tooling line.', year: '2024', comingSoon: false },
+        { title: 'HP+ Spirals', desc: 'Our highest performing spirals for customers who need the longest edge life.', year: '2024', comingSoon: false },
+        { title: 'Circular Saw Blades', desc: 'Complete circular saw blade range including specifications, applications, and ordering information.', year: '2024', comingSoon: true },
+        { title: 'CNC Tooling', desc: 'Spirals, drills, clamping and more for your routing and machining centers.', year: '2024', comingSoon: true },
     ];
 
     return (
@@ -38,10 +39,14 @@ export default function CatalogsPage() {
                                 <div className="text-xs font-black text-gray-400 tracking-widest mb-1">{cat.year}</div>
                                 <h3 className="font-black text-lg mb-2 group-hover:text-leuco-purple transition-colors">{cat.title}</h3>
                                 <p className="text-gray-500 font-medium text-sm mb-4">{cat.desc}</p>
-                                <a href="https://shopleuco.com/pages/catalogs" target="_blank" rel="noopener noreferrer"
-                                    className="font-black text-xs flex items-center gap-1 text-leuco-purple hover:text-leuco-black transition-colors">
-                                    DOWNLOAD PDF <ArrowRight size={12} />
-                                </a>
+                                {cat.comingSoon ? (
+                                    <span className="font-black text-xs text-gray-400 tracking-widest">COMING SOON</span>
+                                ) : (
+                                    <a href="https://shopleuco.com/pages/catalogs" target="_blank" rel="noopener noreferrer"
+                                        className="font-black text-xs flex items-center gap-1 text-leuco-purple hover:text-leuco-black transition-colors">
+                                        DOWNLOAD PDF <ArrowRight size={12} />
+                                    </a>
+                                )}
                             </div>
                         </div>
                     ))}

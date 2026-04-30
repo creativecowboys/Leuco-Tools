@@ -15,7 +15,7 @@ export default function Page() {
             phone="812-683-5808"
             email="sales@leucotool.com"
             hours="Mon–Fri: 7:00 AM – 4:30 PM CT"
-            description="In 2016, LEUCO acquired Global Cutting Solutions, bringing decades of regional expertise into our network. Our Indiana service center in Huntingburg now provides rapid resharpening service to the Midwest's manufacturing and woodworking industries."
+            description="In 2016, LEUCO acquired Global Cutting Solutions, based in Huntingburg, Indiana. This acquisition added decades of regional expertise and a loyal customer base to the LEUCO family. Our Indiana service center is conveniently located in the heart of Indiana's woodworking corridor and is equipped to service carbide saws, profile cutters, carbide and diamond straight cutters, spirals, DP tooling and inserts."
         />
     );
 }

@@ -15,7 +15,7 @@ export default function Page() {
             phone="269-353-1990"
             email="sales@leucotool.com"
             hours="Mon–Fri: 7:00 AM – 4:30 PM ET"
-            description="Following a major 9,000 sq ft facility expansion, LEUCO Michigan now operates state-of-the-art CNC grinding robotics to serve the Great Lakes region's furniture, automotive, and aerospace tooling industries with unmatched precision."
+            description="Following a 9,000 square foot expansion and installation of new grinding robotics, LEUCO Michigan operates one of the most advanced service centers in our North American network. Located in Kalamazoo, this facility is equipped to service carbide saws, profile cutters, carbide and diamond straight cutters, spirals, DP tooling and inserts."
         />
     );
 }

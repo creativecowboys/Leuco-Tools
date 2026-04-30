@@ -12,10 +12,10 @@ export default function Page() {
             state="Georgia"
             city="Villa Rica"
             address="500 W. Industrial Court, Villa Rica, GA 30180"
-            phone="770-459-5784"
+            phone="1.800.631.0096"
             email="sales@leucotool.com"
             hours="Mon–Fri: 8:00 AM – 5:00 PM ET"
-            description="LEUCO's Southeast headquarters in Villa Rica, Georgia serves the furniture, cabinet, and millwork industries across the Southeast US with expert resharpening and tooling services."
+            description="Located in Villa Rica, Georgia, this facility serves as the headquarters of LEUCO Tool Corporation, the North American subsidiary of LEUCO Werkzeuge. The Georgia location is equipped to service carbide saws, profile cutters, carbide and diamond straight cutters, spirals, DP tooling and inserts. With a team of expert machinists and state-of-the-art production equipment, LEUCO Georgia proudly maintains the quality standards set by our parent company in Horb, Germany."
         />
     );
 }

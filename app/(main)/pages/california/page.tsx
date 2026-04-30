@@ -15,7 +15,7 @@ export default function Page() {
             phone="714-990-2844"
             email="sales@leucotool.com"
             hours="Mon–Fri: 6:00 AM – 2:30 PM PST"
-            description="LEUCO acquired D&D Tool in 2012, establishing our West Coast presence. Our California service center in Brea serves the region's diverse woodworking, cabinetry, sign-making, and aerospace composites industries."
+            description="In 2012, LEUCO acquired D&D Tool, establishing our West Coast presence in Brea, California. This facility is equipped to service carbide saws, profile cutters, carbide and diamond straight cutters, spirals, DP tooling and inserts — serving the region's diverse woodworking, cabinetry, sign-making, and composite industries."
         />
     );
 }

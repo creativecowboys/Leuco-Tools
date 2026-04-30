@@ -15,7 +15,7 @@ export default function Page() {
             phone="437-247-5613"
             email="sales@leucotool.com"
             hours="Mon–Fri: 8:00 AM – 5:00 PM ET"
-            description="LEUCO has proudly served the Canadian market from Mississauga, Ontario for over 20 years. Our team delivers the same world-class resharpening quality and tooling expertise as our US locations to customers across Canada."
+            description="In 2014, LEUCO extended its commitment to reliability and innovation by opening its first Canadian Service Center. This facility offers direct sales and servicing of precision tooling and is strategically located in Mississauga. This central location offers easy access for local and expedited logistics. LEUCO has been selling in Canada for well over 20 years with great success. This facility can service your carbide saws, profile cutters, carbide and diamond straight cutters, spirals, and inserts."
         />
     );
 }

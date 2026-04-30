@@ -15,7 +15,7 @@ const faqs = [
     },
     {
         q: 'How long does the resharpening process take?',
-        a: 'Standard turnaround is 24–48 hours from receipt. Rush service is available on request. Shipping times are in addition to service time.',
+        a: 'Standard turnaround is approximately 1 week for carbide tools and 2 weeks for diamond tools from receipt. Rush service is available on request. Shipping times are in addition to service time.',
     },
     {
         q: 'Can tools originally made by other manufacturers be resharpened?',

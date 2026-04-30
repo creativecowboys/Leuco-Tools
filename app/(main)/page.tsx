@@ -5,11 +5,10 @@ import Link from 'next/link';
 import {
     ChevronRight,
     ArrowRight,
-    Zap,
-    ShieldCheck,
     Wrench,
     Globe,
     Sparkles,
+    MapPin,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyProducts } from '@/hooks/useShopifyProducts';
@@ -71,7 +70,7 @@ export default function Home() {
                             <span className="text-leuco-purple">MOMENT.</span>
                         </h1>
                         <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">
-                            Introducing the next generation of high-performance spirals. Engineered for maximum precision and tool life in the most demanding materials.
+                            The HighlineXP represents the pinnacle of LEUCO precision engineering — ultra-fine finish quality with re-sharpenable carbide that extends tool life up to 8–10 resharpenings.
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <Link href="/collections/highlinexp-industrial-series" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group">
@@ -90,18 +89,17 @@ export default function Home() {
 
                 {/* Hero Stats */}
                 <div className="absolute bottom-0 left-0 right-0 bg-white/5 backdrop-blur-md border-t border-white/10 hidden md:block">
-                    <div className="max-w-[1440px] mx-auto grid grid-cols-4 divide-x divide-white/10">
+                    <div className="max-w-[1440px] mx-auto grid grid-cols-3 divide-x divide-white/10">
                         {[
-                            { label: 'TOOL LIFE', value: '+40%', icon: Zap },
-                            { label: 'PRECISION', value: '0.001mm', icon: ShieldCheck },
-                            { label: 'SERVICE', value: '24H TURN', icon: Wrench },
-                            { label: 'GLOBAL', value: '80+ LOC', icon: Globe },
+                            { label: '40+ YEARS', value: 'SERVING NORTH AMERICA', icon: Globe },
+                            { label: '5', value: 'US SERVICE CENTERS', icon: MapPin },
+                            { label: '1–2 WKS', value: 'RESHARPENING TURNAROUND', icon: Wrench },
                         ].map((stat, i) => (
                             <div key={i} className="p-8 flex items-center gap-4">
                                 <stat.icon className="text-leuco-purple" size={32} />
                                 <div>
-                                    <div className="text-2xl font-black text-white">{stat.value}</div>
-                                    <div className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">{stat.label}</div>
+                                    <div className="text-2xl font-black text-white">{stat.label}</div>
+                                    <div className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">{stat.value}</div>
                                 </div>
                             </div>
                         ))}
@@ -113,11 +111,11 @@ export default function Home() {
             <section className="py-24 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="flex justify-between items-end mb-12">
                     <div>
-                        <h2 className="text-4xl font-black tracking-tighter mb-2 uppercase">Explore the Systems</h2>
+                        <h2 className="text-4xl font-black tracking-tighter mb-2 uppercase">Shop Tooling</h2>
                         <div className="h-1.5 w-24 bg-leuco-purple" />
                     </div>
                     <Link href="/pages/tools" className="font-black text-sm flex items-center gap-2 hover:text-leuco-purple transition-colors">
-                        VIEW ALL SYSTEMS <ChevronRight size={20} />
+                        VIEW ALL TOOLS <ChevronRight size={20} />
                     </Link>
                 </div>
 

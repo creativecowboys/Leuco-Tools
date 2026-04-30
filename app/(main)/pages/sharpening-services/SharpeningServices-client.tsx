@@ -8,8 +8,8 @@ import { motion } from 'motion/react';
 const steps = [
     { step: '01', title: 'Pack Your Tools', desc: 'Safely package your tools with appropriate padding. Use original packaging when possible.' },
     { step: '02', title: 'Ship to Nearest Location', desc: 'Send to the LEUCO service center nearest to you for fastest turnaround.' },
-    { step: '03', title: 'Expert Resharpening', desc: 'Our technicians restore your tools to original spec on advanced CNC grinding equipment.' },
-    { step: '04', title: 'Quick Return', desc: 'Typical 24–48 hour turnaround. Rush service available on request.' },
+    { step: '03', title: 'Expert Resharpening', desc: 'Our technicians restore your tools to original spec on precision grinding equipment.' },
+    { step: '04', title: 'Return Shipping', desc: 'Typical turnaround: 1 week for carbide tools, 2 weeks for diamond tools. Rush service available on request.' },
 ];
 
 export default function SharpeningServicesClient() {
@@ -20,7 +20,7 @@ export default function SharpeningServicesClient() {
                     <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">EXPERT SERVICE</span>
                     <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">SHARPENING SERVICES</h1>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
-                        Restore your LEUCO tools to factory-fresh performance. Our certified technicians use precision CNC grinding equipment to bring your tooling back to original manufacturer specifications.
+                        Restore your LEUCO tools to factory-fresh performance. Our certified technicians use precision grinding equipment to bring your tooling back to original manufacturer specifications.
                     </p>
                     <div className="flex flex-wrap gap-4">
                         <Link href="/pages/contact-leuco" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
@@ -34,11 +34,10 @@ export default function SharpeningServicesClient() {
             </div>
 
             <div className="bg-leuco-purple py-12 px-4 md:px-12">
-                <div className="max-w-[1440px] mx-auto grid grid-cols-3 divide-x divide-white/20 text-center">
+                <div className="max-w-[1440px] mx-auto grid grid-cols-2 divide-x divide-white/20 text-center">
                     {[
-                        { value: '24H', label: 'TYPICAL TURNAROUND' },
                         { value: '40+', label: 'YEARS OF EXPERTISE' },
-                        { value: '100%', label: 'QUALITY GUARANTEED' },
+                        { value: '1–2 WKS', label: 'TYPICAL TURNAROUND' },
                     ].map((s, i) => (
                         <div key={i} className="py-4 px-8">
                             <div className="text-4xl font-black text-white mb-1">{s.value}</div>

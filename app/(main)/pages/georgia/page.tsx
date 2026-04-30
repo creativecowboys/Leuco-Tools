@@ -13,9 +13,9 @@ export default function Page() {
             city="Villa Rica"
             address="500 W. Industrial Court, Villa Rica, GA 30180"
             phone="770-459-5784"
-            email="georgia@leuco.com"
-            hours="Mon–Fri: 7:00 AM – 5:00 PM ET"
-            description="LEUCO's Georgia headquarters serves the Southeast US, providing expert resharpening and tooling services to the region's furniture, cabinet, and millwork industries."
+            email="sales@leucotool.com"
+            hours="Mon–Fri: 8:00 AM – 5:00 PM ET"
+            description="LEUCO's Southeast headquarters in Villa Rica, Georgia serves the furniture, cabinet, and millwork industries across the Southeast US with expert resharpening and tooling services."
         />
     );
 }

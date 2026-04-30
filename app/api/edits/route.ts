@@ -52,6 +52,9 @@ export async function POST(req: NextRequest) {
     description: body.description,
     page_url: body.page_url || null,
     submitted_by: body.submitted_by,
+    attachments: Array.isArray(body.attachments) && body.attachments.length > 0
+      ? JSON.stringify(body.attachments)
+      : null,
   });
   return NextResponse.json({ request: created });
 }

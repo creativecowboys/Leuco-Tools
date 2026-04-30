@@ -13,9 +13,9 @@ export default function Page() {
             city="Huntingburg"
             address="613 E. 7th Street, Huntingburg, IN 47542"
             phone="812-683-5808"
-            email="indiana@leuco.com"
-            hours="Mon–Fri: 7:00 AM – 5:00 PM ET"
-            description="LEUCO's Indiana service center is strategically located to provide rapid resharpening service to the Midwest's manufacturing and woodworking industries."
+            email="sales@leucotool.com"
+            hours="Mon–Fri: 7:00 AM – 4:30 PM CT"
+            description="In 2016, LEUCO acquired Global Cutting Solutions, bringing decades of regional expertise into our network. Our Indiana service center in Huntingburg now provides rapid resharpening service to the Midwest's manufacturing and woodworking industries."
         />
     );
 }

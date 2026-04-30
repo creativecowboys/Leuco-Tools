@@ -5,9 +5,8 @@ import Link from 'next/link';
 import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
 
 const locations = [
-    { name: 'Georgia', city: 'Villa Rica', phone: '770-459-5784', href: '/pages/georgia' },
-    { name: 'Mississippi', city: 'Tupelo', phone: '+1 (800) 433-0771', href: '/pages/mississippi' },
-    { name: 'Michigan', city: 'Kalamazoo', phone: '800-631-0096', href: '/pages/michigan' },
+    { name: 'Southeast HQ — Georgia', city: 'Villa Rica', phone: '770-459-5784', href: '/pages/georgia' },
+    { name: 'Michigan', city: 'Kalamazoo', phone: '269-353-1990', href: '/pages/michigan' },
     { name: 'California', city: 'Brea', phone: '714-990-2844', href: '/pages/california' },
     { name: 'Indiana', city: 'Huntingburg', phone: '812-683-5808', href: '/pages/indiana' },
     { name: 'Canada', city: 'Mississauga, ON', phone: '437-247-5613', href: '/pages/canada' },
@@ -117,7 +116,7 @@ export default function ContactClient() {
                                 <Mail className="text-leuco-purple" size={20} />
                                 <div>
                                     <div className="text-xs font-black tracking-widest text-gray-400 mb-1">EMAIL</div>
-                                    <a href="mailto:info@leuco.com" className="font-black hover:text-leuco-purple transition-colors">info@leuco.com</a>
+                                    <a href="mailto:sales@leucotool.com" className="font-black hover:text-leuco-purple transition-colors">sales@leucotool.com</a>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">

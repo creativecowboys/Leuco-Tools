@@ -10,9 +10,8 @@ export default function CatalogsPage() {
     const catalogs = [
         { title: 'LEUCO Main Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2024' },
         { title: 'HighlineXP Industrial Series', desc: 'Full product catalog for the HighlineXP industrial tooling line.', year: '2024' },
+        { title: 'HP+ Spirals & Drills', desc: 'Complete HP+ spiral and drill tooling range for CNC routing and machining centers.', year: '2024' },
         { title: 'Circular Saw Blades', desc: 'Complete circular saw blade range including specifications, applications, and ordering information.', year: '2024' },
-        { title: 'Cutter Heads & Knives', desc: 'Moulder, planer, and jointer cutter head systems with knife inserts.', year: '2024' },
-        { title: 'CNC Tooling (Spirals & Drills)', desc: 'HP+ spiral and drill tooling for CNC routing and machining centers.', year: '2024' },
         { title: 'Resharpening Services Guide', desc: 'How to work with LEUCO service centers to maximize tool performance and life.', year: '2024' },
     ];
 

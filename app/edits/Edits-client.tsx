@@ -2,6 +2,15 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
+// ─── Blob proxy helpers ───────────────────────────────────────────────────────
+// All private Vercel Blob URLs must go through our auth-gated proxy.
+function blobProxy(url: string): string {
+  return `/api/edits/file?url=${encodeURIComponent(url)}`;
+}
+function isImageUrl(url: string): boolean {
+  return /\.(jpe?g|png|gif|webp|svg)(\?|$)/i.test(url);
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Role = 'client' | 'admin';
@@ -18,6 +27,7 @@ interface EditRequest {
   submitted_by: string;
   status: Status;
   admin_note: string | null;
+  attachments: string | null; // JSON-encoded string[]
   created_at: string;
   updated_at: string;
 }
@@ -304,8 +314,40 @@ function NewRequestForm({ onCreated }: { onCreated: (req: EditRequest) => void }
     page_url: '',
     submitted_by: '',
   });
+  const [attachments, setAttachments] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const set = (k: keyof typeof form, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setUploadError('');
+    setUploading(true);
+    const newUrls: string[] = [];
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append('file', file);
+      try {
+        const res = await fetch('/api/edits/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok) { setUploadError(data.error || 'Upload failed'); break; }
+        newUrls.push(data.url);
+      } catch {
+        setUploadError('Upload failed. Please try again.');
+        break;
+      }
+    }
+    setAttachments(a => [...a, ...newUrls]);
+    setUploading(false);
+    // Reset input so the same file can be re-selected
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const removeAttachment = (url: string) =>
+    setAttachments(a => a.filter(u => u !== url));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -318,12 +360,14 @@ function NewRequestForm({ onCreated }: { onCreated: (req: EditRequest) => void }
         body: JSON.stringify({
           ...form,
           page_url: form.page_url.trim() || null,
+          attachments,
         }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Failed to submit'); return; }
       onCreated(data.request);
       setForm({ category: 'text_change', title: '', description: '', page_url: '', submitted_by: '' });
+      setAttachments([]);
       setOpen(false);
     } catch {
       setError('Something went wrong. Please try again.');
@@ -419,7 +463,7 @@ function NewRequestForm({ onCreated }: { onCreated: (req: EditRequest) => void }
             </div>
 
             <div>
-              <label style={styles.label} htmlFor="edits-description">Description * <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>— describe what needs to change and where. No file uploads — paste image links here if needed.</span></label>
+              <label style={styles.label} htmlFor="edits-description">Description * <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>— describe what needs to change and where.</span></label>
               <textarea
                 id="edits-description"
                 value={form.description}
@@ -429,6 +473,92 @@ function NewRequestForm({ onCreated }: { onCreated: (req: EditRequest) => void }
                 rows={4}
                 style={{ ...styles.input, resize: 'vertical', lineHeight: 1.6 }}
               />
+            </div>
+
+            {/* ── File attachments ── */}
+            <div>
+              <label style={styles.label}>Attachments <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional — images, PDFs, videos up to 10 MB each)</span></label>
+
+              {/* Drop zone / picker */}
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  border: '1.5px dashed rgba(255,255,255,0.15)',
+                  borderRadius: '8px',
+                  padding: '14px 16px',
+                  cursor: uploading ? 'wait' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  color: uploading ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.5)',
+                  fontSize: '13px',
+                  transition: 'border-color 0.2s, background 0.2s',
+                  background: 'rgba(255,255,255,0.02)',
+                }}
+              >
+                <span style={{ fontSize: '20px' }}>{uploading ? '⏳' : '📎'}</span>
+                <span>{uploading ? 'Uploading…' : 'Click to attach files'}</span>
+              </div>
+              <input
+                ref={fileInputRef}
+                id="edits-file-input"
+                type="file"
+                multiple
+                accept="image/*,application/pdf,video/mp4,video/quicktime,video/webm"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+
+              {uploadError && (
+                <p style={{ color: '#fca5a5', fontSize: '12px', margin: '6px 0 0' }}>{uploadError}</p>
+              )}
+
+              {/* Preview list */}
+              {attachments.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '10px' }}>
+                  {attachments.map(url => {
+                    const proxied = blobProxy(url);
+                    const fileName = url.split('/').pop() || 'file';
+                    return (
+                      <div key={url} style={{
+                        position: 'relative',
+                        borderRadius: '6px',
+                        overflow: 'hidden',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        background: 'rgba(255,255,255,0.04)',
+                      }}>
+                        {isImageUrl(url) ? (
+                          <img src={proxied} alt="attachment" style={{ width: '72px', height: '72px', objectFit: 'cover', display: 'block' }} />
+                        ) : (
+                          <div style={{
+                            width: '72px', height: '72px', display: 'flex',
+                            flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                            gap: '4px', fontSize: '22px',
+                          }}>
+                            📄
+                            <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', textAlign: 'center', padding: '0 4px', wordBreak: 'break-all', lineHeight: 1.2 }}>
+                              {fileName.slice(0, 16)}
+                            </span>
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          onClick={e => { e.stopPropagation(); removeAttachment(url); }}
+                          style={{
+                            position: 'absolute', top: '2px', right: '2px',
+                            background: 'rgba(0,0,0,0.65)', color: '#fff',
+                            border: 'none', borderRadius: '50%',
+                            width: '18px', height: '18px', fontSize: '10px',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            lineHeight: 1,
+                          }}
+                          aria-label="Remove attachment"
+                        >✕</button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {error && (
@@ -480,6 +610,10 @@ function RequestCard({
   const [adminNote, setAdminNote] = useState(req.admin_note || '');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [cardUploading, setCardUploading] = useState(false);
+  const [cardUploadError, setCardUploadError] = useState('');
+  const [cardDeleting, setCardDeleting] = useState<string | null>(null); // URL being deleted
+  const cardFileInputRef = React.useRef<HTMLInputElement>(null);
 
   const date = new Date(req.created_at).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric',
@@ -515,6 +649,62 @@ function RequestCard({
   };
 
   const statusChanged = newStatus !== req.status || adminNote !== (req.admin_note || '');
+
+  const handleCardFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setCardUploadError('');
+    setCardUploading(true);
+    const newUrls: string[] = [];
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append('file', file);
+      try {
+        const res = await fetch('/api/edits/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok) { setCardUploadError(data.error || 'Upload failed'); break; }
+        newUrls.push(data.url);
+      } catch {
+        setCardUploadError('Upload failed. Please try again.');
+        break;
+      }
+    }
+    if (cardFileInputRef.current) cardFileInputRef.current.value = '';
+    if (newUrls.length === 0) { setCardUploading(false); return; }
+    // Save to the request via PATCH
+    try {
+      const res = await fetch(`/api/edits/${req.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ add_attachments: newUrls }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setCardUploadError(data.error || 'Save failed'); }
+      else { onUpdate(data.request); }
+    } catch {
+      setCardUploadError('Failed to save attachments. Please try again.');
+    } finally {
+      setCardUploading(false);
+    }
+  };
+
+  const handleRemoveAttachment = async (url: string) => {
+    if (!confirm('Remove this attachment? This cannot be undone.')) return;
+    setCardDeleting(url);
+    try {
+      const res = await fetch(`/api/edits/${req.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ remove_attachment: url }),
+      });
+      const data = await res.json();
+      if (res.ok) onUpdate(data.request);
+    } catch {
+      // silent — worst case the list still shows until refresh
+    } finally {
+      setCardDeleting(null);
+    }
+  };
 
   return (
     <div style={{
@@ -596,6 +786,117 @@ function RequestCard({
               </a>
             </div>
           )}
+
+          {/* Attachments — display existing */}
+          {req.attachments && (() => {
+            let urls: string[] = [];
+            try { urls = JSON.parse(req.attachments); } catch { /* ignore */ }
+            return urls.length > 0 ? (
+              <div style={{ marginBottom: '1rem' }}>
+                <div style={styles.label}>Attachments</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
+                  {urls.map(url => {
+                    const proxied = blobProxy(url);
+                    const fileName = url.split('/').pop() || 'file';
+                    const isDeleting = cardDeleting === url;
+                    return (
+                      <div key={url} style={{ position: 'relative' }}>
+                        <a
+                          href={proxied}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={fileName}
+                          style={{
+                            display: 'block',
+                            borderRadius: '6px',
+                            overflow: 'hidden',
+                            border: '1px solid rgba(255,255,255,0.12)',
+                            background: 'rgba(255,255,255,0.04)',
+                            textDecoration: 'none',
+                            opacity: isDeleting ? 0.4 : 1,
+                            transition: 'border-color 0.2s, opacity 0.2s',
+                          }}
+                        >
+                          {isImageUrl(url) ? (
+                            <img
+                              src={proxied}
+                              alt={fileName}
+                              style={{ width: '96px', height: '96px', objectFit: 'cover', display: 'block' }}
+                            />
+                          ) : (
+                            <div style={{
+                              width: '96px', height: '96px', display: 'flex',
+                              flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                              gap: '6px', fontSize: '26px',
+                            }}>
+                              📄
+                              <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.45)', textAlign: 'center', padding: '0 6px', wordBreak: 'break-all', lineHeight: 1.3 }}>
+                                {fileName.slice(0, 18)}
+                              </span>
+                            </div>
+                          )}
+                        </a>
+                        {/* Delete button */}
+                        <button
+                          onClick={e => { e.preventDefault(); handleRemoveAttachment(url); }}
+                          disabled={isDeleting}
+                          title="Remove attachment"
+                          style={{
+                            position: 'absolute', top: '4px', right: '4px',
+                            background: 'rgba(239,68,68,0.85)', color: '#fff',
+                            border: 'none', borderRadius: '50%',
+                            width: '20px', height: '20px', fontSize: '11px',
+                            cursor: isDeleting ? 'wait' : 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            lineHeight: 1, fontWeight: 700,
+                            boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                          }}
+                          aria-label="Remove attachment"
+                        >
+                          {isDeleting ? '…' : '✕'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null;
+          })()}
+
+          {/* Add files to existing request — visible to all roles */}
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={styles.label}>Add Files <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>— attach additional images, PDFs, or videos</span></div>
+            <div
+              onClick={() => !cardUploading && cardFileInputRef.current?.click()}
+              style={{
+                border: '1.5px dashed rgba(255,255,255,0.12)',
+                borderRadius: '8px',
+                padding: '12px 14px',
+                cursor: cardUploading ? 'wait' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: cardUploading ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.45)',
+                fontSize: '13px',
+                background: 'rgba(255,255,255,0.02)',
+                transition: 'border-color 0.2s',
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>{cardUploading ? '⏳' : '📎'}</span>
+              <span>{cardUploading ? 'Uploading & saving…' : 'Click to attach files'}</span>
+            </div>
+            <input
+              ref={cardFileInputRef}
+              type="file"
+              multiple
+              accept="image/*,application/pdf,video/mp4,video/quicktime,video/webm"
+              onChange={handleCardFileChange}
+              style={{ display: 'none' }}
+            />
+            {cardUploadError && (
+              <p style={{ color: '#fca5a5', fontSize: '12px', margin: '6px 0 0' }}>{cardUploadError}</p>
+            )}
+          </div>
 
           {/* Admin note (read-only for client) */}
           {req.admin_note && role === 'client' && (

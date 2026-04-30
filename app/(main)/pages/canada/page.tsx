@@ -13,9 +13,9 @@ export default function Page() {
             city="Mississauga, Ontario"
             address="6295 Shawson Drive Unit #9, Mississauga, Ontario, L5T 1H4"
             phone="437-247-5613"
-            email="canada@leuco.com"
+            email="sales@leucotool.com"
             hours="Mon–Fri: 8:00 AM – 5:00 PM ET"
-            description="LEUCO Canada serves the entire Canadian market from its Ontario base, providing the same world-class resharpening quality and tooling expertise as our US locations."
+            description="LEUCO has proudly served the Canadian market from Mississauga, Ontario for over 20 years. Our team delivers the same world-class resharpening quality and tooling expertise as our US locations to customers across Canada."
         />
     );
 }

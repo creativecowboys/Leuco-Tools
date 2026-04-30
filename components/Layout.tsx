@@ -56,12 +56,12 @@ const navLinks = [
         ],
     },
     {
-        name: 'SOLUTIONS',
+        name: 'APPLICATIONS',
         href: '/blogs/leuco-solutions',
         items: [
-            { label: 'Tooling Innovations', href: '/blogs/leuco-solutions/leuco-tooling-innovations' },
-            { label: 'Materials Solutions', href: '/blogs/leuco-solutions/leuco-materials-solutions' },
-            { label: 'Tooling Solutions', href: '/blogs/leuco-solutions/leuco-tooling-solutions' },
+            { label: 'Solid Wood & Moulding', href: '/blogs/leuco-solutions/leuco-tooling-innovations' },
+            { label: 'Panel & Composite Materials', href: '/blogs/leuco-solutions/leuco-materials-solutions' },
+            { label: 'CNC Routing & Machining', href: '/blogs/leuco-solutions/leuco-tooling-solutions' },
         ],
     },
     {
@@ -273,15 +273,15 @@ export default function Layout({ children }: LayoutProps) {
                             <div className="space-y-4 pt-4">
                                 <div className="flex items-center gap-3 text-gray-400">
                                     <Phone size={18} className="text-leuco-purple" />
-                                    <span className="font-bold">+1 (800) 433-0771</span>
+                                    <span className="font-bold">+1 (800) 631-0096</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-400">
                                     <Mail size={18} className="text-leuco-purple" />
-                                    <span className="font-bold">info@leuco.com</span>
+                                    <span className="font-bold">sales@leucotool.com</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-400">
                                     <MapPin size={18} className="text-leuco-purple" />
-                                    <span className="font-bold">Horicon, Wisconsin, USA</span>
+                                    <span className="font-bold">Villa Rica, Georgia, USA</span>
                                 </div>
                             </div>
                         </div>

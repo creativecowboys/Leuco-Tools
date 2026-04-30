@@ -27,7 +27,7 @@ export default function HighlineXPClient({ initialProducts }: Props) {
                         HIGHLINE<span className="text-leuco-purple">XP</span>
                     </h1>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
-                        The HighlineXP Industrial Series represents the pinnacle of LEUCO engineering — precision-engineered for the most demanding industrial applications.
+                        The HighlineXP Industrial Series delivers ultra-fine finish quality in the most demanding production environments. Re-sharpenable carbide construction extends tool life up to 8–10 resharpenings, reducing cost-per-cut across your entire operation.
                     </p>
                     <button
                         onClick={() => document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth' })}
@@ -41,9 +41,9 @@ export default function HighlineXPClient({ initialProducts }: Props) {
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
                     {[
-                        { icon: Zap, title: 'Maximum Performance', desc: 'Up to 40% longer tool life compared to standard tooling.' },
-                        { icon: ShieldCheck, title: 'Precision Engineering', desc: 'Tolerances down to 0.001mm for ultra-fine surface quality.' },
-                        { icon: Award, title: 'Industrial Grade', desc: 'Built for high-volume production environments.' },
+                        { icon: Zap, title: 'Maximum Performance', desc: 'Engineered for the highest feed rates and longest run times — outperforming standard tooling in head-to-head production tests.' },
+                        { icon: ShieldCheck, title: 'Precision Engineering', desc: 'Micron-level tolerances produce ultra-fine surface quality straight off the tool, reducing downstream sanding and finishing time.' },
+                        { icon: Award, title: 'Industrial Grade', desc: 'Re-sharpenable carbide construction yields up to 8–10 resharpenings, dramatically lowering total tool cost for high-volume operations.' },
                     ].map(({ icon: Icon, title, desc }, i) => (
                         <motion.div key={i} whileHover={{ y: -4 }} className="p-8 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-lg transition-all">
                             <Icon className="text-leuco-purple mb-4" size={40} />

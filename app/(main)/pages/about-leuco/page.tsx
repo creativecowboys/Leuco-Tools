@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
     const locations = [
-        { name: 'Southeast HQ — Georgia', href: '/pages/georgia' },
+        { name: 'Southeast', href: '/pages/georgia' },
         { name: 'Michigan', href: '/pages/michigan' },
         { name: 'California', href: '/pages/california' },
         { name: 'Indiana', href: '/pages/indiana' },

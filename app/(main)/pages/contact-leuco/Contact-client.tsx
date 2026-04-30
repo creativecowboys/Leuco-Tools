@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
 
 const locations = [
-    { name: 'Southeast HQ — Georgia', city: 'Villa Rica', phone: '770-459-5784', href: '/pages/georgia' },
+    { name: 'Southeast', city: 'Villa Rica, GA', phone: '770-459-5784', href: '/pages/georgia' },
     { name: 'Michigan', city: 'Kalamazoo', phone: '269-353-1990', href: '/pages/michigan' },
     { name: 'California', city: 'Brea', phone: '714-990-2844', href: '/pages/california' },
     { name: 'Indiana', city: 'Huntingburg', phone: '812-683-5808', href: '/pages/indiana' },
@@ -117,13 +117,6 @@ export default function ContactClient() {
                                 <div>
                                     <div className="text-xs font-black tracking-widest text-gray-400 mb-1">EMAIL</div>
                                     <a href="mailto:sales@leucotool.com" className="font-black hover:text-leuco-purple transition-colors">sales@leucotool.com</a>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <Clock className="text-leuco-purple shrink-0" size={20} />
-                                <div>
-                                    <div className="text-xs font-black tracking-widest text-gray-400 mb-1">BUSINESS HOURS</div>
-                                    <div className="font-bold text-gray-700 text-sm">Monday – Friday, 7:00 AM – 5:00 PM (local)</div>
                                 </div>
                             </div>
                         </div>

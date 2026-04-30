@@ -59,9 +59,8 @@ const navLinks = [
         name: 'APPLICATIONS',
         href: '/blogs/leuco-solutions',
         items: [
-            { label: 'Solid Wood & Moulding', href: '/blogs/leuco-solutions/leuco-tooling-innovations' },
-            { label: 'Panel & Composite Materials', href: '/blogs/leuco-solutions/leuco-materials-solutions' },
-            { label: 'CNC Routing & Machining', href: '/blogs/leuco-solutions/leuco-tooling-solutions' },
+            { label: 'Tooling Innovations', href: '/blogs/leuco-solutions/leuco-tooling-innovations' },
+            { label: 'Material Solutions', href: '/blogs/leuco-solutions/leuco-materials-solutions' },
         ],
     },
     {

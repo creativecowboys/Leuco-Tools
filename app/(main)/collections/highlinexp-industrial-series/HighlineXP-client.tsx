@@ -27,7 +27,7 @@ export default function HighlineXPClient({ initialProducts }: Props) {
                         HIGHLINE<span className="text-leuco-purple">XP</span>
                     </h1>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl mb-10">
-                        The HighlineXP Industrial Series delivers ultra-fine finish quality in the most demanding production environments. Re-sharpenable carbide construction extends tool life up to 8–10 resharpenings, reducing cost-per-cut across your entire operation.
+                        Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.
                     </p>
                     <button
                         onClick={() => document.getElementById('products-grid')?.scrollIntoView({ behavior: 'smooth' })}
@@ -41,9 +41,9 @@ export default function HighlineXPClient({ initialProducts }: Props) {
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
                     {[
-                        { icon: Zap, title: 'Maximum Performance', desc: 'Engineered for the highest feed rates and longest run times — outperforming standard tooling in head-to-head production tests.' },
-                        { icon: ShieldCheck, title: 'Precision Engineering', desc: 'Micron-level tolerances produce ultra-fine surface quality straight off the tool, reducing downstream sanding and finishing time.' },
-                        { icon: Award, title: 'Industrial Grade', desc: 'Re-sharpenable carbide construction yields up to 8–10 resharpenings, dramatically lowering total tool cost for high-volume operations.' },
+                        { icon: Zap, title: 'High Performance', desc: 'Get the most out of your machine with our specialized edge geometries and high-grade carbide.' },
+                        { icon: ShieldCheck, title: 'Stability and Balance', desc: 'Designed for vibration-free operation and high-feed processing in demanding industrial environments.' },
+                        { icon: Award, title: 'Superior Finish', desc: 'Deliver paint-ready or laminate-ready edges directly from the machine, reducing secondary processes.' },
                     ].map(({ icon: Icon, title, desc }, i) => (
                         <motion.div key={i} whileHover={{ y: -4 }} className="p-8 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-lg transition-all">
                             <Icon className="text-leuco-purple mb-4" size={40} />

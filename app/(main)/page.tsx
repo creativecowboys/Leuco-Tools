@@ -22,23 +22,23 @@ export default function Home() {
         {
             title: 'HP+ SPIRALS',
             subtitle: 'HIGH PERFORMANCE CUTTING',
+            cta: 'SHOP SPIRALS',
             image: categoryImages.spirals,
             href: '/collections/spiral-tools',
-            color: 'bg-leuco-purple',
         },
         {
-            title: 'DIAMOND TOOLING',
-            subtitle: 'MAXIMUM DURABILITY',
+            title: 'CUTTER HEADS',
+            subtitle: 'PRECISION SHAPING',
+            cta: 'SHOP CUTTER HEADS',
             image: categoryImages.diamond,
             href: '/collections/cutter-heads',
-            color: 'bg-leuco-black',
         },
         {
             title: 'SAW BLADES',
             subtitle: 'PRECISION CUTTING',
+            cta: 'SHOP SAWBLADES',
             image: categoryImages.sawBlades,
             href: '/collections/circular-saw-blades',
-            color: 'bg-leuco-purple',
         },
     ];
 
@@ -63,18 +63,18 @@ export default function Home() {
                         className="max-w-2xl"
                     >
                         <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">
-                            NEW HP+ SPIRALS LINE
+                            ALL NEW HIGHLINEXP
                         </span>
                         <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
-                            NEVER A DULL <br />
-                            <span className="text-leuco-purple">MOMENT.</span>
+                            ENGINEERED <br />
+                            <span className="text-leuco-purple">PERFORMANCE.</span>
                         </h1>
                         <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">
-                            The HighlineXP represents the pinnacle of LEUCO precision engineering — ultra-fine finish quality with re-sharpenable carbide that extends tool life up to 8–10 resharpenings.
+                            Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <Link href="/collections/highlinexp-industrial-series" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group">
-                                SHOP THE LINE <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                SHOP HIGHLINE XP <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                             </Link>
                             <button
                                 onClick={() => window.postMessage({ type: 'leuco-embed:open' }, '*')}
@@ -89,11 +89,12 @@ export default function Home() {
 
                 {/* Hero Stats */}
                 <div className="absolute bottom-0 left-0 right-0 bg-white/5 backdrop-blur-md border-t border-white/10 hidden md:block">
-                    <div className="max-w-[1440px] mx-auto grid grid-cols-3 divide-x divide-white/10">
+                    <div className="max-w-[1440px] mx-auto grid grid-cols-4 divide-x divide-white/10">
                         {[
                             { label: '40+ YEARS', value: 'SERVING NORTH AMERICA', icon: Globe },
-                            { label: '5', value: 'US SERVICE CENTERS', icon: MapPin },
-                            { label: '1–2 WKS', value: 'RESHARPENING TURNAROUND', icon: Wrench },
+                            { label: '6', value: 'NORTH AMERICA SERVICE CENTERS', icon: MapPin },
+                            { label: '1 WEEK', value: 'CARBIDE TURNAROUND', icon: Wrench },
+                            { label: '2 WEEKS', value: 'DIAMOND TURNAROUND', icon: Wrench },
                         ].map((stat, i) => (
                             <div key={i} className="p-8 flex items-center gap-4">
                                 <stat.icon className="text-leuco-purple" size={32} />
@@ -137,7 +138,7 @@ export default function Home() {
                                     <div className="text-leuco-purple font-black text-xs tracking-widest mb-2">{system.subtitle}</div>
                                     <h3 className="text-4xl font-black text-white mb-6 uppercase tracking-tighter leading-none">{system.title}</h3>
                                     <span className="bg-white text-leuco-black font-black text-xs px-6 py-3 group-hover:bg-leuco-purple group-hover:text-white transition-colors inline-block">
-                                        EXPLORE SYSTEM
+                                        {system.cta}
                                     </span>
                                 </div>
                             </Link>

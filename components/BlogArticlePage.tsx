@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import type { BlogArticle } from '@/lib/blog-articles';
 
@@ -35,6 +36,39 @@ export default function BlogArticlePage({ article, backHref, backLabel, category
                     )}
                 </div>
             </div>
+
+            {/* Image Gallery */}
+            {article.images && article.images.length > 0 && (
+                <div className="px-4 md:px-12 max-w-[1440px] mx-auto pt-12">
+                    {/* Featured / first image full-width */}
+                    <div className="relative w-full aspect-[16/7] mb-4 overflow-hidden bg-gray-100">
+                        <Image
+                            src={article.images[0].src}
+                            alt={article.images[0].alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 1440px"
+                            priority
+                        />
+                    </div>
+                    {/* Secondary images in a grid */}
+                    {article.images.length > 1 && (
+                        <div className={`grid gap-4 mb-4 ${article.images.length === 2 ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-3'}`}>
+                            {article.images.slice(1).map((img, i) => (
+                                <div key={i} className="relative aspect-square overflow-hidden bg-gray-100">
+                                    <Image
+                                        src={img.src}
+                                        alt={img.alt}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 50vw, 400px"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Article Body */}
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">

@@ -11,13 +11,81 @@ export interface BlogSection {
   paragraphs: string[];
 }
 
+/** A product card rendered as an alternating 2-col image+text row */
+export interface ProductCard {
+  heading: string;
+  description: string;
+  image: BlogImage;
+  ctaLabel: string;
+  ctaHref: string;
+  /** If true, image is on the right and text on the left */
+  imageRight?: boolean;
+  /** If provided, renders an embedded video instead of a static image */
+  videoUrl?: string;
+}
+
+/** A full-bleed interstitial banner between content sections */
+export interface InterstitialBanner {
+  headline: string;
+  subtext?: string;
+  backgroundImage?: string;
+  /** purple | dark */
+  style?: 'purple' | 'dark';
+  /** Optional CTA button href — defaults to contact page if omitted */
+  ctaHref?: string;
+  ctaLabel?: string;
+}
+
+/** A comparison table row */
+export interface ComparisonRow {
+  feature: string;
+  before: string;
+  after: string;
+}
+
+/** A comparison table (e.g. HP Spirals vs HP+ Spirals) */
+export interface ComparisonTable {
+  beforeLabel: string;
+  afterLabel: string;
+  rows: ComparisonRow[];
+}
+
+/** An individual shoppable product listed in the article */
+export interface FeaturedProduct {
+  name: string;
+  description: string;
+  image: BlogImage;
+  price?: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+
 export interface BlogArticle {
   slug: string;
   title: string;
   blog: string;
   intro: string;
+  /** Optional override hero image (shown full-bleed below the dark title bar) */
+  heroImage?: BlogImage;
   sections: BlogSection[];
   images: BlogImage[];
+  /** Product showcase cards rendered as alternating 2-col rows */
+  productCards?: ProductCard[];
+  /** Optional interstitial banner injected between sections and product cards */
+  interstitialBanner?: InterstitialBanner;
+  /** Label for the "Why Choose" overline above the feature grid (product-card articles) */
+  featuresSectionLabel?: string;
+  /** Hero CTA label (product-card articles) */
+  heroCta?: { label: string; href: string };
+  /** Sidebar "Shop System" link (product-card articles) */
+  shopSystemHref?: string;
+  /** Optional comparison table (e.g. before vs after product upgrade) */
+  comparisonTable?: ComparisonTable;
+  /** Individual shoppable products listed in the article */
+  featuredProducts?: FeaturedProduct[];
+  /** Optional YouTube/Vimeo embed URL for a "Learn More" video section */
+  videoUrl?: string;
+  videoLabel?: string;
 }
 
 export const blogArticles: Record<string, BlogArticle> = {
@@ -376,66 +444,194 @@ export const blogArticles: Record<string, BlogArticle> = {
     slug: "leuco-hp-plus-spirals",
     title: "LEUCO HP+ Spirals",
     blog: "tooling-innovations",
-    intro: "While the Original HP Spirals Set Industry Benchmarks for Performance, LEUCO HP+ Spirals Take Precision, Durability, And Efficiency to Unprecedented Levels.\nWhen it comes to precision tooling for CNC machines, LEUCO is a premier name that is synonymous with innovation and performance. Two of our most recent standout products are the HP Spirals and the newer, improved HP+ Spirals.\nHP Spirals quickly became trusted tools used by professionals for a variety of applications, including sizing, jointing, grooving, and dividing panels. Known for their exceptional performance and versatility, these tools have remained a go-to option across the woodworking industry. Their accessibility and reliability have made them a staple in countless manufacturing setups worldwide. They outperformed standard spirals in the market by delivering 2\u20133 times the edge life of typical tools, offering unmatched cost-effectiveness.\nBut if you know much about LEUCO Tools, you know we weren\u2019t content with \u201cgood enough.\u201d That\u2019s why we embarked on the new and improved LEUCO HP+ Spirals.",
+    intro: "While the Original HP Spirals set industry benchmarks for performance, LEUCO HP+ Spirals take precision, durability, and efficiency to unprecedented levels. Crafted from ultra-hard micro grain carbide with an optimized cutting geometry, HP+ Spirals address the key challenges that limit standard spiral performance: chip evacuation, heat buildup, and tool longevity.",
+    featuresSectionLabel: "THE HP+ UPGRADES",
+    heroCta: { label: "SHOP HP+ SPIRALS", href: "https://shopleuco.com/collections/hp-plus-spirals" },
+    shopSystemHref: "https://shopleuco.com/collections/hp-plus-spirals",
+    videoUrl: "https://vimeo.com/1077261728",
+    videoLabel: "Learn About LEUCO HP+ Spirals",
     sections: [
-      { heading: "Why LEUCO HP+ Spirals Are the Upgrade You Need", paragraphs: ["While the HP Spirals remain a top-tier choice, LEUCO pushed boundaries to develop the HP+ Spirals. These new spirals addressed key industry challenges such as efficient chip evacuation, heat management, and tool longevity head-on, and improved on an already outstanding product."] },
-      { heading: "Key Upgrades:", paragraphs: [] },
-      { heading: "Revolutionized Chip Evacuation:", paragraphs: ["Enhanced washout areas improve chip evacuation by 30%, leading to smoother operations and significantly longer tool life."] },
-      { heading: "Heat Management with an Innovative Design:", paragraphs: ["By eliminating coatings that trapped heat during intensive operations, HP+ Spirals reduce heat buildup, minimizing tool wear and increasing operational consistency."] },
-      { heading: "Improved Tool Strength:", paragraphs: ["HP+ Spirals are designed to be more durable, ensuring longer-lasting performance even under high workloads. With an extended lifespan, these spirals reduce downtime and tool replacement costs."] },
-      { heading: "Next-Level Efficiency:", paragraphs: ["These enhancements transform HP+ Spirals into powerhouse tools capable of achieving greater precision and speed, delivering an undeniable return on investment."] },
-      { heading: "Applications:", paragraphs: ["Our HP+ Spirals shine in the same versatile settings as HP Spirals, but excel in operations demanding enhanced toughness and efficiency. Whether you're machining dense materials or working at higher feed rates, HP+ Spirals are by far the premier choice."] },
-      { heading: "Performance:", paragraphs: ["HP+ Spirals take the edge life and cutting quality of HP Spirals to the next level, promising unparalleled performance that meets even the most intense industry standards."] },
-      { heading: "HP+ Spirals", paragraphs: ["[Explore LEUCO HP+Spirals](https://shopleuco.com/collections/hp-plus-spirals)"] },
-      { heading: "See Why Professionals Choose LEUCO\u2019s HP+ Spirals", paragraphs: ["While the HP Spirals remain a fantastic tool for many applications, the HP+ Spirals cater to professionals who demand nothing short of perfection. LEUCO\u2019s HP+ Spirals were engineered to address real-life manufacturing challenges, offering longer tool life, greater efficiency, and consistently higher performance."] },
-      { heading: "Elevate Your Operations with LEUCO HP+ Spirals", paragraphs: ["At LEUCO, we don't rest on our laurels. The HP+ Spirals are proof of our commitment to innovation, delivering tools that not only meet but exceed professional demands. If you've relied on HP Spirals, our HP+ Spirals will transform your workflows with even greater precision, durability, and efficiency.", "American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "Revolutionized Chip Evacuation", paragraphs: ["Enhanced washout areas improve chip evacuation by 30%, leading to smoother operations and significantly longer tool life. Less chip buildup means cleaner cuts and less heat accumulation at the cutting edge."] },
+      { heading: "Heat Management Without Coatings", paragraphs: ["By eliminating coatings that trapped heat during intensive operations, HP+ Spirals reduce heat buildup at the source. Less thermal stress means less tool wear and more consistent performance across long production runs."] },
+      { heading: "Improved Tool Strength", paragraphs: ["HP+ Spirals are designed to be more durable, ensuring longer-lasting performance even under high workloads. With an extended lifespan, these spirals reduce downtime and tool replacement costs — delivering a measurable return on investment."] },
+      { heading: "Next-Level Efficiency", paragraphs: ["These enhancements transform HP+ Spirals into powerhouse tools capable of achieving greater precision and speed. Whether you're machining dense materials or working at higher feed rates, HP+ Spirals are the premier choice."] },
+    ],
+    comparisonTable: {
+      beforeLabel: "HP Spirals",
+      afterLabel: "HP+ Spirals",
+      rows: [
+        { feature: "Tool Material", before: "Tungsten carbide", after: "Ultra-hard micro grain carbide" },
+        { feature: "Chip Evacuation", before: "Standard washout areas", after: "Enhanced washout areas — 30% improvement" },
+        { feature: "Heat Management", before: "Coated to manage heat", after: "Coating eliminated — heat escapes freely" },
+        { feature: "Tool Life", before: "2–3× edge life vs. standard spirals", after: "Extended further with HP+ geometry" },
+        { feature: "Cutting Geometry", before: "Standard optimized geometry", after: "Next-generation optimized geometry" },
+        { feature: "Best For", before: "Standard CNC panel operations", after: "High-demand operations requiring max toughness and efficiency" },
+      ],
+    },
+    featuredProducts: [
+      {
+        name: "HP+ High Performance Compression Tungsten Carbide Spiral",
+        description: "The flagship HP+ compression spiral. Combines upcut and downcut edges for chip-free finishes on both panel faces. Ultra-hard micro grain carbide, 30% improved chip evacuation, no coating for better heat management. Available in 3/8\" and 1/2\" diameters.",
+        image: { src: "/blog-images/hp-plus-compression.png", alt: "HP+ High Performance Compression Spiral" },
+        price: "From $118.24",
+        ctaLabel: "VIEW PRODUCT",
+        ctaHref: "https://shopleuco.com/products/hp-plus-high-performance-compression-tungsten-carbide-spiral",
+      },
+      {
+        name: "HP+ High Performance Mortise Compression Tungsten Carbide Spiral",
+        description: "The mortise compression variant with a shorter upcut length — optimized for thinner panels and groove cutting. The same HP+ micro grain carbide and enhanced chip evacuation design. Available in 3/8\" and 1/2\" diameters.",
+        image: { src: "/blog-images/hp-plus-mortise-compression.jpg", alt: "HP+ High Performance Mortise Compression Spiral" },
+        price: "From $105.54",
+        ctaLabel: "VIEW PRODUCT",
+        ctaHref: "https://shopleuco.com/products/hp-plus-high-performance-mortise-compression-tungsten-carbide-spiral",
+      },
+      {
+        name: "HP+ High Performance Downcut Tungsten Carbide Spiral",
+        description: "When you need the best quality finish on the panel's upper surface, the HP+ Downcut delivers. The same micro grain carbide construction and enhanced chip evacuation as the full HP+ line. Available in 1/4\", 3/8\", and 1/2\" diameters.",
+        image: { src: "/blog-images/hp-plus-downcut.jpg", alt: "HP+ High Performance Downcut Spiral" },
+        price: "From $63.09",
+        ctaLabel: "VIEW PRODUCT",
+        ctaHref: "https://shopleuco.com/products/hp-plus-high-performance-downcut-tungsten-carbide-spiral",
+      },
+    ],
+    interstitialBanner: {
+      headline: "Outperform With Every Cut",
+      subtext: "Engineered for professionals who demand precision, durability, and efficiency in every pass.",
+      backgroundImage: "/blog-images/hp-plus-banner.jpg",
+      style: "purple",
+      ctaHref: "https://shopleuco.com/collections/hp-plus-spirals",
+      ctaLabel: "SHOP HP+ SPIRALS",
+    },
+    productCards: [
+      {
+        heading: "HP+ vs HP Spirals: The Upgrade Story",
+        description: "HP Spirals were already best-in-class, delivering 2–3× the edge life of typical tools. HP+ Spirals didn't just improve on the HP — they addressed the fundamental performance limiters. Enhanced washout areas, coating-free heat management, and ultra-hard micro grain carbide combine to deliver performance that professionals can measure in reduced downtime, longer runs, and better surface finishes.",
+        image: { src: "/blog-images/hp-plus-poster.jpg", alt: "LEUCO HP+ Spirals in operation" },
+        videoUrl: "https://vimeo.com/1077261728",
+        ctaLabel: "SHOP HP+ SPIRALS",
+        ctaHref: "https://shopleuco.com/collections/hp-plus-spirals",
+        imageRight: false,
+      },
+
+      {
+        heading: "See Why Professionals Choose HP+ Spirals",
+        description: "HP+ Spirals cater to professionals who demand nothing short of perfection. LEUCO engineered them to address real-life manufacturing challenges — longer tool life, greater efficiency, and consistently higher performance at higher feed rates and in denser materials.",
+        image: { src: "/blog-images/hp-plus-banner.jpg", alt: "LEUCO HP+ Spirals system" },
+        ctaLabel: "SHOP HP+ SPIRALS",
+        ctaHref: "https://shopleuco.com/collections/hp-plus-spirals",
+        imageRight: true,
+      },
     ],
     images: [{"src": "/blog-images/hp-plus-banner.jpg", "alt": "LEUCO HP+ Spirals System"}, {"src": "/blog-images/hp-plus-poster.jpg", "alt": "HP+ Spirals in action"}],
   },
+
+
   "leuco-shrinkfit-heatsync-system": {
     slug: "leuco-shrinkfit-heatsync-system",
     title: "LEUCO ShrinkFIT HeatSync System",
     blog: "tooling-innovations",
-    intro: "Take Control of Your Tool Setup with LEUCO\u2019s ShrinkFIT HeatSync System, and Watch Your Efficiency, Durability, and Productivity Skyrocket!\n[Shop ShrinkFIT HeatSync](https://shopleuco.com/collections/shrinkfit-heatsync-system)\nAvailable through LEUCO is a groundbreaking innovation in tool holding technology, empowering manufacturers to streamline their tool-changing process while achieving superior performance. Built for professionals who demand precision and efficiency, the HeatSync System eliminates the need for traditional collets, offering a cutting-edge alternative that enhances tool life, cut quality, and operator efficiency.\nEngineered especially for machinists and manufacturing engineers, this system provides total control over tool setup, allowing users to independently change heat shrink tool holders with unparalleled ease.\nLEUCO\u2019s HS-System isn\u2019t just another tool clamping solution; it\u2019s a game-changer for modern machining. Engineered with cutting-edge innovation and designed to optimize every aspect of the machining process, it\u2019s the ultimate solution for manufacturing environments that demand precision, speed, and reliability. Here\u2019s how the system stands out:",
+    intro: "Take Control of Your Tool Setup with LEUCO\u2019s ShrinkFIT HeatSync System, and Watch Your Efficiency, Durability, and Productivity Skyrocket! Available through LEUCO is a groundbreaking innovation in tool holding technology, empowering manufacturers to streamline their tool-changing process while achieving superior performance. Built for professionals who demand precision and efficiency, the HeatSync System eliminates the need for traditional collets, offering a cutting-edge alternative that enhances tool life, cut quality, and operator efficiency.",
+    heroImage: undefined,
+    featuresSectionLabel: "WHY CHOOSE THE HS-SYSTEM",
+    heroCta: { label: "SHOP SHRINKFIT HEATSYNC", href: "https://shopleuco.com/collections/shrinkfit-heatsync-system" },
+    shopSystemHref: "https://shopleuco.com/collections/shrinkfit-heatsync-system",
     sections: [
       { heading: "Enhanced Efficiency for Peak Performance", paragraphs: ["Designed with efficiency in mind, the HS-System delivers faster, more precise tool changes that eliminate unnecessary downtime. This translates into more uninterrupted workflows, allowing manufacturers to operate with maximum productivity. By minimizing the time spent on maintenance and re-adjustments, the HS-System enhances the opportunity for seamless operation, helping businesses meet tight production deadlines and enhance overall productivity."] },
       { heading: "Improved Tool Life for Long-Term Value", paragraphs: ["With the HS-System, tools are securely and uniformly clamped, reducing stress during machining and contributing to exceptional cut quality. This precise clamping system minimizes wear and tear, significantly extending tool life. For manufacturers, this means fewer replacements, reduced overall tooling costs, and a consistent quality output that meets even the most demanding production standards."] },
       { heading: "Operator Convenience and Safety Built-In", paragraphs: ["Safety and usability are at the core of LEUCO\u2019s HS-System. The system features advanced components that prioritize the well-being of operators while simplifying tool handling. With intuitive mechanisms and ergonomic designs, this system not only reduces the risk of workplace accidents but also makes tool adjustments quicker and easier for machinists of all skill levels."] },
       { heading: "Engineered for Modern Manufacturing", paragraphs: ["By offering this sophisticated HS-System, LEUCO is able to help address the unique challenges of fast-paced, technology-driven manufacturing environments. The system integrates advanced technology to offer unparalleled precision and adaptability, ensuring that your operations remain cutting-edge. The system is versatile enough to accommodate a wide range of machining requirements, making it an indispensable solution for various applications across different industries."] },
-      { heading: "HS-Induction Unit", paragraphs: ["Quickly and efficiently heats tool holders for precise tool changes. Available in two size options: HeatSync+ or HeatSync (tabletop), you can facilitate smooth and accurate tool changes, all while minimizing potential damage to the tools or holders.", "[Shop Now](https://shopleuco.com/collections/shrinkfit-heatsync-system)"] },
-      { heading: "HS-Cooler", paragraphs: ["Designed to cool holders quickly after tool changes, the HS-Cooler minimizes downtime and reduces the risk of heat-related accidents, promoting both efficiency and safety.", "[Shop Now](https://shopleuco.com/products/heatsync-cooler-unit)"] },
-      { heading: "HS-Holders", paragraphs: ["The HS-Holders are available in four versatile sizes (3/8\u201d, 3/4\u201d, and 1/2\u201d), ensuring compatibility with a wide range of tools and machinery. Whether you're working on intricate components or handling heavy-duty projects, the HS-Holders provide the reliability and precision that professionals demand.", "[Shop Now](https://shopleuco.com/products/cnc-heat-shrinking-chucks)"] },
-      { heading: "Heat Protectant Gloves", paragraphs: ["These gloves are designed to protect operators from high temperatures while handling heated holders or tools, ensuring safe operation when using the HS-Induction Unit or HS-Cooler. They are essential for maintaining safety standards in high-performance industrial environments.", "[Shop Now](https://shopleuco.com/products/heatsync-gloves)", "American Express", "Apple Pay", "Discover", "Mastercard"] },
     ],
-    images: [{"src": "/blog-images/heatsync-cooler.jpg", "alt": "LEUCO HeatSync Cooler with Holder"}, {"src": "/blog-images/heatsync-gloves.png", "alt": "LEUCO HeatSync System Gloves"}],
+    images: [],
+    interstitialBanner: {
+      headline: "Outperform The Competition",
+      subtext: "Engineered for professionals who demand precision, speed, and reliability in every tool change.",
+      backgroundImage: "/blog-images/heatsync-banner.jpg",
+      style: "purple",
+    },
+    productCards: [
+      {
+        heading: "HS-Induction Unit",
+        description: "Quickly and efficiently heats tool holders for precise tool changes. Available in two size options \u2014 HeatSync+ (full tower) or HeatSync (tabletop) \u2014 you can facilitate smooth and accurate tool changes all while minimizing potential damage to tools or holders. The intuitive touchscreen interface provides precise heating settings with safe, hands-free operation.",
+        image: { src: "/blog-images/heatsync-tower.png", alt: "LEUCO HeatSync+ Induction Unit" },
+        ctaLabel: "Shop HS-Induction Unit",
+        ctaHref: "https://shopleuco.com/collections/shrinkfit-heatsync-system",
+        imageRight: false,
+      },
+      {
+        heading: "HS-Cooler",
+        description: "Designed to cool holders quickly after tool changes, the HS-Cooler minimizes downtime and reduces the risk of heat-related accidents, promoting both efficiency and safety. Its rapid cooling cycles pair seamlessly with the HS-Induction Unit for a complete, streamlined tool-change workflow.",
+        image: { src: "/blog-images/heatsync-cooler.jpg", alt: "LEUCO HeatSync Cooler with Holder" },
+        ctaLabel: "Shop HS-Cooler",
+        ctaHref: "https://shopleuco.com/products/heatsync-cooler-unit",
+        imageRight: true,
+      },
+      {
+        heading: "HS-Holders",
+        description: "The HS-Holders are available in four versatile sizes (3/8\u2033, 1/2\u2033, and 3/4\u2033), ensuring compatibility with a wide range of tools and machinery. Whether you\u2019re working on intricate components or handling heavy-duty projects, the HS-Holders provide the reliability and precision that professionals demand \u2014 with 360\u00b0 grip and near-zero runout.",
+        image: { src: "/blog-images/heatsync-holders.jpg", alt: "LEUCO CNC Heat Shrinking Chuck Holder" },
+        ctaLabel: "Shop HS-Holders",
+        ctaHref: "https://shopleuco.com/products/cnc-heat-shrinking-chucks",
+        imageRight: false,
+      },
+      {
+        heading: "Heat Protectant Gloves",
+        description: "These gloves are designed to protect operators from high temperatures while handling heated holders or tools, ensuring safe operation when using the HS-Induction Unit or HS-Cooler. Essential for maintaining safety standards in high-performance industrial environments, they are rated for sustained exposure to the heat levels generated during the shrink-fit process.",
+        image: { src: "/blog-images/heatsync-gloves.png", alt: "LEUCO HeatSync Heat Protectant Gloves" },
+        ctaLabel: "Shop Gloves",
+        ctaHref: "https://shopleuco.com/products/heatsync-gloves",
+        imageRight: true,
+      },
+    ],
+    videoUrl: undefined,
+    videoLabel: undefined,
   },
   "leuco-t3-system": {
     slug: "leuco-t3-system",
     title: "LEUCO t3-System",
     blog: "tooling-innovations",
-    intro: "LEUCO: Revolutionizing Solid Wood Machining at the Highest Level. Discover Cutting-Edge Precision with the LEUCO t3-System - Proven Performance, Proven Products.\nLEUCO's t3-System is setting new standards in the machining of solid wood and wood-based materials. Specifically designed for carpenters, furniture manufacturers, and joinery professionals, this innovative solution combines advanced technology with practicality to deliver outstanding performance. From chip-free surfaces to high milling precision, the t3-System is engineered to elevate your woodworking experience.\nThe new t3-System shank-type cutter is designed for use on CNC machines and joinery machinery. The triangular turnover knives with rounded edges are the decisive feature for the high processing quality of the t3-System shank-type cutter.\nTwo high-quality hole saws were compared in machine use - one with square inserts, the other from LEUCO with triangular inserts. The t3-System tool by LEUCO came out on top. The excellent cutting quality of the cutter due to the arrangement of the triangular indexing inserts for which a patent is pending makes the difference.\nBoth cutters were put to the test at Weinmann, a leading manufacturer of machines for woodworking. The crucial question was to find out which of the selected hole saws with square or triangular inserts can deliver the more convincing performance. The tools are mainly used for milling of socket holes and cable ducts in beams in frame construction \u2013especially by woodworking companies with joinery machines and multifunction bridges placing high demands on surface and cutting quality.",
+    intro: "LEUCO\u2019s t3-System is setting a new standard in solid wood and wood-based material machining. With patent-pending triangular turnover knives and an innovative shear-angle design, the t3-System delivers chip-free surfaces, superior edge quality, and zero overcuts \u2014 proven in head-to-head testing against leading competitors at Weinmann\u2019s multifunction bridge facility.",
+    featuresSectionLabel: "WHY CHOOSE THE t3-SYSTEM",
+    heroCta: { label: "SHOP t3-SYSTEM", href: "https://shopleuco.com/collections/t3-system" },
+    shopSystemHref: "https://shopleuco.com/collections/t3-system",
     sections: [
-      { heading: "Increased Feed, Optimum Chip Evacuation And Smooth Surfaces", paragraphs: ["The test was carried out on a WALLTEC M-300 multifunction bridge in the test department of the machine manufacturer Weinmann. The upper edges of both tools are arranged at an angle of 45 degrees so that drilling and chamfering can be carried out in one step. The equivalent cutter has square inserts in contrast to the t3 system tool from LEUCO working with an efficient and patent-pending arrangement of triangular inserts.", "The tool of the competitor was tested with a feed of 8 meters at 12,000 revolutions per minute and a feed of 34 millimeters. However, when the feed was increased to 10 meters per minute, burn marks appeared on the piece of wood due to frictional heat. This was not the case with the LEUCO hole saw which delivered a convincing cutting quality at a feed rate of 10 meters and 12,000 revolutions per minute \u2014 with excellent surface quality of the wooden workpiece and chip-free edges at the socket hole.", "Another benefit is the excellent chip evacuation without clogging the gullets or overloading the dust extraction. The WALLTEC M-300 had been specifically programmed for spiral plunge-cutting of the tool. This enabled the feed rate of the LEUCO t3-System milling cutter to be increased to 12 meters per minute, which meant that only 30 percent spindle power was required for the entire work process \u2014 a considerable saving in energy and less stress for the machine."] },
-      { heading: "Centered Shear Angle, Excellent Edge Quality, No Overcuts", paragraphs: ["The t3-System turnover knives of the LEUCO hole saw can be positioned at a shear angle which allows to guide the cutting force to the central part of the cutter. This will pull the cutting edges in direction of the workpiece to be machined, which improves the milling quality especially when processing crosscut wood and when cutting across the grain. The tool cuts socket holes and cable ducts in one pass, produces smooth surfaces and excellent edge quality \u2013without overcuts. The cutter is also suitable for sizing and is ideal for processing various materials, such as soft and hard wood, glued laminated timber, and wood and panel materials. Even abrasive gypsum plaster boards can be processed.", "The simultaneous drilling and chamfering using the upper cutting edges at a 45-degree angle eliminates the need for time-consuming rework. In addition to the high hole and surface quality, the cutting-intensive arrangement of the turnover knives increases the chip volume and optimizes chip evacuation. Advantages that were also convincing in the comparison test at Weinmann \u2014 since then, the woodworking machine manufacturer has preferred the innovative t3-System from LEUCO.", "Holes made by LEUCO: clear test result for the t3-System cutter \u2013 excellent milling quality, excellent edge quality, no burn marks. The chamfer with 45 degrees at the upper edge is produced by the innovative tool in one pass.", "The t3 system milling cutter has no need to shy away from comparison and is also impressive when it comes to producing chip-free and clean cable ducts.", "The t3 system passed the stress test with flying colors - the t3 system milling cutter delivers top results at a feed rate of up to 10 meters and 12,000 revolutions per minute.", "Holes made by LEUCO: clear test result for the t3-System cutter \u2013 excellent milling quality, excellent edge quality, no burn marks. The chamfer with 45 degrees at the upper edge is produced by the innovative tool in one pass."] },
-      { heading: "The Triangular Form Defeats The Square Form", paragraphs: ["The t3 system milling cutter has no need to shy away from comparison and is also impressive when it comes to producing chip-free and clean cable ducts.", "The t3 system passed the stress test with flying colors - the t3 system milling cutter delivers top results at a feed rate of up to 10 meters and 12,000 revolutions per minute."] },
-      { heading: "Indispensable Features of the t3-System", paragraphs: ["The LEUCO t3-System introduces a range of unique features that set it apart in the field of solid wood machining. Here's what makes it indispensable for professionals:"] },
-      { heading: "Exceptional Design for Flawless Results", paragraphs: ["The t3-System shank-type cutter features triangular, rounded turnover knives strategically positioned at shear angles. This design ensures chip-free surfaces when joining, rabbeting, or freeform milling solid wood and wood-based materials. The result? Seamless, shoulder-free joints and superior edge quality."] },
-      { heading: "Versatile Applications", paragraphs: ["Ideal for CNC machines and joinery machinery, the t3-System enables a wide range of tasks, including door rabbet production, tenon cutting, specialized joinery, and freeform milling, making it perfect for furniture and stair construction."] },
-      { heading: "Highly Efficient Spiral Plunge-Cutting", paragraphs: ["The spiral and inclined cutting capabilities allow for precision in producing small cutouts and complex free-form curves with ease, even in tight spaces."] },
-      { heading: "Easy Maintenance", paragraphs: ["With a user-friendly design, the cutters are quick to maintain. All 18 knives can be removed, cleaned, and replaced in just 10 to 15 minutes using a simple Allen key. This ensures minimal downtime and maximum efficiency."] },
-      { heading: "Durable and Customizable", paragraphs: ["The triangular turnover knives offer three cutting edges, extending tool life. LEUCO also provides variants tailored for specific needs, including hard and soft wood, laminated wood, and specialty knives for unique applications.", "Conventional standard tool The rectangular turnover knives can only be positioned in a way that the cutting pressure on the workpiece is directed to the outside (see arrows). Consequence: rough edges that have to be reworked.", "Innovative LEUCO toolThe triangular turnover knives of the t3-System are arranged in way that the cutting pressure acts towards the inside of the material (see arrows). Effect: very fine edges, no rework required.", "Conventional standard tool", "The rectangular turnover knives can only be positioned in a way that the cutting pressure on the workpiece is directed to the outside (see arrows). Consequence: rough edges that have to be reworked.", "Innovative LEUCO tool", "The triangular turnover knives of the t3-System are arranged in way that the cutting pressure acts towards the inside of the material (see arrows). Effect: very fine edges, no rework required."] },
-      { heading: "How the t3-System Benefits Your Workflow", paragraphs: ["When it comes to woodworking, the right tools make all the difference. The LEUCO t3-System isn't just a cutter\u2014it's a complete solution to optimize your workflow and improve your finished product quality."] },
-      { heading: "Save Time, Save Costs", paragraphs: ["The t3-System\u2019s innovative design results in flawless machining that requires little to no rework. From chip-free edges to smooth surface finishes, this efficiency translates directly into time and cost savings for your business."] },
-      { heading: "Increase Productivity with High Performance", paragraphs: ["Achieve faster feed rates of up to 12 meters per minute without compromising the quality of your results. The t3-System handles large chip volumes with ease, ensuring optimal chip evacuation and less machine stress."] },
-      { heading: "Achieve Unmatched Precision", paragraphs: ["Say goodbye to visible overcuts and burn marks. The patent-pending design places cutting pressure inward, maintaining clean edges even when working against the grain. This system is ideal for creating high-quality joints, rabbets, and freeform designs."] },
-      { heading: "Enhance Versatility", paragraphs: ["From softwoods to hardwoods and engineered materials like glued laminated timber, the t3-System is built to handle a wide variety of materials. Whether you're working on doors, furniture, stairs, or decorative woodworking, this tool delivers exceptional results every time."] },
-      { heading: "Boost Sustainability", paragraphs: ["By reducing waste through precision cutting and minimizing tool replacement frequency, the t3-System supports sustainable practices in woodworking. It\u2019s a smart choice for environmentally conscious professionals."] },
-      { heading: "Real-World Applications", paragraphs: ["The t3-System is quickly becoming a favorite tool among wood manufacturing professionals. Whether you're producing furniture pieces, crafting stair components, or machining decorative curves, the system\u2019s ability to create smooth, chip-free surfaces ensures a perfect finish every time. Here are just a few applications:"] },
-      { heading: "Furniture and Door Manufacturing", paragraphs: ["Achieve flawless door rabbets and furniture surfaces with minimal rework."] },
-      { heading: "Freeform Milling", paragraphs: ["Create complex freeform designs such as curves and string wreaths with the precision of spiral plunge-cutting."] },
-      { heading: "Stair Construction", paragraphs: ["Easily follow round curves and maintain high-quality edges in stair components."] },
-      { heading: "Specialized Joinery", paragraphs: ["Generate tenons and other specialized joints effortlessly, increasing project versatility."] },
-      { heading: "Take Your Woodworking to the Next Level", paragraphs: ["The LEUCO t3-System is more than a tool\u2014it\u2019s a game-changer for carpenters, furniture manufacturers, and joinery professionals alike. Experience the perfect combination of precision, efficiency, and versatility with our cutting-edge technology.", "Don\u2019t settle for less. Upgrade your machining process today with the LEUCO t3-System and redefine what\u2019s possible in solid wood machining. Contact us now to learn more, request a demo, or place an order. Transform your woodworking experience with LEUCO.", "American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "Faster Feed, Superior Chip Evacuation", paragraphs: ["In head-to-head testing at Weinmann, the t3-System achieved 12 m/min feed rates using only 30% spindle power \u2014 while the competitor produced burn marks at 10 m/min. Optimized spiral plunge-cutting and chip evacuation keep gullets clear and dust extraction efficient."] },
+      { heading: "Centered Shear Angle, No Overcuts", paragraphs: ["Triangular knives are positioned so cutting pressure acts inward \u2014 eliminating the overcuts that plague standard square-insert tools. The result: clean edges, no burn marks, and no rework, even when cutting crossgrain or across the grain."] },
+      { heading: "Drill and Chamfer in One Pass", paragraphs: ["The 45\u00b0 upper cutting edges allow drilling and chamfering to happen simultaneously, eliminating a separate process step and saving measurable production time on every hole."] },
+      { heading: "Easy Maintenance, 10-Minute Knife Change", paragraphs: ["All 18 turnover knives can be removed, cleaned, and repositioned in 10\u201315 minutes with a standard Allen key. Three cutting edges per knife extend tool life well beyond standard square-insert competitors."] },
+    ],
+    interstitialBanner: {
+      headline: "The Triangular Form Defeats The Square Form",
+      subtext: "Proven in live comparison testing at Weinmann \u2014 superior edge quality, zero burn marks, zero rework.",
+      backgroundImage: "/blog-images/t3-banner.jpg",
+      style: "dark",
+      ctaHref: "https://shopleuco.com/collections/t3-system",
+      ctaLabel: "SHOP t3-SYSTEM",
+    },
+    productCards: [
+      {
+        heading: "t3-System Shank-Type Cutter",
+        description: "The flagship t3 cutter for CNC machines and joinery machinery. Patent-pending triangular turnover knives at optimized shear angles deliver chip-free socket holes, cable ducts, and freeform cuts \u2014 in one pass, with no overcuts.",
+        image: { src: "/blog-images/t3-banner.jpg", alt: "LEUCO t3-System Cutter" },
+        ctaLabel: "SHOP t3-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/t3-system",
+        imageRight: false,
+      },
+      {
+        heading: "Test Results: t3 vs. Square Insert",
+        description: "Side-by-side results from Weinmann\u2019s WALLTEC M-300 testing: LEUCO t3 achieved 12 m/min at 30% spindle power with zero burn marks. The competitor showed burn marks before reaching 10 m/min.",
+        image: { src: "/blog-images/t3-test-01.jpg", alt: "t3 System test result" },
+        ctaLabel: "SHOP t3-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/t3-system",
+        imageRight: true,
+      },
+      {
+        heading: "Edge Quality Detail",
+        description: "A clear milling quality result: chip-free edges, no burn marks, and a clean 45\u00b0 chamfer produced in a single pass. The t3 consistently outperforms conventional tooling in finish quality.",
+        image: { src: "/blog-images/t3-test-02.jpg", alt: "t3 System edge quality" },
+        ctaLabel: "SHOP t3-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/t3-system",
+        imageRight: false,
+      },
     ],
     images: [{"src": "/blog-images/t3-banner.jpg", "alt": "LEUCO t3-System"}, {"src": "/blog-images/t3-test-01.jpg", "alt": "t3-System Test Result 1"}, {"src": "/blog-images/t3-test-02.jpg", "alt": "t3-System Test Result 2"}, {"src": "/blog-images/t3-test-03.jpg", "alt": "t3-System Test Result 3"}],
   },
@@ -443,13 +639,57 @@ export const blogArticles: Record<string, BlogArticle> = {
     slug: "leuco-plastics-processing",
     title: "LEUCO Plastics Processing",
     blog: "tooling-innovations",
-    intro: "As an experienced manufacturer in today\u2019s market, you know the importance of being able to cut plastics with the same precision, accuracy, and quality that you cut your other materials. Because this takes specially engineered equipment, the newest sizing saw blades from LEUCO are made to ensure the utmost in excellent cutting quality for plastic materials.\nThese blades minimize cutting marks and eliminate the need for reworking visible edges. The tooth geometry is specifically designed for a variety of plastic materials, but especially thermoplastics, PMMA panels, polycarbonate panels, abrasive thermosets, anti-fingerprint plastics, and conventional plastics.\nWith a close tooth pitch, thin plastic panels can be processed without noticeable marks. The LEUCO Plastics Processing System is available only in topline quality, offering the highest performance level with precise run-out and concentricity tolerances. The LowNoise blade option reduces vibration and auxiliary noise during sawing, benefiting machine operators.\n- Minimize Cutting Marks\n- Eliminate Reworking Edges\n- Precision Run-Out\n- Low Noise Options\n- Expansion Slots Available\n- Versatile Compatibility\nWith multiple circular saw blades engineered for cutting plastics with table saws, vertical panel sizing saws and clipping and miter saws, LEUCO can help you overcome challenges that arise from the growing use of plastics in furniture and kitchens applications. These plastics can have widely different characteristics from each other. For instance, thermoplastics such as polycarbonate and polystyrene easily become too warm and melt when sawed, while thermosets tend to chip.\nThese blades are designed to include outstanding features, like an expansion slot and other features that result in optimized cutting quality and superior operations. The 303mm HW saw blade by LEUCO is engineered for plastic materials, and is compatible with table saws and vertical panel saws. This product serves the industrial and craft sectors, catering to the growing use of plastics in the furniture industry, among other industries that you may serve.\n[Skip to product information](https://shopleuco.com/blogs/tooling-innovations/leuco-plastics-processing#ProductInfo-template--18035873120390__e248d761-6d8a-4341-a55a-e7534f7ca42b)",
+    intro: "As an experienced manufacturer in today\u2019s market, you know the importance of being able to cut plastics with the same precision, accuracy, and quality that you cut your other materials. The newest sizing saw blades from LEUCO are made to ensure the utmost in excellent cutting quality for plastic materials \u2014 minimizing cutting marks and eliminating the need for reworking visible edges. Specifically engineered for thermoplastics, PMMA, polycarbonate, abrasive thermosets, anti-fingerprint plastics, and conventional plastics.",
     sections: [
-      { heading: "Highline Tungsten Carbide Specialty Cutting G5 Saw Blade for Thin Plastics", paragraphs: ["[View full details](https://shopleuco.com/products/leuco-highline-tungsten-carbide-specialty-cutting-g5-saw-blade-for-thin-plastics)", "LEUCO\u2019s Highline Tungsten Carbide Specialty Cutting G5 Saw Blade for Thin Plastics provides the highest quality when sawing thin polycarbonate panels, twin-wall sheets, for instance. Lightweight and brittle panels of extruded polystyrene can also be processed very well with this saw blade.", "This specialty saw blade is also designed for cutting hard and abrasive thermosets. Thus, high-pressure laminates (HPL) can be sawed quickly and with high quality with this blade. Additionally, the G5 saw blade offers an excellent cutting quality in \u201canti fingerprint\u201d materials and for conventional plastics. The convex tooth sides prevent the formation of grooves on the cutting surface and flares on the surface of sensible materials."] },
-      { heading: "Plastics Processing Gallery", paragraphs: ["SawingThe \"Plastics\" saw blade processes all transparent PMMA panels as well as transparent polystyrene panels (Wattolene). It also saws solid polycarbonate(PC) panels, available under names such as Lexan and Makrolon.", "DrillingThe \"Plastics\" saw blade processes all transparent PMMA panels as well as transparent polystyrene panels (Wattolene). It also saws solid polycarbonate(PC) panels, available under names such as Lexan and Makrolon.", "MillingLEUCO milling tools can be used in many ways. They are characterized by high machining quality and a long service life and can be usedfor high-performance machining."] },
-      { heading: "Sawing", paragraphs: ["The \"Plastics\" saw blade processes all transparent PMMA panels as well as transparent polystyrene panels (Wattolene). It also saws solid polycarbonate(PC) panels, available under names such as Lexan and Makrolon."] },
-      { heading: "Drilling", paragraphs: ["The \"Plastics\" saw blade processes all transparent PMMA panels as well as transparent polystyrene panels (Wattolene). It also saws solid polycarbonate(PC) panels, available under names such as Lexan and Makrolon."] },
-      { heading: "Milling", paragraphs: ["LEUCO milling tools can be used in many ways. They are characterized by high machining quality and a long service life and can be usedfor high-performance machining.", "American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "Engineered for Every Plastic", paragraphs: ["Thermoplastics such as polycarbonate and polystyrene easily become too warm and melt when sawed with standard tooling. Thermosets tend to chip. LEUCO Plastics blades address both with precision tooth geometry, close pitch, and optimized heat management \u2014 the LEUCO Plastics Processing System is available only in topline quality, with precise run-out and concentricity tolerances."] },
+      { heading: "Highline G5 \u2014 Purpose-Built for Thin Plastics", paragraphs: ["The G5 Saw Blade for Thin Plastics delivers the highest quality when sawing thin polycarbonate panels, twin-wall sheets, and lightweight extruded polystyrene panels. Convex tooth sides prevent groove formation and surface flares on sensitive materials. Also designed for cutting hard and abrasive thermosets \u2014 HPL, anti-fingerprint, and conventional plastics."] },
+      { heading: "LowNoise & Topline Precision", paragraphs: ["The LowNoise blade option reduces vibration and auxiliary noise during sawing, benefiting machine operators. Blades include expansion slots and other features that result in optimized cutting quality. Topline-quality run-out and concentricity tolerances ensure consistent, repeatable results."] },
+      { heading: "Versatile Across Machines", paragraphs: ["Multiple blade configurations are engineered for table saws, vertical panel sizing saws, clipping saws, and miter saws. The 303mm HW saw blade is compatible with table saws and vertical panel saws and serves the industrial and craft sectors across furniture, kitchen, and specialty fabrication applications."] },
+    ],
+    featuresSectionLabel: "PLASTICS PROCESSING ADVANTAGES",
+    heroCta: { label: "SHOP PLASTICS BLADES", href: "https://shopleuco.com/collections/circular-saw-blades" },
+    shopSystemHref: "https://shopleuco.com/collections/circular-saw-blades",
+    interstitialBanner: {
+      headline: "Precision Engineered for Plastics",
+      subtext: "Minimize cutting marks. Eliminate rework. Topline quality on every cut.",
+      backgroundImage: "/blog-images/plastics-banner.jpg",
+      style: "dark",
+      ctaHref: "https://shopleuco.com/collections/circular-saw-blades",
+      ctaLabel: "SHOP PLASTICS BLADES",
+    },
+    productCards: [
+      {
+        heading: "Highline G5 \u2014 Thin Plastics Specialist",
+        description: "LEUCO\u2019s Highline Tungsten Carbide Specialty Cutting G5 Saw Blade for Thin Plastics provides the highest quality when sawing thin polycarbonate panels, twin-wall sheets, and extruded polystyrene. Convex tooth sides prevent grooves and surface flares on sensitive materials. Also cuts HPL and anti-fingerprint plastics with outstanding edge quality. The convex tooth sides prevent groove formation on the cutting surface and flares on the surface of sensible materials.",
+        image: { src: "/blog-images/plastics-g5-blade.jpg", alt: "LEUCO G5 Plastics Saw Blade" },
+        ctaLabel: "VIEW G5 BLADE",
+        ctaHref: "https://shopleuco.com/products/leuco-highline-tungsten-carbide-specialty-cutting-g5-saw-blade-for-thin-plastics",
+        imageRight: false,
+      },
+      {
+        heading: "Sawing \u2014 PMMA, Polycarbonate & More",
+        description: "The Plastics saw blade processes all transparent PMMA panels as well as transparent polystyrene panels (Wattolene). It also saws solid polycarbonate (PC) panels \u2014 available under names such as Lexan and Makrolon \u2014 without melting or chipping. The close pitch design keeps thin panels stable and mark-free throughout the cut.",
+        image: { src: "/blog-images/plastics-sawing.jpg", alt: "LEUCO sawing plastic panels" },
+        ctaLabel: "SHOP PLASTICS BLADES",
+        ctaHref: "https://shopleuco.com/collections/circular-saw-blades",
+        imageRight: true,
+      },
+      {
+        heading: "Drilling Plastics",
+        description: "The Plastics saw blade is also effective for drilling operations on polycarbonate and PMMA panels. The close tooth pitch and precision geometry ensure clean entry and exit on both sides of the panel \u2014 without melting, chipping, or surface flares.",
+        image: { src: "/blog-images/plastics-drilling.jpg", alt: "LEUCO drilling plastic panels" },
+        ctaLabel: "SHOP PLASTICS BLADES",
+        ctaHref: "https://shopleuco.com/collections/circular-saw-blades",
+        imageRight: false,
+      },
+      {
+        heading: "Milling Plastics at Scale",
+        description: "LEUCO milling tools for plastics can be used in many ways. Characterized by high machining quality and a long service life, they are ideal for high-performance machining of thermoplastics, thermosets, and specialty composite panels \u2014 serving the furniture, kitchen, and specialty fabrication sectors.",
+        image: { src: "/blog-images/plastics-milling.jpg", alt: "LEUCO milling plastic panels" },
+        ctaLabel: "SHOP PLASTICS BLADES",
+        ctaHref: "https://shopleuco.com/collections/circular-saw-blades",
+        imageRight: true,
+      },
     ],
     images: [],
   },
@@ -457,21 +697,127 @@ export const blogArticles: Record<string, BlogArticle> = {
     slug: "leuco-airface-system",
     title: "LEUCO airFace System",
     blog: "tooling-innovations",
-    intro: "SmartJointer plus with the option to change cutting inserts independently.\nLEUCO SmartJointer airFace the smart jointing cutter for many edge banders.\n[Shop airFace](https://shopleuco.com/collections/cutter-heads)\nTheir sophisticated feather structures allow them to fly almost noiselessly so that they do not startle their prey. Most of the noise is generated by turbulences at the rear edge of the wing. The \u201cowl wing\u201d concept smooths the air flow by means of the serrated edge and scatters noise, which allows nearly noiseless flight characteristics without having a negative effect on the aerodynamics.\nLEUCO has recognized the advantages of the owl wing structure and implemented this concept in the design of the new generation of jointing cutters and hoggers. The aim was to systematically guide the air flow around the diamond-tipped DP cutting edges and to reduce turbulences.\nLEUCO has used this concept of learning from nature to make sizing tools even more aerodynamic and to achieve further effects in noise reduction! With the slogan \u201calways one wing beat ahead\u201d and thanks to the completely new design approach, the tools will be designed for the first time without studs behind the edge and with a special surface!\nThis kind of design has never been used in the field of woodworking and therefore represents a milestone in the jointing cutter evolution.\nThe so-called \u201cLEUCO airFace\u201d surface over the entire body of the jointing cutters and LEUCO PowerTec hoggers is the result of intense research and development work by experienced engineers. The principal effect of the gullet with the \u201cowl wing edge\u201d is to canalize the air at this point. A patent is pending for the airFace principle.\n- airFace is an innovative patent-pending surface of the tool body. The principle is based on an innovative development approach from nature\u2018s example and contributes audibly to noise reduction during the jointing process.\n- LEUCO SmartJointer, LEUCO DIAMAX, and LEUCO DIAREX are the proven diamond-tipped jointing cutters whose tool bodies are from now on equipped by default with the innovative airFace surface. Only LEUCO offers such a surface.\n- The highly appreciated jointing cutters are still equipped with the well-known resharpening areas: LEUCO DIAMAX airFace = 1.5 mm and LEUCO DIAREX airFace = 3.0 mm.\n- The technical surface has been consistently implemented; therefore, the studs behind the edge are no longer required. A stable tungsten carbide supporting plate provides the required stability. The air flow can be channeled more optimally.\n- The aerodynamic optimization is the common thread running through the process up to the concentricity tolerance. Until now the balancing process has been realized with the help of balancing bores in the body. In the future, LEUCO will manufacture the body with defined threads for balancing screws to avoid the negative influence of balancing bores on the body surface.\n- The noise reduction can be heard and measured. When idling, a reduction by 1 dB for DIAMAX airFace and LEUCO SmartJointer airFace can be reached - compared to the already silent predecessor version. For LEUCO DIAREX airFace, a reduction of 2 dB can be reached when idling. These cutters are the quietest jointing cutters with steel body on the market.",
+    intro: "Inspired by the silent flight of the owl, LEUCO\u2019s airFace System introduces a patent-pending surface technology to diamond-tipped jointing cutters that measurably reduces idle noise \u2014 up to 2 dB(A) \u2014 while improving airflow around the cutting edges. The result is the quietest jointing cutter with a steel body on the market.",
+    featuresSectionLabel: "WHY CHOOSE airFace",
+    heroCta: { label: "SHOP AIRFACE CUTTERS", href: "https://shopleuco.com/collections/cutter-heads" },
+    shopSystemHref: "https://shopleuco.com/collections/cutter-heads",
     sections: [
-      { heading: "Benefits of the LEUCO airFace System\u2122", paragraphs: ["Previously: Air turbulences at the cutting edge generated noise that negatively impacted the working environment around the machine.", "New: A closer look at the new surface structure of the body reveals a gullet with an \u201cowl-wing edge\u201d of irregular shape, channeling the air at this point and thus reducing noise emission.", "LEUCO airFace Design: A closer look at the surface structure of the body reveals a gullet with an \"owl-wing edge\" of irregular shape, channeling the air at this point and thus reducing noise emission.", "The diamond-tipped jointing cutter, LEUCO SmartJointer airFace, features smart characteristics: exchangeable stainless steel segments, easy segment replacement with only few accessories, light-weight aluminum body, constant diameter, noise-reducing LEUCO airFace surface with grooves in the aluminum body.", "Previously: Air turbulences at the cutting edge generated noise that negatively impacted the working environment around the machine.", "New: A closer look at the new surface structure of the body reveals a gullet with an \u201cowl-wing edge\u201d of irregular shape, channeling the air at this point and thus reducing noise emission.", "LEUCO airFace Design: A closer look at the surface structure of the body reveals a gullet with an \"owl-wing edge\" of irregular shape, channeling the air at this point and thus reducing noise emission.", "The diamond-tipped jointing cutter, LEUCO SmartJointer airFace, features smart characteristics: exchangeable stainless steel segments, easy segment replacement with only few accessories, light-weight aluminum body, constant diameter, noise-reducing LEUCO airFace surface with grooves in the aluminum body."] },
-      { heading: "Request A Sample Cut", paragraphs: ["[Contact us today to get a sample cut!](https://shopleuco.com/pages/contact-us-1)", "American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "The Owl Wing Principle", paragraphs: ["Owl feathers feature a serrated trailing edge that scatters turbulent airflow, enabling nearly noiseless flight. Most of the noise is generated by turbulences at the rear edge of the wing. The \u201cowl wing\u201d concept smooths the airflow by means of the serrated edge and scatters noise \u2014 LEUCO adapted this principle to the body grooves of jointing cutters, creating an irregular \u201cowl-wing edge\u201d gullet that channels airflow at the cutting edge."] },
+      { heading: "Measurable Noise Reduction", paragraphs: ["The noise reduction can be heard and measured. LEUCO DIAMAX airFace and SmartJointer airFace achieve -1 dB(A) at idle compared to the already-quiet predecessor versions. LEUCO DIAREX airFace achieves -2 dB(A) at idle. These are the quietest jointing cutters with steel body on the market.", "LEUCO SmartJointer, DIAMAX, and DIAREX are all equipped with the airFace surface as standard. Resharpening areas remain: DIAMAX airFace = 1.5mm, DIAREX airFace = 3.0mm."] },
+      { heading: "No Studs, Better Airflow", paragraphs: ["The airFace design eliminates the studs behind the cutting edge that were previously required for stability. A tungsten carbide supporting plate provides the required rigidity, while the stud-free body surface allows the air flow to be channeled more optimally across the entire tool \u2014 a design approach that has never before been used in woodworking."] },
+      { heading: "Precision Balancing", paragraphs: ["Traditional balancing used bores drilled into the body \u2014 disrupting the surface and airflow. airFace tools use defined threads for balancing screws, maintaining body surface integrity and preserving the full aerodynamic benefit of the airFace profile through the balancing process."] },
     ],
-    images: [{"src": "/blog-images/airface-poster.png", "alt": "LEUCO airFace System"}, {"src": "/blog-images/airface-owl.jpg", "alt": "Owl wing bionik inspiration"}, {"src": "/blog-images/airface-jointer.jpg", "alt": "LEUCO Diamond SmartJointer airFace"}, {"src": "/blog-images/airface-before.jpg", "alt": "Before airFace"}, {"src": "/blog-images/airface-after.jpg", "alt": "After airFace"}],
+    interstitialBanner: {
+      headline: "Always One Wing Beat Ahead",
+      subtext: "The quietest jointing cutters with steel body on the market \u2014 engineered from nature\u2019s example. Request a sample cut today.",
+      backgroundImage: "/blog-images/airface-poster.png",
+      style: "dark",
+      ctaHref: "https://shopleuco.com/pages/contact-us-1",
+      ctaLabel: "REQUEST A SAMPLE CUT",
+    },
+    productCards: [
+      {
+        heading: "SmartJointer Plus \u2014 Change Cutting Inserts Independently",
+        description: "See the LEUCO SmartJointer Plus with the option to change cutting inserts independently \u2014 the airFace owl-wing surface design channels airflow across the body to measurably reduce idle noise. Exchangeable stainless steel segments, lightweight aluminum body, constant diameter, and the full airFace noise-reducing surface.",
+        image: { src: "/blog-images/airface-vid1-poster.jpg", alt: "SmartJointer Plus airFace video" },
+        videoUrl: "https://www.youtube.com/embed/oXRWq0yQrck",
+        ctaLabel: "SHOP AIRFACE CUTTERS",
+        ctaHref: "https://shopleuco.com/collections/cutter-heads",
+        imageRight: false,
+      },
+      {
+        heading: "LEUCO SmartJointer airFace — Edge Bander Ready",
+        description: "The LEUCO SmartJointer airFace is the smart jointing cutter for many edge banders. Designed with constant diameter, exchangeable segments, and the full airFace surface — delivering -1 dB(A) at idle compared to its already-quiet predecessor.",
+        image: { src: "/blog-images/airface-vid2-poster.jpg", alt: "LEUCO SmartJointer airFace edge bander" },
+        videoUrl: "https://www.youtube.com/embed/eidr2x0Eqr0",
+        ctaLabel: "SHOP AIRFACE CUTTERS",
+        ctaHref: "https://shopleuco.com/collections/cutter-heads",
+        imageRight: true,
+      },
+      {
+        heading: "The Owl Wing Inspiration",
+        description: "The serrated trailing edge of owl feathers scatters turbulent air, enabling nearly silent flight. LEUCO\u2019s engineers applied this principle to tool body grooves \u2014 creating an irregular gullet profile that channels air and measurably reduces noise emission during idling.",
+        image: { src: "/blog-images/airface-owl.jpg", alt: "Owl wing bionic inspiration" },
+        ctaLabel: "LEARN MORE",
+        ctaHref: "https://shopleuco.com/collections/cutter-heads",
+        imageRight: false,
+      },
+      {
+        heading: "Before airFace: Turbulence at the Cutting Edge",
+        description: "Previously, air turbulences at the cutting edge generated significant noise that negatively impacted the working environment around the machine during idling \u2014 often louder than during active cutting.",
+        image: { src: "/blog-images/airface-before.jpg", alt: "Before airFace: turbulence at cutting edge" },
+        ctaLabel: "SHOP AIRFACE CUTTERS",
+        ctaHref: "https://shopleuco.com/collections/cutter-heads",
+        imageRight: false,
+      },
+      {
+        heading: "After airFace: The Owl-Wing Gullet",
+        description: "A closer look at the new surface structure reveals a gullet with an \u201cowl-wing edge\u201d of irregular shape, canalizing the air at this point and thus reducing noise emission \u2014 measurably quieter at every rpm.",
+        image: { src: "/blog-images/airface-after.jpg", alt: "After airFace: owl-wing gullet noise reduction" },
+        ctaLabel: "SHOP AIRFACE CUTTERS",
+        ctaHref: "https://shopleuco.com/collections/cutter-heads",
+        imageRight: true,
+      },
+      {
+        heading: "LEUCO SmartJointer airFace \u2014 Full Feature Detail",
+        description: "The LEUCO SmartJointer airFace features exchangeable stainless steel segments, easy segment replacement with only a few accessories, lightweight aluminum body with constant diameter, and the full noise-reducing airFace surface with grooves in the aluminum body.",
+        image: { src: "/blog-images/airface-jointer.jpg", alt: "LEUCO SmartJointer airFace feature detail" },
+        ctaLabel: "SHOP AIRFACE CUTTERS",
+        ctaHref: "https://shopleuco.com/collections/cutter-heads",
+        imageRight: false,
+      },
+    ],
+    images: [{"src": "/blog-images/airface-poster.png", "alt": "LEUCO airFace System"}, {"src": "/blog-images/airface-owl.jpg", "alt": "Owl wing bionic inspiration"}, {"src": "/blog-images/airface-jointer.jpg", "alt": "LEUCO Diamond SmartJointer airFace"}, {"src": "/blog-images/airface-before.jpg", "alt": "Before airFace"}, {"src": "/blog-images/airface-after.jpg", "alt": "After airFace"}],
   },
   "leuco-hp-spirals": {
     slug: "leuco-hp-spirals",
     title: "LEUCO HP Spirals",
     blog: "tooling-innovations",
-    intro: "HP Spirals\n[Shop HP Spirals](https://shopleuco.com/collections/hp-spirals)",
+    intro: "LEUCO HP Spirals are the trusted workhorses of CNC panel processing \u2014 used for sizing, jointing, grooving, and dividing, with a helical cutting edge that produces excellent chip-free finishes at high feed rates. Re-sharpenable and cost-effective, they deliver 2\u20133\u00d7 the edge life of standard carbide spirals.",
+    featuresSectionLabel: "CHOOSE THE RIGHT SPIRAL",
+    heroCta: { label: "SHOP HP SPIRALS", href: "https://shopleuco.com/collections/hp-spirals" },
+    shopSystemHref: "https://shopleuco.com/collections/hp-spirals",
     sections: [
-      { heading: "SO, Why are spirals so popular?", paragraphs: ["Spirals are typically used for sizing, jointing, grooving, and dividing of panels. They can cut at high rates of feed, are relatively low in cost, and are re-sharpenable. The helical or spiral cutting edge produces an excellent chip free finish on the material being cut.", "There are three primary types of spirals, with your edge finish requirements dictating what type of spiral you should use:", "Upcut \u2013 when the best cut quality is needed on the panels bottom surface.", "Downcut \u2013 when you want the best quality on the panels upper surface.", "Compression \u2013 This design combines both upcut and downcut resulting in excellent quality on both upper and lower surfaces.", "Compression spirals come in two variations: Standard compressions for thicker panels and mortise compressions that have a shorter up-cut length making them the better choice for thinner panels and cutting grooves. With all compression spirals, the up and down cutting edges come together and overlap each other. It is important that this overlapping area be positioned in the core area of the panel.", "Many spirals sold today have a coating applied to them. The coating allows for longer life of the tool. Typically, this is achieved by reducing the amount of heat the carbide is exposed to when used. The less heat the longer the tool will last. Service of spirals is also very important."] },
-      { heading: "HP Spirals Gallery", paragraphs: ["American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "Why Spirals?", paragraphs: ["The helical or spiral cutting edge produces an excellent chip-free finish on the material being cut at high rates of feed. They are relatively low in cost, re-sharpenable, and suitable for a wide range of panel materials."] },
+      { heading: "Upcut", paragraphs: ["Best cut quality on the panel\u2019s bottom surface. Chips evacuate upward, keeping the lower face clean."] },
+      { heading: "Downcut", paragraphs: ["Best cut quality on the panel\u2019s upper surface. Chips evacuate downward for a clean top edge."] },
+      { heading: "Compression", paragraphs: ["Combines upcut and downcut edges for excellent quality on both upper and lower surfaces. Available in standard (thicker panels) and mortise (thinner panels and grooves) variations."] },
+      { heading: "Coatings & Service", paragraphs: ["Most HP Spirals are coated to reduce heat at the carbide edge, extending tool life. Regular resharpening and proper service intervals are key to maintaining optimal performance."] },
+    ],
+    interstitialBanner: {
+      headline: "So, Why Are Spirals So Popular?",
+      subtext: "The helical cutting edge produces an excellent chip-free finish at high feed rates. They\u2019re low in cost, re-sharpenable, and the right tool for a wide range of CNC panel applications.",
+      backgroundImage: "/blog-images/hp-spirals-compression.png",
+      style: "dark",
+      ctaHref: "https://shopleuco.com/collections/hp-spirals",
+      ctaLabel: "SHOP HP SPIRALS",
+    },
+    productCards: [
+      {
+        heading: "HP Spirals — See Them in Action",
+        description: "Spirals are used for sizing, jointing, grooving, and dividing of panels. They cut at high rates of feed, are re-sharpenable, and the helical cutting edge produces an excellent chip-free finish on the material being cut. Watch LEUCO HP Spirals at work.",
+        image: { src: "/blog-images/hp-spirals-compression.png", alt: "LEUCO HP Spirals video" },
+        videoUrl: "https://vimeo.com/652601089",
+        ctaLabel: "SHOP HP SPIRALS",
+        ctaHref: "https://shopleuco.com/collections/hp-spirals",
+        imageRight: false,
+      },
+      {
+        heading: "Compression Spirals — Best of Both Worlds",
+        description: "Compression spirals combine upcut and downcut edges for excellent quality on both upper and lower panel surfaces. Available in standard (thicker panels) and mortise configurations (thinner panels, grooves). The overlap zone must be positioned in the core of the panel.",
+        image: { src: "/blog-images/hp-spirals-compression.png", alt: "HP Compression spiral types" },
+        ctaLabel: "SHOP HP SPIRALS",
+        ctaHref: "https://shopleuco.com/collections/hp-spirals",
+        imageRight: true,
+      },
+      {
+        heading: "Proven in Production Worldwide",
+        description: "LEUCO HP Spirals are the trusted workhorses of CNC panel processing worldwide. Re-sharpenable, cost-effective, and available with performance coatings that reduce heat at the carbide edge for extended tool life.",
+        image: { src: "/blog-images/hp-spirals-iwf.jpg", alt: "LEUCO HP Spirals in production" },
+        ctaLabel: "SHOP HP SPIRALS",
+        ctaHref: "https://shopleuco.com/collections/hp-spirals",
+        imageRight: false,
+      },
     ],
     images: [{"src": "/blog-images/hp-spirals-compression.png", "alt": "Compression and DownCut spiral types"}, {"src": "/blog-images/hp-spirals-iwf.jpg", "alt": "LEUCO HP Spirals"}],
   },
@@ -479,14 +825,33 @@ export const blogArticles: Record<string, BlogArticle> = {
     slug: "leuco-nn-system",
     title: "LEUCO nn-System",
     blog: "tooling-innovations",
-    intro: "[Shop nn-System](https://shopleuco.com/collections/nn-system)",
+    intro: "LEUCO\u2019s NoNoise (nn) System reduces the idle-running noise of diamond-tipped saw blades by up to 6 dB(A) \u2014 a radical improvement achieved through minimized gullets and innovative HR tooth geometry. The result: a quieter workshop, superior cutting quality, and compatibility across table saws, panel sizing saws, miter saws, and CNC machines.",
+    featuresSectionLabel: "WHY CHOOSE THE nn-SYSTEM",
+    heroCta: { label: "SHOP nn-SYSTEM", href: "https://shopleuco.com/collections/nn-system" },
+    shopSystemHref: "https://shopleuco.com/collections/nn-system",
     sections: [
-      { heading: "The most silent saw blade in the industry segment!", paragraphs: ["The new LEUCO nn-System inspires with its superior cutting quality in an extreme variety of materials.\u00a0 Thanks to a radical minimization of gullets LEUCO succeeded in reducing the noise of idling diamond-tipped saw blades by up to 6 dB(A) compared to conventional diamond-tipped saw blades.", "Noise is caused either by idle running of the tools or during operation. In the case of saw blades there is a lot of time when the machine is idling and the saw blade is just rotating without touching the workpiece material. Nevertheless, noises arising during idling can be louder than during operation. This is the case with so-called \u201cwhistling\u201d saw blades.", "The NoNoise saw blades from LEUCO have a cutting width of just 2.5 mm and, with many diameter options can be used for final trimming saws, table saws, vertical panel sizing saws and even for miter saws in through-feed machines.", "- Excellent cutting quality thanks to the innovative \u201cHR\u201d tooth geometry for the main saw blade.", "- In addition to this, the hollow back tooth noticeably reduces the cutting pressure while enabling work with nearly no backlash.", "- The saw blade design guarantees excellent cutting quality for nearly all wooden panels, even those with high-gloss coatings and those made from solid timber.", "In line with the main saw blades, the diamond-tipped scoring saw blades and conical alternate top bevel teeth are also available for two-sided"] },
-      { heading: "Benefits of the nn-System", paragraphs: ["Tungsten carbide tipped standard saw blade (without nn-system design)Measurement on a Holz-Her table saw at 3,000 rpm", "Diamond tipped LEUCO nn-System saw bladeMeasurement on a Holz-Her table saw at 3,000 rpm", "Diamond tipped standard saw blade (without nn-System design)Measurement on MAKA CNC-BAZ at 4500 rpm", "Diamond-tipped LEUCO nn-System saw bladeMeasurement on MAKA CNC-BAZ at 4500 rpm"] },
-      { heading: "Tungsten carbide tipped standard saw blade (without nn-system design)", paragraphs: ["Measurement on a Holz-Her table saw at 3,000 rpm"] },
-      { heading: "Diamond tipped LEUCO nn-System saw blade", paragraphs: ["Measurement on a Holz-Her table saw at 3,000 rpm"] },
-      { heading: "Diamond tipped standard saw blade (without nn-System design)", paragraphs: ["Measurement on MAKA CNC-BAZ at 4500 rpm"] },
-      { heading: "Diamond-tipped LEUCO nn-System saw blade", paragraphs: ["Measurement on MAKA CNC-BAZ at 4500 rpm", "American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "Up to 6 dB(A) Quieter at Idle", paragraphs: ["Standard diamond-tipped saw blades \u201cwhistle\u201d at idle \u2014 sometimes louder than during operation. The nn-System\u2019s minimized gullet design directly attacks this source of noise, delivering a measurable 6 dB(A) reduction compared to conventional diamond-tipped blades."] },
+      { heading: "Innovative HR Tooth Geometry", paragraphs: ["The \u201cHR\u201d hollow back tooth noticeably reduces cutting pressure while enabling near-zero backlash. This delivers excellent cutting quality across nearly all wooden panels, including high-gloss coatings and solid timber."] },
+      { heading: "2.5mm Cutting Width, Many Diameters", paragraphs: ["nn-System blades are available in a range of diameters for final trimming saws, table saws, vertical panel sizing saws, miter saws, and through-feed machines \u2014 all with a precision 2.5mm cutting width for minimal kerf loss."] },
+      { heading: "Scoring Blades Available", paragraphs: ["Diamond-tipped scoring saw blades and conical alternate top bevel teeth are available to complete the nn-System setup for two-sided scoring machines."] },
+    ],
+    productCards: [
+      {
+        heading: "Acoustic Comparison: Without nn-System",
+        description: "A standard tungsten carbide saw blade at 3,000 rpm on a Holz-Her table saw generates substantial idle-running noise \u2014 visible as a loud \u2018hot spot\u2019 in acoustic camera imaging. Standard diamond-tipped blades at 4,500 rpm on a MAKA CNC show a similar pattern.",
+        image: { src: "/blog-images/nn-without.jpg", alt: "Acoustic camera without nn-System" },
+        ctaLabel: "SHOP nn-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/nn-system",
+        imageRight: false,
+      },
+      {
+        heading: "Acoustic Comparison: With nn-System",
+        description: "The LEUCO nn-System blade at the same rpm shows dramatically reduced noise in acoustic camera imaging \u2014 up to 6 dB(A) quieter at idle. Less noise means a healthier work environment and compliance with increasingly strict industrial noise regulations.",
+        image: { src: "/blog-images/nn-with.jpg", alt: "Acoustic camera with nn-System" },
+        ctaLabel: "SHOP nn-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/nn-system",
+        imageRight: true,
+      },
     ],
     images: [{"src": "/blog-images/nn-without.jpg", "alt": "Acoustic camera without nn-System"}, {"src": "/blog-images/nn-with.jpg", "alt": "Acoustic camera with nn-System"}],
   },
@@ -494,15 +859,76 @@ export const blogArticles: Record<string, BlogArticle> = {
     slug: "leuco-p-system",
     title: "LEUCO p-System",
     blog: "tooling-innovations",
-    intro: "LEUCO p-System: edge life 12 million running meters\nLEUCO p-System: Peeling \u2013 the revolutionary wood processing technology by LEUCO\nCutting of a door with the LEUCO p-System\n[Shop p-System](https://shopleuco.com/collections/p-system)",
+    intro: "LEUCO\u2019s p-System represents the pinnacle of face-shear technology \u2014 a 70-degree shear angle that nearly doubles the capability of conventional diamond tools. The \u201cp\u201d stands for Peeling: the cutting edge doesn\u2019t mill in the traditional sense, it peels fibers away with extraordinary force, achieving finish-cut quality on even the most demanding fibrous and exotic materials.",
+    featuresSectionLabel: "THE p-SYSTEM ADVANTAGE",
+    heroCta: { label: "SHOP p-SYSTEM", href: "https://shopleuco.com/collections/p-system" },
+    shopSystemHref: "https://shopleuco.com/collections/p-system",
     sections: [
-      { heading: "It\u2019s all about face shear! The Revolution of Peeling.", paragraphs: [] },
-      { heading: "LEUCO p-System tools are used for jointing, rabbeting and dividing on stationary and through-feed machines.", paragraphs: ["The evolution of face shear has gone from having carbide insert tools with 0 to 15 degrees to diamond tools with face shear of 35 \u2013 45 degrees. Then as the complexity of challenging materials and laminates evolved, so did the need to machine them economically. Some of the newer materials were so fibrous that it was impossible to achieve a finish cut with lower face shear tools. In these cases the p-System made the impossible\u2026Possible!", "Leuco\u2019s R&D took on the challenge and developed a tool with 70 degree face shear. That\u2019s almost double the shear of previous tools. And the p-System was born. What does the \u201cp\u201d in p-System stand for? Well, it was noticed during the development that the cutting edge did not function like normal tools but rather in a Peeling affect. The shearing forces are very strong allowing for this tool to cut just about any material clean and for a very long time.", "Due to the very strong 70-degree shear a lot of diamond tips are necessary to make up the tools cutting edge length. In some cases, more than twice the diamond is necessary than conventional tools. The amount of diamond is directly linked to cost. Therefore, the application for every p-System should be looked at in detail to insure it is the correct tool for the job."] },
-      { heading: "Benefits of the LEUCO p-System", paragraphs: ["Finished CutMilling With Finish Cut Quality Without Post-ProcessingThe p-System produces edges in finish-cut quality, time-consuming grinding is no longer necessary.", "Save TimeReduction Of DowntimeIn the case of end-grain cutting, the p-System allows the cutting head to pass the edge against the feed without causing edge chipping.", "Chip FreeChip Free Jointing of Veneered BoardsCutting veneer like a sharp knife, the p-System hardly exerts a cutting force and make a clean cut, regardless whether the veneer overlap is 2mm or 10mm.", "ExoticsFibrous And Exotic MaterialsThanks to the large shear angle the fibers are cleanly cut, often not even post-processing is needed."] },
-      { heading: "Finished Cut", paragraphs: ["Milling With Finish Cut Quality Without Post-ProcessingThe p-System produces edges in finish-cut quality, time-consuming grinding is no longer necessary."] },
-      { heading: "Save Time", paragraphs: ["Reduction Of DowntimeIn the case of end-grain cutting, the p-System allows the cutting head to pass the edge against the feed without causing edge chipping."] },
-      { heading: "Chip Free", paragraphs: ["Chip Free Jointing of Veneered BoardsCutting veneer like a sharp knife, the p-System hardly exerts a cutting force and make a clean cut, regardless whether the veneer overlap is 2mm or 10mm."] },
-      { heading: "Exotics", paragraphs: ["Fibrous And Exotic MaterialsThanks to the large shear angle the fibers are cleanly cut, often not even post-processing is needed.", "[Contact us today to get a sample cut!](https://shopleuco.com/pages/contact-us-1)", "American Express", "Apple Pay", "Discover", "Mastercard"] },
+      { heading: "It\u2019s All About Face Shear", paragraphs: ["The evolution of face shear: carbide insert tools at 0\u201315\u00b0, then diamond tools at 35\u201345\u00b0, then the p-System at 70\u00b0 \u2014 nearly double the shear of previous tools. The p-System\u2019s extreme shear angle makes the impossible possible on fibrous and challenging materials."] },
+      { heading: "Finish-Cut Quality, No Post-Processing", paragraphs: ["The p-System produces edges in finish-cut quality. Time-consuming grinding is no longer necessary. Edges come off the machine ready for assembly."] },
+      { heading: "Chip-Free on Veneered Boards", paragraphs: ["Cutting veneer like a sharp knife \u2014 the p-System exerts minimal cutting force and makes a clean cut regardless of whether the veneer overlap is 2mm or 10mm."] },
+      { heading: "Fibrous & Exotic Materials", paragraphs: ["Thanks to the large shear angle, fibers are cleanly cut and often don\u2019t require post-processing. Ideal for materials that are impossible to finish-cut with conventional tooling."] },
+    ],
+    interstitialBanner: {
+      headline: "Contact Us Today to Get a Sample Cut!",
+      subtext: "Experience the p-System advantage first-hand. LEUCO will cut a sample piece on your material so you can see the finish-cut quality for yourself.",
+      backgroundImage: "/blog-images/p-system-vid2-poster.jpg",
+      style: "dark",
+      ctaHref: "https://shopleuco.com/pages/contact-us-1",
+      ctaLabel: "REQUEST A SAMPLE CUT",
+    },
+    productCards: [
+      {
+        heading: "p-System: 12 Million Running Meters",
+        description: "The LEUCO p-System achieves extraordinary tool life — up to 12 million running meters of edge life on demanding materials. The 70\u00b0 shear angle peels fibers rather than tearing them, dramatically reducing cutting forces and extending diamond tip longevity.",
+        image: { src: "/blog-images/p-system-vid1-poster.jpg", alt: "p-System edge life video" },
+        videoUrl: "https://www.youtube.com/embed/-gC2dkTRfoA",
+        ctaLabel: "SHOP p-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/p-system",
+        imageRight: false,
+      },
+      {
+        heading: "Peeling \u2014 The Revolutionary Technology",
+        description: "The p-System doesn\u2019t mill in the traditional sense \u2014 it peels. The 70\u00b0 face shear cuts fibers the way a sharp knife cuts veneer: cleanly, with minimal force, leaving a finish-cut surface with no post-processing required.",
+        image: { src: "/blog-images/p-system-vid2-poster.jpg", alt: "p-System peeling technology video" },
+        videoUrl: "https://www.youtube.com/embed/D1DiZ_vb-Sw",
+        ctaLabel: "SHOP p-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/p-system",
+        imageRight: true,
+      },
+      {
+        heading: "Cutting a Door with the p-System",
+        description: "Watch the LEUCO p-System in live production: cutting a door in a single pass with finish-cut quality edges. No rework, no grinding — ready for assembly straight off the machine.",
+        image: { src: "/blog-images/p-system-vid3-poster.jpg", alt: "p-System door cutting video" },
+        videoUrl: "https://www.youtube.com/embed/92EPYIiLzUc",
+        ctaLabel: "SHOP p-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/p-system",
+        imageRight: false,
+      },
+      {
+        heading: "Finished Cut \u2014 No Rework",
+        description: "The p-System produces edges in finish-cut quality. Time-consuming grinding is eliminated. The peeling action of the 70\u00b0 shear angle cleanly severs fibers rather than tearing them, delivering a surface ready for the next step.",
+        image: { src: "/blog-images/p-system-02.jpg", alt: "p-System finished cut quality" },
+        ctaLabel: "SHOP p-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/p-system",
+        imageRight: true,
+      },
+      {
+        heading: "Chip-Free Veneered Boards",
+        description: "The p-System cuts veneer with minimal force \u2014 like a sharp knife. Clean cuts regardless of whether the veneer overlap is 2mm or 10mm. Applicable to edge banding, through-feed, and stationary machines.",
+        image: { src: "/blog-images/p-system-03.jpg", alt: "p-System chip-free jointing" },
+        ctaLabel: "SHOP p-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/p-system",
+        imageRight: false,
+      },
+      {
+        heading: "Fibrous & Exotic Materials",
+        description: "The large shear angle cleanly severs even the most fibrous exotic materials \u2014 often without post-processing. The p-System handles materials that are impossible to finish-cut with lower-shear tools.",
+        image: { src: "/blog-images/p-system-04.jpg", alt: "p-System exotic materials" },
+        ctaLabel: "SHOP p-SYSTEM",
+        ctaHref: "https://shopleuco.com/collections/p-system",
+        imageRight: true,
+      },
     ],
     images: [{"src": "/blog-images/p-system-01.jpg", "alt": "p-System saves time"}, {"src": "/blog-images/p-system-02.jpg", "alt": "p-System finished cut"}, {"src": "/blog-images/p-system-03.jpg", "alt": "p-System chip-free"}, {"src": "/blog-images/p-system-04.jpg", "alt": "p-System exotics"}],
   },

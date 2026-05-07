@@ -133,11 +133,9 @@ export default function MaterialSolutionsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
                     {materials.map((mat, i) => (
-                        <a
+                        <Link
                             key={i}
-                            href={`https://shopleuco.com/blogs/materials-solutions/${mat.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`/blogs/materials-solutions/${mat.slug}`}
                             className="group p-8 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-lg transition-all"
                         >
                             <h3 className="font-black text-lg mb-3 group-hover:text-leuco-purple transition-colors flex items-center gap-2">
@@ -145,7 +143,7 @@ export default function MaterialSolutionsPage() {
                                 <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                             </h3>
                             <p className="text-gray-500 font-medium text-sm leading-relaxed">{mat.desc}</p>
-                        </a>
+                        </Link>
                     ))}
                 </div>
 

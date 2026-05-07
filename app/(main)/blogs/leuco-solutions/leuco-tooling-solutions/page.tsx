@@ -57,11 +57,9 @@ export default function ToolingSolutionsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
                     {solutions.map((sol, i) => (
-                        <a
+                        <Link
                             key={i}
-                            href={`https://shopleuco.com/blogs/tooling-solutions/${sol.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`/blogs/tooling-solutions/${sol.slug}`}
                             className="group p-10 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-xl transition-all"
                         >
                             <div className="text-4xl mb-4">{sol.icon}</div>
@@ -70,7 +68,7 @@ export default function ToolingSolutionsPage() {
                                 <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                             </h3>
                             <p className="text-gray-500 font-medium leading-relaxed">{sol.desc}</p>
-                        </a>
+                        </Link>
                     ))}
                 </div>
 

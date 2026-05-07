@@ -68,14 +68,8 @@ const navLinks = [
         href: '/pages/about-leuco',
         items: [
             { label: 'Catalog', href: '/pages/catalogs' },
-            { label: 'News', href: '/blogs/leuco-news' },
             { label: 'Careers', href: '/pages/leuco-careers' },
-            { label: 'Georgia', href: '/pages/georgia' },
-            { label: 'Mississippi', href: '/pages/mississippi' },
-            { label: 'Michigan', href: '/pages/michigan' },
-            { label: 'California', href: '/pages/california' },
-            { label: 'Indiana', href: '/pages/indiana' },
-            { label: 'Canada', href: '/pages/canada' },
+            { label: 'Locations', href: '/pages/contact-leuco' },
         ],
     },
     {

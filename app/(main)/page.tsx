@@ -66,8 +66,8 @@ export default function Home() {
                             ALL NEW HIGHLINEXP
                         </span>
                         <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
-                            ENGINEERED <br />
-                            <span className="text-leuco-purple">PERFORMANCE.</span>
+                            ENGINEERED PERFORMANCE.<br />
+                            <span className="text-leuco-purple">EVERYDAY PRICE.</span>
                         </h1>
                         <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">
                             Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.

@@ -995,6 +995,7 @@ function Dashboard({ role, onLogout }: { role: Role; onLogout: () => void }) {
   const [requests, setRequests] = useState<EditRequest[]>([]);
   const [filter, setFilter] = useState<FilterKey>('all');
   const [loadError, setLoadError] = useState('');
+  const [completedOpen, setCompletedOpen] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -1018,13 +1019,19 @@ function Dashboard({ role, onLogout }: { role: Role; onLogout: () => void }) {
   const handleUpdate = (updated: EditRequest) => setRequests(r => r.map(x => x.id === updated.id ? updated : x));
   const handleDelete = (id: number) => setRequests(r => r.filter(x => x.id !== id));
 
-  const filtered = filter === 'all' ? requests : requests.filter(r => r.status === filter);
+  // Split into active vs completed
+  const activeRequests = requests.filter(r => r.status !== 'done');
+  const completedRequests = requests.filter(r => r.status === 'done');
+
+  // When a specific filter is chosen, show all matching (overrides split view)
+  const isFiltered = filter !== 'all';
+  const filtered = isFiltered ? requests.filter(r => r.status === filter) : activeRequests;
 
   const counts: Record<FilterKey, number> = {
     all: requests.length,
     open: requests.filter(r => r.status === 'open').length,
     in_progress: requests.filter(r => r.status === 'in_progress').length,
-    done: requests.filter(r => r.status === 'done').length,
+    done: completedRequests.length,
   };
 
   const filterBtns: { key: FilterKey; label: string }[] = [
@@ -1122,22 +1129,31 @@ function Dashboard({ role, onLogout }: { role: Role; onLogout: () => void }) {
           </div>
         )}
 
-        {/* Empty State */}
-        {filtered.length === 0 && !loadError && (
+        {/* ── Active requests (or filtered view) ── */}
+        {filtered.length === 0 && !loadError && !isFiltered && (
+          <div style={{
+            textAlign: 'center',
+            padding: '4rem 2rem',
+            color: 'rgba(255,255,255,0.3)',
+          }}>
+            <div style={{ fontSize: '40px', marginBottom: '12px' }}>✅</div>
+            <p style={{ fontSize: '15px', fontWeight: 600, margin: '0 0 6px' }}>All caught up!</p>
+            <p style={{ fontSize: '13px', margin: 0 }}>No open requests right now.</p>
+          </div>
+        )}
+
+        {isFiltered && filtered.length === 0 && !loadError && (
           <div style={{
             textAlign: 'center',
             padding: '4rem 2rem',
             color: 'rgba(255,255,255,0.3)',
           }}>
             <div style={{ fontSize: '40px', marginBottom: '12px' }}>📋</div>
-            <p style={{ fontSize: '15px', fontWeight: 600, margin: '0 0 6px' }}>No requests yet</p>
-            <p style={{ fontSize: '13px', margin: 0 }}>
-              {filter === 'all' ? 'Submit the first one above!' : `No ${filter.replace('_', ' ')} requests.`}
-            </p>
+            <p style={{ fontSize: '15px', fontWeight: 600, margin: '0 0 6px' }}>No requests</p>
+            <p style={{ fontSize: '13px', margin: 0 }}>No {filter.replace('_', ' ')} requests found.</p>
           </div>
         )}
 
-        {/* Request List */}
         {filtered.map(req => (
           <RequestCard
             key={req.id}
@@ -1147,10 +1163,74 @@ function Dashboard({ role, onLogout }: { role: Role; onLogout: () => void }) {
             onDelete={handleDelete}
           />
         ))}
+
+        {/* ── Completed Section (only when not filtered to done) ── */}
+        {!isFiltered && completedRequests.length > 0 && (
+          <div style={{ marginTop: '2rem' }}>
+            {/* Section Header */}
+            <button
+              onClick={() => setCompletedOpen(o => !o)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                background: 'rgba(16,185,129,0.06)',
+                border: '1px solid rgba(16,185,129,0.18)',
+                borderRadius: completedOpen ? '12px 12px 0 0' : '12px',
+                padding: '14px 20px',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '16px' }}>✅</span>
+                <span style={{ color: '#34d399', fontSize: '14px', fontWeight: 700, letterSpacing: '0.04em' }}>
+                  Completed
+                </span>
+                <span style={{
+                  background: 'rgba(16,185,129,0.15)',
+                  color: '#34d399',
+                  borderRadius: '6px',
+                  padding: '2px 8px',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                }}>
+                  {completedRequests.length}
+                </span>
+              </div>
+              <span style={{ color: '#34d399', fontSize: '13px', fontWeight: 700 }}>
+                {completedOpen ? '▲ Hide' : '▼ Show'}
+              </span>
+            </button>
+
+            {/* Completed Cards */}
+            {completedOpen && (
+              <div style={{
+                border: '1px solid rgba(16,185,129,0.18)',
+                borderTop: 'none',
+                borderRadius: '0 0 12px 12px',
+                padding: '1rem',
+                background: 'rgba(16,185,129,0.02)',
+              }}>
+                {completedRequests.map(req => (
+                  <RequestCard
+                    key={req.id}
+                    req={req}
+                    role={role}
+                    onUpdate={handleUpdate}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
 
 // ─── Root Export ──────────────────────────────────────────────────────────────
 

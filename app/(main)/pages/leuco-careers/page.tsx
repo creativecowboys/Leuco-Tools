@@ -1,19 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, MapPin, Briefcase } from 'lucide-react';
+import { ArrowRight, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
     title: 'Leuco Careers - LEUCO Tool Corporation',
     description: 'At Leuco Tool Corporation, our vision is to be the highest quality cutting tool and cutting tool service provider. Join our team.',
 };
-
-const openings = [
-    { title: 'CNC Grinding Technician', location: 'Georgia', type: 'Full-Time', dept: 'Service Operations' },
-    { title: 'Regional Sales Manager – Southeast', location: 'Georgia', type: 'Full-Time', dept: 'Sales' },
-    { title: 'Application Engineer', location: 'Michigan', type: 'Full-Time', dept: 'Engineering' },
-    { title: 'Customer Service Representative', location: 'Indiana (Remote)', type: 'Full-Time', dept: 'Customer Service' },
-    { title: 'Warehouse Associate', location: 'Mississippi', type: 'Full-Time', dept: 'Operations' },
-];
 
 export default function CareersPage() {
     return (
@@ -48,27 +40,12 @@ export default function CareersPage() {
                     <div className="h-1.5 w-24 bg-leuco-purple" />
                 </div>
 
-                <div className="space-y-4 mb-16">
-                    {openings.map((job, i) => (
-                        <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-8 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-lg transition-all group">
-                            <div>
-                                <h3 className="font-black text-lg mb-1 group-hover:text-leuco-purple transition-colors">{job.title}</h3>
-                                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                                    <span className="flex items-center gap-1"><MapPin size={14} />{job.location}</span>
-                                    <span className="font-bold">{job.dept}</span>
-                                    <span className="font-bold">{job.type}</span>
-                                </div>
-                            </div>
-                            <Link href="/pages/contact-leuco" className="mt-4 md:mt-0 bg-leuco-purple text-white font-black px-6 py-3 inline-flex items-center gap-2 hover:bg-leuco-black transition-colors text-sm shrink-0">
-                                APPLY NOW <ArrowRight size={14} />
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="bg-gray-50 p-12 text-center">
-                    <h2 className="text-2xl font-black mb-4">Don't See Your Role?</h2>
-                    <p className="text-gray-500 font-medium mb-6">We're always looking for talented people. Send us your resume and we'll be in touch.</p>
+                <div className="bg-gray-50 p-16 text-center mb-16">
+                    <div className="text-5xl mb-6">📋</div>
+                    <h3 className="text-2xl font-black mb-4">No Current Openings</h3>
+                    <p className="text-gray-500 font-medium max-w-lg mx-auto mb-8">
+                        We don&apos;t have any posted positions at the moment, but we&apos;re always interested in connecting with talented people. Send us your resume and we&apos;ll reach out when a role opens up.
+                    </p>
                     <Link href="/pages/contact-leuco" className="bg-leuco-purple text-white font-black px-8 py-4 inline-flex items-center gap-2 hover:bg-leuco-black transition-colors">
                         SEND YOUR RESUME <ArrowRight size={18} />
                     </Link>

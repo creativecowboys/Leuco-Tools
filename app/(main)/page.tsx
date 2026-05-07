@@ -43,7 +43,14 @@ export default function Home() {
     ];
 
     const [heroIndex, setHeroIndex] = React.useState(0);
-    const heroSlides = [
+    const heroSlides: Array<{
+        image: string;
+        eyebrow: string;
+        headline: React.ReactNode;
+        body: string;
+        ctas: Array<{ label: string; href: string; primary: boolean; external?: boolean }>;
+        extra?: React.ReactNode;
+    }> = [
         {
             image: '/Leuco Hero Image 2.png',
             eyebrow: 'ALL NEW HIGHLINEXP',

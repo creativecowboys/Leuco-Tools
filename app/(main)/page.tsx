@@ -42,53 +42,159 @@ export default function Home() {
         },
     ];
 
+    const [heroIndex, setHeroIndex] = React.useState(0);
+    const heroSlides = [
+        {
+            image: '/Leuco Hero Image 2.png',
+            eyebrow: 'ALL NEW HIGHLINEXP',
+            headline: <>ENGINEERED PERFORMANCE.<br /><span className="text-leuco-purple">EVERYDAY PRICE.</span></>,
+            body: "Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.",
+            ctas: [
+                { label: 'SHOP HIGHLINE XP', href: '/collections/highlinexp-industrial-series', primary: true },
+            ],
+            extra: (
+                <button
+                    onClick={() => window.postMessage({ type: 'leuco-embed:open' }, '*')}
+                    className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                >
+                    <Sparkles size={18} className="group-hover:text-leuco-purple transition-colors" />
+                    SEARCH WITH AI
+                </button>
+            ),
+        },
+        {
+            image: '/hero-iwf-educational.jpg',
+            eyebrow: 'IWF 2026 · ATLANTA',
+            headline: <><span className="text-leuco-purple">TOOLING SECRETS</span><br />EVERY SHOP SHOULD KNOW.</>,
+            body: "Join LEUCO at IWF 2026 for an exclusive educational session on precision tooling strategies that boost productivity and slash waste. Register now to secure your spot.",
+            ctas: [
+                { label: 'REGISTER FOR SESSION', href: 'https://iwf26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=45', primary: true, external: true },
+            ],
+        },
+        {
+            image: '/hero-iwf-visit.jpg',
+            eyebrow: 'IWF 2026 · BOOTH #B5553',
+            headline: <>VISIT US AT<br /><span className="text-leuco-purple">BOOTH #B5553.</span></>,
+            body: "Find us on the IWF 2026 show floor in Hall B. Our team will be on hand to demonstrate the latest LEUCO tooling innovations and connect with you face-to-face.",
+            ctas: [
+                { label: 'VIEW BOOTH ON MAP', href: 'https://iwf26.mapyourshow.com/8_0/floorplan/index.cfm?hallID=B&selectedBooth=B5553', primary: true, external: true },
+            ],
+        },
+        {
+            image: '/hero-mass-timber.jpg',
+            eyebrow: 'IWF 2026 · MASS TIMBER PAVILION',
+            headline: <>MASS TIMBER<br /><span className="text-leuco-purple">PAVILION #A9828.</span></>,
+            body: "LEUCO is proud to be part of the Mass Timber Pavilion at IWF 2026. Visit us at Booth A9828 to explore our diamond tooling solutions purpose-built for CLT, glulam, and engineered wood.",
+            ctas: [
+                { label: 'VIEW PAVILION MAP', href: 'https://iwf26.mapyourshow.com/8_0/floorplan/index.cfm?hallID=A&selectedBooth=A9828', primary: true, external: true },
+            ],
+        },
+    ];
+
+    // Auto-advance slider
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setHeroIndex(i => (i + 1) % heroSlides.length);
+        }, 6000);
+        return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const currentSlide = heroSlides[heroIndex];
+
     return (
         <>
-            {/* Hero Section */}
+            {/* Hero Section — rotating slider */}
             <section className="relative h-[85vh] bg-leuco-black overflow-hidden">
-                <div className="absolute inset-0">
-                    <img
-                        src="/Leuco Hero Image 2.png"
-                        className="w-full h-full object-cover opacity-50"
-                        alt="Industrial Tooling"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-leuco-black via-leuco-black/60 to-transparent" />
-                </div>
+                {/* Background images — crossfade */}
+                {heroSlides.map((slide, i) => (
+                    <div
+                        key={i}
+                        className="absolute inset-0 transition-opacity duration-1000"
+                        style={{ opacity: i === heroIndex ? 1 : 0, zIndex: 0 }}
+                    >
+                        <img
+                            src={slide.image}
+                            className="w-full h-full object-cover opacity-50"
+                            alt=""
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-leuco-black via-leuco-black/60 to-transparent" />
+                    </div>
+                ))}
 
-                <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-12 flex flex-col justify-center items-start">
+                {/* Content */}
+                <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-12 flex flex-col justify-center items-start" style={{ zIndex: 1 }}>
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        key={heroIndex}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 0.6 }}
                         className="max-w-2xl"
                     >
                         <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">
-                            ALL NEW HIGHLINEXP
+                            {currentSlide.eyebrow}
                         </span>
                         <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
-                            ENGINEERED PERFORMANCE.<br />
-                            <span className="text-leuco-purple">EVERYDAY PRICE.</span>
+                            {currentSlide.headline}
                         </h1>
                         <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">
-                            Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.
+                            {currentSlide.body}
                         </p>
                         <div className="flex flex-wrap gap-4">
-                            <Link href="/collections/highlinexp-industrial-series" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group">
-                                SHOP HIGHLINE XP <ArrowRight className="group-hover:translate-x-2 transition-transform" />
-                            </Link>
-                            <button
-                                onClick={() => window.postMessage({ type: 'leuco-embed:open' }, '*')}
-                                className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
-                            >
-                                <Sparkles size={18} className="group-hover:text-leuco-purple transition-colors" />
-                                SEARCH WITH AI
-                            </button>
+                            {currentSlide.ctas.map((cta, ci) => (
+                                cta.external ? (
+                                    <a
+                                        key={ci}
+                                        href={cta.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={cta.primary
+                                            ? "bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                                            : "border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                                        }
+                                    >
+                                        {cta.label} <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={ci}
+                                        href={cta.href}
+                                        className={cta.primary
+                                            ? "bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                                            : "border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                                        }
+                                    >
+                                        {cta.label} <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                    </Link>
+                                )
+                            ))}
+                            {currentSlide.extra}
                         </div>
                     </motion.div>
                 </div>
 
+                {/* Slide Dots */}
+                <div className="absolute bottom-24 right-6 md:right-12 flex gap-3 z-10">
+                    {heroSlides.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setHeroIndex(i)}
+                            className="transition-all duration-300"
+                            style={{
+                                width: i === heroIndex ? '2rem' : '0.5rem',
+                                height: '0.5rem',
+                                background: i === heroIndex ? '#a9218d' : 'rgba(255,255,255,0.4)',
+                                borderRadius: '999px',
+                                border: 'none',
+                                cursor: 'pointer',
+                            }}
+                            aria-label={`Go to slide ${i + 1}`}
+                        />
+                    ))}
+                </div>
+
                 {/* Hero Stats */}
-                <div className="absolute bottom-0 left-0 right-0 bg-white/5 backdrop-blur-md border-t border-white/10 hidden md:block">
+                <div className="absolute bottom-0 left-0 right-0 bg-white/5 backdrop-blur-md border-t border-white/10 hidden md:block" style={{ zIndex: 1 }}>
                     <div className="max-w-[1440px] mx-auto grid grid-cols-4 divide-x divide-white/10">
                         {[
                             { label: '40+ YEARS', value: 'SERVING NORTH AMERICA', icon: Globe },
@@ -107,6 +213,7 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
 
             {/* Systems Grid */}
             <section className="py-24 px-4 md:px-12 max-w-[1440px] mx-auto">

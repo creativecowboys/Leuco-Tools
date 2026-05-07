@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, ArrowRight } from 'lucide-react';
 
 interface LocationPageProps {
@@ -10,9 +11,10 @@ interface LocationPageProps {
     email: string;
     hours: string;
     description: string;
+    image?: string;  // optional facility photo, relative to /public
 }
 
-export default function LocationPage({ state, city, address, phone, email, hours, description }: LocationPageProps) {
+export default function LocationPage({ state, city, address, phone, email, hours, description, image }: LocationPageProps) {
     return (
         <div>
             <div className="bg-leuco-black py-24 px-4 md:px-12">
@@ -22,6 +24,19 @@ export default function LocationPage({ state, city, address, phone, email, hours
                     <p className="text-gray-300 text-xl font-medium max-w-2xl">{description}</p>
                 </div>
             </div>
+
+            {/* Facility photo */}
+            {image && (
+                <div className="relative w-full h-64 md:h-96 overflow-hidden">
+                    <Image
+                        src={image}
+                        alt={`LEUCO ${state} facility`}
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                </div>
+            )}
 
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="max-w-2xl">

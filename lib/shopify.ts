@@ -127,8 +127,8 @@ const CART_FRAGMENT = /* GraphQL */ `
 // ─── GraphQL Queries & Mutations ──────────────────────────────────────────────
 
 const PRODUCTS_QUERY = /* GraphQL */ `
-  query GetProducts($first: Int!) {
-    products(first: $first) {
+  query GetProducts($first: Int!, $query: String) {
+    products(first: $first, query: $query) {
       edges {
         node {
           id
@@ -265,10 +265,13 @@ async function shopifyFetch<T>(query: string, variables: Record<string, unknown>
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
-export async function fetchProducts(count = 8): Promise<ShopifyProduct[]> {
+export async function fetchProducts(count = 8, query?: string): Promise<ShopifyProduct[]> {
+  const variables: Record<string, unknown> = { first: count };
+  if (query) variables.query = query;
+
   const data = await shopifyFetch<{ products: { edges: Array<{ node: ShopifyProduct }> } }>(
     PRODUCTS_QUERY,
-    { first: count }
+    variables
   );
   return data.products.edges.map((edge) => edge.node);
 }
@@ -505,6 +508,8 @@ export interface CategoryImages {
   spirals: string | null;
   diamond: string | null;
   sawBlades: string | null;
+  knives: string | null;
+  clamping: string | null;
 }
 
 const CATEGORY_IMAGES_QUERY = /* GraphQL */ `{
@@ -517,6 +522,12 @@ const CATEGORY_IMAGES_QUERY = /* GraphQL */ `{
   sawBlades: collection(handle: "saw-blades") {
     image { url }
   }
+  knives: collection(handle: "knives-and-inserts") {
+    image { url }
+  }
+  clamping: collection(handle: "clamping-systems") {
+    image { url }
+  }
 }`;
 
 export async function fetchCategoryImages(): Promise<CategoryImages> {
@@ -524,12 +535,16 @@ export async function fetchCategoryImages(): Promise<CategoryImages> {
     spirals: { edges: Array<{ node: { images: { edges: Array<{ node: { url: string } }> } } }> };
     diamond: { edges: Array<{ node: { images: { edges: Array<{ node: { url: string } }> } } }> };
     sawBlades: { image: { url: string } | null } | null;
+    knives: { image: { url: string } | null } | null;
+    clamping: { image: { url: string } | null } | null;
   }>(CATEGORY_IMAGES_QUERY, {});
 
   return {
     spirals: data.spirals?.edges[0]?.node?.images?.edges[0]?.node?.url ?? null,
     diamond: data.diamond?.edges[0]?.node?.images?.edges[0]?.node?.url ?? null,
     sawBlades: data.sawBlades?.image?.url ?? null,
+    knives: data.knives?.image?.url ?? null,
+    clamping: data.clamping?.image?.url ?? null,
   };
 }
 

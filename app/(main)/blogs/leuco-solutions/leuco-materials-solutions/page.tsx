@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
     title: 'Material Solutions - LEUCO Tool Corporation',
-    description: 'With LEUCO Material Solutions, you will receive longer edge life, better cut quality, low-noise, and a team of tooling experts on hand.',
+    description: 'Not every material cuts the same. LEUCO Material Solutions pairs each substrate with the exact cutting geometry, tooth count, and tip grade engineered for it.',
 };
 
 const materials = [
@@ -116,10 +116,10 @@ export default function MaterialSolutionsPage() {
             {/* Hero */}
             <div className="bg-leuco-black py-24 px-4 md:px-12">
                 <div className="max-w-[1440px] mx-auto">
-                    <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">APPLICATIONS</span>
+                    <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">KNOWLEDGE</span>
                     <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">MATERIAL SOLUTIONS</h1>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl">
-                        With LEUCO Material Solutions, you will receive longer edge life, better cut quality, low-noise, and a team of tooling experts on hand. Our Material Solutions provide you with a driving business saving you time and money as we stay ahead of your production needs before you even think about it.
+                        Not every material cuts the same — and the wrong tooling shows it immediately. LEUCO Material Solutions pairs each substrate with the exact cutting geometry, tooth count, and tip grade engineered for it. From lightweight panels and HPL to laminated glass and fiber cement, every recommendation comes backed by decades of field data and a team of specialists who understand your production floor, not just the catalog.
                     </p>
                 </div>
             </div>

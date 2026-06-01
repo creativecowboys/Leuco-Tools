@@ -21,6 +21,7 @@ import {
     Youtube,
     Linkedin,
     Twitter,
+    Sparkles,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -50,24 +51,28 @@ const navLinks = [
         name: 'SERVICES',
         href: '/pages/services',
         items: [
-            { label: 'Sharpening', href: '/pages/sharpening-services' },
+            { label: 'Sharpening', href: 'https://shopleuco.com/apps/bundles/bundle/131486' },
             { label: 'Engineering', href: '/pages/leuco-engineering' },
             { label: 'Custom Tooling', href: '/pages/custom-tooling' },
         ],
     },
     {
-        name: 'APPLICATIONS',
+        name: 'KNOWLEDGE',
         href: '/blogs/leuco-solutions',
         items: [
-            { label: 'Tooling Innovations', href: '/blogs/leuco-solutions/leuco-tooling-innovations' },
             { label: 'Material Solutions', href: '/blogs/leuco-solutions/leuco-materials-solutions' },
+            { label: 'Tooling Innovations', href: '/blogs/leuco-solutions/leuco-tooling-innovations' },
+            { label: 'Catalogs', href: '/pages/catalogs' },
+            { label: 'Resharpening FAQ', href: '/pages/tool-resharpening-faq' },
+            { label: 'Safety', href: '/pages/safety' },
+            { label: 'News', href: '/blogs/leuco-news' },
         ],
     },
     {
         name: 'ABOUT',
         href: '/pages/about-leuco',
         items: [
-            { label: 'Catalog', href: '/pages/catalogs' },
+            { label: 'About LEUCO', href: '/pages/about-leuco' },
             { label: 'Careers', href: '/pages/leuco-careers' },
             { label: 'Locations', href: '/pages/contact-leuco' },
         ],
@@ -98,29 +103,34 @@ export default function Layout({ children }: LayoutProps) {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        if (searchQuery.trim()) {
-            router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+        const query = searchQuery.trim();
+        // 1. Open the chat widget
+        window.postMessage({ type: 'leuco-embed:open' }, '*');
+        
+        if (query) {
+            // 2. Post the query to the Replit AI iframe
+            const sendQuery = () => {
+                const iframe = document.querySelector('iframe[title="Leuco AI Tool Advisor"]') as HTMLIFrameElement;
+                if (iframe && iframe.contentWindow) {
+                    iframe.contentWindow.postMessage({ type: 'leuco-embed:query', query: query }, '*');
+                    iframe.contentWindow.postMessage({ type: 'query', query: query }, '*');
+                    iframe.contentWindow.postMessage({ type: 'message', text: query }, '*');
+                }
+            };
+            
+            // Try sending immediately and after brief delays to ensure iframe is loaded/open
+            sendQuery();
+            setTimeout(sendQuery, 300);
+            setTimeout(sendQuery, 800);
+            
+            // Clear input
             setSearchQuery('');
         }
     };
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            {/* Top Utility Nav */}
-            <div className="bg-leuco-black text-white text-[10px] font-bold tracking-widest py-2 px-4 md:px-12 flex justify-between items-center border-b border-white/10">
-                <div className="flex gap-6">
-                    <Link href="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">WHERE TO BUY</Link>
-                    <Link href="/pages/sharpening-services" className="hover:text-leuco-purple transition-colors">RE-SHARPENING</Link>
-                    <Link href="/blogs/leuco-solutions" className="hover:text-leuco-purple transition-colors">EDUCATION</Link>
-                </div>
-                <div className="flex gap-6 items-center">
-                    <div className="flex items-center gap-1 cursor-pointer hover:text-leuco-purple transition-colors">
-                        <Globe size={12} />
-                        <span>EN / US</span>
-                    </div>
-                    <Link href="/pages/contact-leuco" className="hover:text-leuco-purple transition-colors">CONTACT</Link>
-                </div>
-            </div>
+
 
             {/* Main Nav */}
             <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-xl py-2' : 'bg-white py-4'} border-b border-gray-100`}>
@@ -142,6 +152,8 @@ export default function Layout({ children }: LayoutProps) {
                                                 <Link
                                                     key={item.href}
                                                     href={item.href}
+                                                    target={item.href.startsWith('http') ? '_blank' : undefined}
+                                                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                                                     className="block px-6 py-2 text-xs font-bold hover:bg-gray-50 hover:text-leuco-purple"
                                                 >
                                                     {item.label}
@@ -155,20 +167,24 @@ export default function Layout({ children }: LayoutProps) {
                     </div>
 
                     <div className="flex items-center gap-6">
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center bg-gray-100 rounded-sm px-3 py-2 w-64">
-                            <button type="submit"><Search size={18} className="text-gray-400" /></button>
+                        <form onSubmit={handleSearch} className="hidden md:flex items-center bg-gray-100 rounded-sm px-3 py-2 w-72 border border-transparent focus-within:border-leuco-purple/30 focus-within:bg-white transition-all">
+                            <button type="submit"><Sparkles size={18} className="text-leuco-purple" /></button>
                             <input
                                 type="text"
                                 value={searchQuery}
                                 onChange={e => setSearchQuery(e.target.value)}
-                                placeholder="Search tools, parts..."
+                                placeholder="Ask the AI Tool Advisor..."
                                 className="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 font-medium outline-none"
                             />
                         </form>
                         <div className="flex items-center gap-4">
-                            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                            <div className="hidden lg:flex items-center gap-1 px-3 border-r border-gray-200 cursor-pointer hover:text-leuco-purple transition-colors">
+                                <Globe size={16} />
+                                <span className="text-xs font-bold">EN/US</span>
+                            </div>
+                            <a href="https://shopleuco.com/account/login" target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                                 <User size={22} />
-                            </button>
+                            </a>
                             <button onClick={openCart} className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
                                 <ShoppingCart size={22} />
                                 {cartCount > 0 && (
@@ -220,6 +236,8 @@ export default function Layout({ children }: LayoutProps) {
                                                     key={item.href}
                                                     href={item.href}
                                                     onClick={() => setIsMenuOpen(false)}
+                                                    target={item.href.startsWith('http') ? '_blank' : undefined}
+                                                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                                                     className="text-sm font-bold text-gray-600 hover:text-leuco-purple"
                                                 >
                                                     {item.label}
@@ -229,6 +247,20 @@ export default function Layout({ children }: LayoutProps) {
                                     )}
                                 </div>
                             ))}
+                            
+                            {/* Mobile Customer Login */}
+                            <div className="pt-6 border-t border-gray-100">
+                                <a
+                                    href="https://shopleuco.com/account/login"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-lg font-black text-gray-800 hover:text-leuco-purple flex items-center gap-2"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    <User size={20} className="text-leuco-purple" />
+                                    CUSTOMER LOGIN
+                                </a>
+                            </div>
                         </div>
                     </motion.div>
                 )}
@@ -243,7 +275,7 @@ export default function Layout({ children }: LayoutProps) {
             </main>
 
             {/* Footer */}
-            <footer className="bg-leuco-black text-white pt-24 pb-12 border-t border-white/10">
+            <footer className="bg-leuco-black text-white pt-24 pb-[96px] md:pb-12 border-t border-white/10">
                 <div className="max-w-[1440px] mx-auto px-4 md:px-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
                         <div className="lg:col-span-2 space-y-8">
@@ -290,13 +322,13 @@ export default function Layout({ children }: LayoutProps) {
                                     { label: 'Custom Tooling', href: '/pages/custom-tooling' },
                                 ],
                             },
-                            {
+                                {
                                 title: 'SUPPORT',
                                 links: [
                                     { label: 'Contact Us', href: '/pages/contact-leuco' },
                                     { label: 'Search', href: '/search' },
                                     { label: 'Safety', href: '/pages/safety' },
-                                    { label: 'Resharpening', href: '/pages/sharpening-services' },
+                                    { label: 'Resharpening', href: 'https://shopleuco.com/apps/bundles/bundle/131486' },
                                     { label: 'Resharpening FAQ', href: '/pages/tool-resharpening-faq' },
                                 ],
                             },
@@ -307,7 +339,7 @@ export default function Layout({ children }: LayoutProps) {
                                     { label: 'Careers', href: '/pages/leuco-careers' },
                                     { label: 'News', href: '/blogs/leuco-news' },
                                     { label: 'Catalogs', href: '/pages/catalogs' },
-                                    { label: 'Locations', href: '/pages/georgia' },
+                                    { label: 'Locations', href: '/pages/contact-leuco' },
                                 ],
                             },
                         ].map((col, i) => (
@@ -316,7 +348,12 @@ export default function Layout({ children }: LayoutProps) {
                                 <ul className="space-y-4">
                                     {col.links.map(link => (
                                         <li key={link.href}>
-                                            <Link href={link.href} className="text-gray-400 font-bold text-sm hover:text-white transition-colors">
+                                            <Link
+                                                href={link.href}
+                                                target={link.href.startsWith('http') ? '_blank' : undefined}
+                                                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                                className="text-gray-400 font-bold text-sm hover:text-white transition-colors"
+                                            >
                                                 {link.label}
                                             </Link>
                                         </li>

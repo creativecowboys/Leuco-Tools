@@ -8,7 +8,6 @@ import { motion } from 'motion/react';
 const categories = [
     { title: 'Tooling Innovations', desc: 'The latest breakthroughs in cutting tool design, geometry, and materials science.', href: '/blogs/leuco-solutions/leuco-tooling-innovations', tag: 'INNOVATION' },
     { title: 'Materials Solutions', desc: 'Optimized tooling strategies for specific materials: solid wood, MDF, composites, HPL, and more.', href: '/blogs/leuco-solutions/leuco-materials-solutions', tag: 'MATERIALS' },
-    { title: 'Tooling Solutions', desc: 'Practical guides for specific production challenges, machine configurations, and application types.', href: '/blogs/leuco-solutions/leuco-tooling-solutions', tag: 'SOLUTIONS' },
 ];
 
 export default function SolutionsHubClient() {
@@ -25,7 +24,7 @@ export default function SolutionsHubClient() {
             </div>
 
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {categories.map((cat, i) => (
                         <motion.div key={i} whileHover={{ y: -6 }} className="group">
                             <Link href={cat.href} className="block p-10 border border-gray-100 hover:border-leuco-purple/30 hover:shadow-xl transition-all h-full">

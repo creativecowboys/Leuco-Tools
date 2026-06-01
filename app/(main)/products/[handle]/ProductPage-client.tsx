@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
-import { ShoppingCart, Loader2, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ShoppingCart, Loader2, ChevronLeft, ChevronRight, Check, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShopifyProductDetail, ShopifyVariantDetail } from '@/lib/shopify';
 
@@ -196,6 +196,28 @@ export default function ProductPageClient({ product }: Props) {
         setTimeout(() => setJustAdded(false), 2000);
     };
 
+    const handleAskAI = () => {
+        // 1. Open the widget
+        window.postMessage({ type: 'leuco-embed:open' }, '*');
+
+        // 2. Formulate a contextual prompt for this product
+        const sku = selectedVariant?.sku || product.variants.edges[0]?.node?.sku || '';
+        const promptText = `I have a question about the ${product.title}${sku ? ` (SKU: ${sku})` : ''}. Can you help me check its feed rate, compatibility, and recommended applications?`;
+
+        const sendPrompt = () => {
+            const iframe = document.querySelector('iframe[title="Leuco AI Tool Advisor"]') as HTMLIFrameElement;
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ type: 'leuco-embed:query', query: promptText }, '*');
+                iframe.contentWindow.postMessage({ type: 'query', query: promptText }, '*');
+                iframe.contentWindow.postMessage({ type: 'message', text: promptText }, '*');
+            }
+        };
+
+        sendPrompt();
+        setTimeout(sendPrompt, 300);
+        setTimeout(sendPrompt, 800);
+    };
+
     const breadcrumb = PRODUCT_TYPE_TO_ROUTE[product.productType] ?? { label: 'Tools', href: '/pages/tools' };
     const variants = product.variants.edges.map((e) => e.node);
     const price = selectedVariant?.price ?? product.priceRange.minVariantPrice;
@@ -372,6 +394,25 @@ export default function ProductPageClient({ product }: Props) {
                                 'OUT OF STOCK'
                             )}
                         </button>
+
+                        {/* Contextual AI Advisor Banner */}
+                        <div className="bg-leuco-black p-5 border border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2">
+                            <div className="flex gap-3 items-start">
+                                <Sparkles className="text-leuco-purple-light shrink-0 mt-0.5" size={20} />
+                                <div>
+                                    <h4 className="text-xs font-black text-white tracking-wider uppercase mb-1">Confused about compatibility?</h4>
+                                    <p className="text-[11px] text-gray-400 font-medium leading-relaxed">
+                                        Ask our AI Advisor about feed rates, machine compatibility, and custom applications for this tool.
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={handleAskAI}
+                                className="text-xs font-black text-leuco-purple-light hover:text-white border-b-2 border-leuco-purple-light hover:border-white transition-all py-1 whitespace-nowrap cursor-pointer"
+                            >
+                                ASK THE AI ADVISOR
+                            </button>
+                        </div>
 
                         {/* Description */}
                         {product.descriptionHtml && (

@@ -36,6 +36,21 @@ const nextConfig = {
         destination: '/products/10-highlinexp-carbide-sawblade-for-fine-finish-rips-crosscuts',
         permanent: true,
       },
+      {
+        source: '/applications/tooling-innovations',
+        destination: '/blogs/leuco-solutions/leuco-tooling-innovations',
+        permanent: true,
+      },
+      {
+        source: '/applications/material-solutions',
+        destination: '/blogs/leuco-solutions/leuco-materials-solutions',
+        permanent: true,
+      },
+      {
+        source: '/applications',
+        destination: '/blogs/leuco-solutions',
+        permanent: true,
+      },
     ];
   },
 };

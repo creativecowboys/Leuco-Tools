@@ -15,7 +15,7 @@ import { useShopifyProducts } from '@/hooks/useShopifyProducts';
 import { useShopifyCategoryImages } from '@/hooks/useShopifyCategoryImages';
 
 export default function Home() {
-    const { products: shopifyProducts, loading: productsLoading, error: productsError } = useShopifyProducts(8);
+    const { products: shopifyProducts, loading: productsLoading, error: productsError } = useShopifyProducts(8, "title:spiral OR title:blade OR tag:hp-plus-spirals");
     const { images: categoryImages } = useShopifyCategoryImages();
 
     const systems = [
@@ -39,6 +39,20 @@ export default function Home() {
             cta: 'SHOP SAWBLADES',
             image: categoryImages.sawBlades,
             href: '/collections/circular-saw-blades',
+        },
+        {
+            title: 'KNIVES & INSERTS',
+            subtitle: 'CUTTING EDGES',
+            cta: 'SHOP KNIVES',
+            image: categoryImages.knives,
+            href: '/collections/knives-and-inserts',
+        },
+        {
+            title: 'CLAMPING SYSTEMS',
+            subtitle: 'ACCESSORIES',
+            cta: 'SHOP CLAMPING',
+            image: categoryImages.clamping,
+            href: '/collections/clamping-systems',
         },
     ];
 
@@ -234,7 +248,7 @@ export default function Home() {
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {systems.map((system, i) => (
                         <motion.div
                             key={i}
@@ -249,7 +263,7 @@ export default function Home() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-leuco-black/90 via-transparent to-transparent" />
                                 <div className="absolute bottom-0 left-0 p-10">
-                                    <div className="text-leuco-purple font-black text-xs tracking-widest mb-2">{system.subtitle}</div>
+                                    <div className="text-leuco-purple-light font-black text-xs tracking-widest mb-2">{system.subtitle}</div>
                                     <h3 className="text-4xl font-black text-white mb-6 uppercase tracking-tighter leading-none">{system.title}</h3>
                                     <span className="bg-white text-leuco-black font-black text-xs px-6 py-3 group-hover:bg-leuco-purple group-hover:text-white transition-colors inline-block">
                                         {system.cta}
@@ -361,7 +375,9 @@ export default function Home() {
                                 Our world-class service centers restore your tools to original manufacturer specifications using advanced CNC grinding technology.
                             </p>
                             <Link
-                                href="/pages/sharpening-services"
+                                href="https://shopleuco.com/apps/bundles/bundle/131486"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="bg-leuco-purple text-white font-black px-8 py-4 flex items-center gap-2 group-hover:bg-white group-hover:text-leuco-purple transition-all w-fit"
                             >
                                 BOOK SERVICE <ArrowRight size={18} />

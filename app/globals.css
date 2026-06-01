@@ -2,6 +2,7 @@
 
 @theme {
   --color-leuco-purple: #a9218d;
+  --color-leuco-purple-light: #ff7ae6;
   --color-leuco-black: #1A1A1A;
   --color-leuco-gray: #F5F5F5;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -18,4 +19,22 @@ body {
 .industrial-grid {
   background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* Leuco AI Tool Advisor Widget overrides */
+button[aria-label="Open Leuco AI Tool Advisor"] {
+  transition: all 0.3s ease-in-out !important;
+}
+
+@media (max-width: 767px) {
+  button[aria-label="Open Leuco AI Tool Advisor"] {
+    width: 48px !important;
+    height: 48px !important;
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+  button[aria-label="Open Leuco AI Tool Advisor"] svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
 }

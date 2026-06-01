@@ -53,10 +53,10 @@ export default function ToolingInnovationsClient() {
         <div>
             <div className="bg-leuco-black py-24 px-4 md:px-12">
                 <div className="max-w-[1440px] mx-auto">
-                    <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">INNOVATION</span>
+                    <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">KNOWLEDGE</span>
                     <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none mb-6">TOOLING INNOVATIONS</h1>
                     <p className="text-gray-300 text-xl font-medium max-w-2xl">
-                        The latest advances in cutting tool technology, materials, and design from LEUCO&apos;s global R&amp;D program.
+                        LEUCO has spent decades not just manufacturing cutting tools, but rethinking how they work. From the owl-wing acoustics of the airFace System to the face-shear revolution of the p-System, every innovation on this page started as an engineering problem that industry standards hadn&apos;t solved yet. This is where LEUCO&apos;s global R&amp;D program meets the production floor.
                     </p>
                 </div>
             </div>

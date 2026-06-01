@@ -9,7 +9,7 @@ interface UseShopifyProductsResult {
     error: string | null;
 }
 
-export function useShopifyProducts(count = 8): UseShopifyProductsResult {
+export function useShopifyProducts(count = 8, query?: string): UseShopifyProductsResult {
     const [products, setProducts] = useState<ShopifyProduct[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export function useShopifyProducts(count = 8): UseShopifyProductsResult {
         setLoading(true);
         setError(null);
 
-        fetchProducts(count)
+        fetchProducts(count, query)
             .then((data) => {
                 if (!cancelled) {
                     setProducts(data);
@@ -40,7 +40,7 @@ export function useShopifyProducts(count = 8): UseShopifyProductsResult {
         return () => {
             cancelled = true;
         };
-    }, [count]);
+    }, [count, query]);
 
     return { products, loading, error };
 }

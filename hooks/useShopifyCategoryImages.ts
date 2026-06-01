@@ -12,6 +12,8 @@ const FALLBACKS: CategoryImages = {
     spirals: 'https://cdn.shopify.com/s/files/1/2239/2465/products/3-7A_B_f6c34fce-489a-45e5-8e95-ff82161e99f1.png?v=1651774348',
     diamond: 'https://cdn.shopify.com/s/files/1/2239/2465/products/PIC_1-9_sizing-edited.jpg?v=1648565919',
     sawBlades: 'https://cdn.shopify.com/s/files/1/2239/2465/collections/13.jpg?v=1621543042',
+    knives: 'https://cdn.shopify.com/s/files/1/2239/2465/collections/leuco_knives.jpg?v=1709323733',
+    clamping: 'https://cdn.shopify.com/s/files/1/2239/2465/collections/leuco_clamping.jpg?v=1709323769',
 };
 
 export function useShopifyCategoryImages(): UseShopifyCategoryImagesResult {
@@ -27,6 +29,8 @@ export function useShopifyCategoryImages(): UseShopifyCategoryImagesResult {
                         spirals: data.spirals ?? FALLBACKS.spirals,
                         diamond: data.diamond ?? FALLBACKS.diamond,
                         sawBlades: data.sawBlades ?? FALLBACKS.sawBlades,
+                        knives: data.knives ?? FALLBACKS.knives,
+                        clamping: data.clamping ?? FALLBACKS.clamping,
                     });
                 }
             })

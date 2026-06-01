@@ -16,6 +16,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://leuco-tools.replit.app" />
+        <link rel="preload" href="https://leuco-tools.replit.app/embed.js" as="script" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
           rel="stylesheet"

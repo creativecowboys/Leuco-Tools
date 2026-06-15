@@ -152,8 +152,18 @@ function parseVariantSpecsUnified(sizeString: string, productType = ''): ParsedS
             bore = formatSegment(segments[3], 'bore');
         }
     } else if (prefix === 'BOR' || typeLower.includes('boring')) {
-        diameter = formatSegment(segments[1], 'diameter');
-        bore = formatSegment(segments[0], 'bore');
+        diameter = formatSegment(segments[0], 'diameter');
+        if (segments.length >= 3) {
+            const seg1 = parseFloat(segments[1].replace(/[^0-9.]/g, ''));
+            const seg2 = parseFloat(segments[2].replace(/[^0-9.]/g, ''));
+            if (!isNaN(seg1) && !isNaN(seg2)) {
+                bore = formatSegment(seg1 > seg2 ? segments[2] : segments[1], 'bore');
+            } else {
+                bore = formatSegment(segments[1], 'bore');
+            }
+        } else {
+            bore = formatSegment(segments[1], 'bore');
+        }
     } else if (prefix === 'KNI' || typeLower.includes('knives') || typeLower.includes('inserts')) {
         diameter = formatSegment(segments[1], 'diameter');
     } else if (prefix === 'CLA' || typeLower.includes('clamp')) {
@@ -424,8 +434,18 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
 
     const showTeethFilter = !isSpiralColl && !isOtherColl && allFacets.teeth.length > 0;
     const showFlutesFilter = !isSawOrCutterColl && !isOtherColl && allFacets.flutes.length > 0;
-    const showBoreFilter = !isOtherColl && allFacets.bores.length > 0;
+    const showBoreFilter = !isOtherColl && !isSpiralColl && allFacets.bores.length > 0;
     const showDiameterFilter = allFacets.diameters.length > 0;
+
+    const diameterLabel = useMemo(() => {
+        if (titleLower.includes('kniv') || titleLower.includes('insert') || titleLower.includes('clamp') || titleLower.includes('part') || titleLower.includes('accessor')) {
+            return 'Size';
+        }
+        if (titleLower.includes('spiral') || titleLower.includes('boring')) {
+            return 'Cutting Diameter';
+        }
+        return 'Blade Diameter';
+    }, [titleLower]);
 
     // 4. Handle state mutations for checkboxes
     const toggleFilter = (selected: string[], setSelected: React.Dispatch<React.SetStateAction<string[]>>) => (val: string) => {
@@ -528,7 +548,7 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
         <div className="space-y-2">
             {showDiameterFilter && (
                 <FilterSection
-                    title="Blade Diameter"
+                    title={diameterLabel}
                     values={allFacets.diameters}
                     selected={selectedDiameters}
                     onChange={toggleFilter(selectedDiameters, setSelectedDiameters)}

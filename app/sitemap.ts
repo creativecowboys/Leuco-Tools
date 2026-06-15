@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { fetchProducts } from '@/lib/shopify';
 
+import { FLAGS } from '@/lib/flags';
+
 const BASE_URL = 'https://shopleuco.com';
 
 // Static routes — listed manually so we control priority and changefreq per page type.
@@ -65,12 +67,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const now = new Date();
 
     // Static routes
-    const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) => ({
-        url: `${BASE_URL}${route.path}`,
-        lastModified: now,
-        changeFrequency: route.changeFrequency,
-        priority: route.priority,
-    }));
+    const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES
+        .filter((route) => FLAGS.ENABLE_NEWS || route.path !== '/blogs/leuco-news')
+        .map((route) => ({
+            url: `${BASE_URL}${route.path}`,
+            lastModified: now,
+            changeFrequency: route.changeFrequency,
+            priority: route.priority,
+        }));
 
     // Dynamic product routes — fetched from Shopify at build time.
     // 250 covers the current 160-product catalog with headroom.

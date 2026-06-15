@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { FLAGS } from '@/lib/flags';
 import NewsClient from './News-client';
 
 export const metadata: Metadata = {
@@ -7,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+    if (!FLAGS.ENABLE_NEWS) {
+        notFound();
+    }
     return <NewsClient />;
 }
+

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import CartDrawer from '@/components/CartDrawer';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
@@ -20,10 +20,11 @@ import {
     Instagram,
     Youtube,
     Linkedin,
-    Twitter,
     Sparkles,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
+import { FLAGS } from '@/lib/flags';
 
 const LeucoLogo = () => (
     <img
@@ -92,6 +93,9 @@ export default function Layout({ children }: LayoutProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [autocompleteProducts, setAutocompleteProducts] = useState<ShopifyProduct[]>([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
     const router = useRouter();
     const { cartCount, openCart } = useCart();
 
@@ -101,14 +105,55 @@ export default function Layout({ children }: LayoutProps) {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleSearch = (e: React.FormEvent) => {
+    // Autocomplete live fetch with 300ms debounce
+    useEffect(() => {
+        if (searchQuery.trim().length < 2) {
+            setAutocompleteProducts([]);
+            setDropdownOpen(false);
+            return;
+        }
+
+        const delayDebounce = setTimeout(async () => {
+            try {
+                const results = await fetchProducts(5, searchQuery);
+                setAutocompleteProducts(results);
+                setDropdownOpen(true);
+            } catch (err) {
+                console.error('Autocomplete fetch failed:', err);
+            }
+        }, 300);
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchQuery]);
+
+    const handleTraditionalSearch = (e: React.FormEvent) => {
         e.preventDefault();
         const query = searchQuery.trim();
-        // 1. Open the chat widget
-        window.postMessage({ type: 'leuco-embed:open' }, '*');
-        
         if (query) {
-            // 2. Post the query to the Replit AI iframe
+            setDropdownOpen(false);
+            setMobileSearchOpen(false);
+            setIsMenuOpen(false);
+            router.push(`/search?q=${encodeURIComponent(query)}`);
+        }
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const clearSearch = () => {
+        setSearchQuery('');
+        setAutocompleteProducts([]);
+        setDropdownOpen(false);
+    };
+
+    const openAiAdvisor = () => {
+        window.postMessage({ type: 'leuco-embed:open' }, '*');
+    };
+
+    const triggerAiQuery = (query: string) => {
+        window.postMessage({ type: 'leuco-embed:open' }, '*');
+        if (query) {
             const sendQuery = () => {
                 const iframe = document.querySelector('iframe[title="Leuco AI Tool Advisor"]') as HTMLIFrameElement;
                 if (iframe && iframe.contentWindow) {
@@ -117,20 +162,64 @@ export default function Layout({ children }: LayoutProps) {
                     iframe.contentWindow.postMessage({ type: 'message', text: query }, '*');
                 }
             };
-            
-            // Try sending immediately and after brief delays to ensure iframe is loaded/open
             sendQuery();
             setTimeout(sendQuery, 300);
             setTimeout(sendQuery, 800);
-            
-            // Clear input
             setSearchQuery('');
         }
     };
 
+    // Filter news link dynamically
+    const filteredNavLinks = useMemo(() => {
+        return navLinks.map(link => {
+            if (link.name === 'KNOWLEDGE') {
+                return {
+                    ...link,
+                    items: link.items.filter(item => FLAGS.ENABLE_NEWS || item.href !== '/blogs/leuco-news')
+                };
+            }
+            return link;
+        });
+    }, []);
+
+    // Filter footer links
+    const footerCols = useMemo(() => {
+        return [
+            {
+                title: 'TOOLS',
+                links: [
+                    { label: 'HighlineXP', href: '/collections/highlinexp-industrial-series' },
+                    { label: 'Circular Saws', href: '/collections/circular-saw-blades' },
+                    { label: 'Cutter Heads', href: '/collections/cutter-heads' },
+                    { label: 'Spirals & Drills', href: '/collections/spiral-tools' },
+                    { label: 'Custom Tooling', href: '/pages/custom-tooling' },
+                ],
+            },
+            {
+                title: 'SUPPORT',
+                links: [
+                    { label: 'Contact Us', href: '/pages/contact-leuco' },
+                    { label: 'Search', href: '/search' },
+                    { label: 'Safety', href: '/pages/safety' },
+                    { label: 'Resharpening', href: 'https://shopleuco.com/apps/bundles/bundle/131486' },
+                    { label: 'Resharpening FAQ', href: '/pages/tool-resharpening-faq' },
+                ],
+            },
+            {
+                title: 'COMPANY',
+                links: [
+                    { label: 'About LEUCO', href: '/pages/about-leuco' },
+                    { label: 'Careers', href: '/pages/leuco-careers' },
+                    ...(FLAGS.ENABLE_NEWS ? [{ label: 'News', href: '/blogs/leuco-news' }] : []),
+                    { label: 'Catalogs', href: '/pages/catalogs' },
+                    { label: 'Locations', href: '/pages/contact-leuco' },
+                ],
+            },
+        ];
+    }, []);
+
     return (
         <div className="min-h-screen bg-white flex flex-col">
-
 
             {/* Main Nav */}
             <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-xl py-2' : 'bg-white py-4'} border-b border-gray-100`}>
@@ -138,7 +227,7 @@ export default function Layout({ children }: LayoutProps) {
                     <div className="flex items-center gap-12">
                         <Link href="/"><LeucoLogo /></Link>
                         <div className="hidden lg:flex gap-8">
-                            {navLinks.map((link) => (
+                            {filteredNavLinks.map((link) => (
                                 <div key={link.name} className="group relative py-4">
                                     <Link
                                         href={link.href}
@@ -167,17 +256,75 @@ export default function Layout({ children }: LayoutProps) {
                     </div>
 
                     <div className="flex items-center gap-6">
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center bg-gray-100 rounded-sm px-3 py-2 w-72 border border-transparent focus-within:border-leuco-purple/30 focus-within:bg-white transition-all">
-                            <button type="submit"><Sparkles size={18} className="text-leuco-purple" /></button>
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={e => setSearchQuery(e.target.value)}
-                                placeholder="Ask the AI Tool Advisor..."
-                                className="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 font-medium outline-none"
-                            />
-                        </form>
+                        {/* Traditional Search (Desktop) */}
+                        <div className="relative hidden md:block">
+                            <form onSubmit={handleTraditionalSearch} className="flex items-center bg-gray-100 rounded-sm px-3 py-2 w-64 border border-transparent focus-within:border-leuco-purple/30 focus-within:bg-white transition-all">
+                                <button type="submit"><Search size={18} className="text-gray-400" /></button>
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    placeholder="Search catalog, part #, SKU..."
+                                    className="bg-transparent border-none focus:ring-0 text-xs w-full ml-2 font-medium outline-none text-leuco-black"
+                                    onFocus={() => { if (autocompleteProducts.length > 0) setDropdownOpen(true); }}
+                                />
+                                {searchQuery && (
+                                    <button type="button" onClick={clearSearch} className="text-gray-400 hover:text-gray-600">
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </form>
+
+                            {/* Autocomplete Dropdown */}
+                            {dropdownOpen && autocompleteProducts.length > 0 && (
+                                <>
+                                    <div className="fixed inset-0 z-30" onClick={() => setDropdownOpen(false)} />
+                                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-xl z-40 py-2 rounded-sm max-h-[300px] overflow-y-auto">
+                                        {autocompleteProducts.map((product) => (
+                                            <Link
+                                                key={product.id}
+                                                href={`/products/${product.handle}`}
+                                                onClick={() => { setDropdownOpen(false); setSearchQuery(''); }}
+                                                className="block px-4 py-2 hover:bg-gray-50 transition-colors text-xs font-bold text-gray-800 hover:text-leuco-purple"
+                                            >
+                                                <div className="font-extrabold truncate">{product.title}</div>
+                                                <div className="text-[10px] text-gray-400 font-medium">
+                                                    {product.productType} {product.variants.edges[0]?.node?.sku ? `• SKU: ${product.variants.edges[0]?.node?.sku}` : ''}
+                                                </div>
+                                            </Link>
+                                        ))}
+                                        <div className="border-t border-gray-100 mt-2 pt-2 px-4">
+                                            <button
+                                                type="button"
+                                                onClick={handleTraditionalSearch}
+                                                className="text-[10px] font-black text-leuco-purple hover:underline"
+                                            >
+                                                View all results for "{searchQuery}"
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* AI Advisor Entry Pill (Desktop) */}
+                        <button
+                            onClick={openAiAdvisor}
+                            className="hidden md:flex items-center gap-1.5 bg-leuco-purple/10 text-leuco-purple hover:bg-leuco-purple hover:text-white px-3.5 py-2 text-xs font-black transition-all border border-leuco-purple/20 rounded-sm"
+                        >
+                            <Sparkles size={14} />
+                            Ask AI
+                        </button>
+
                         <div className="flex items-center gap-4">
+                            {/* Mobile search toggle button */}
+                            <button
+                                onClick={() => setMobileSearchOpen(o => !o)}
+                                className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors relative"
+                            >
+                                {mobileSearchOpen ? <X size={22} /> : <Search size={22} />}
+                            </button>
+
                             <div className="hidden lg:flex items-center gap-1 px-3 border-r border-gray-200 cursor-pointer hover:text-leuco-purple transition-colors">
                                 <Globe size={16} />
                                 <span className="text-xs font-bold">EN/US</span>
@@ -202,6 +349,78 @@ export default function Layout({ children }: LayoutProps) {
                         </div>
                     </div>
                 </div>
+
+                {/* Mobile Search Expandable Bar */}
+                <AnimatePresence>
+                    {mobileSearchOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="md:hidden border-t border-gray-100 bg-gray-50 overflow-hidden"
+                        >
+                            <div className="px-4 py-4 space-y-3">
+                                <div className="relative">
+                                    <form onSubmit={handleTraditionalSearch} className="flex items-center bg-white border border-gray-200 rounded-sm px-3 py-2.5">
+                                        <Search size={18} className="text-gray-400 shrink-0" />
+                                        <input
+                                            type="text"
+                                            value={searchQuery}
+                                            onChange={handleSearchChange}
+                                            placeholder="Search catalog, part #, SKU..."
+                                            className="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 font-medium outline-none text-leuco-black"
+                                            onFocus={() => { if (autocompleteProducts.length > 0) setDropdownOpen(true); }}
+                                        />
+                                        {searchQuery && (
+                                            <button type="button" onClick={clearSearch} className="text-gray-400 hover:text-gray-600">
+                                                <X size={16} />
+                                            </button>
+                                        )}
+                                    </form>
+
+                                    {/* Mobile Autocomplete Dropdown */}
+                                    {dropdownOpen && autocompleteProducts.length > 0 && (
+                                        <>
+                                            <div className="fixed inset-0 z-30" onClick={() => setDropdownOpen(false)} />
+                                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-xl z-40 py-2 rounded-sm max-h-[250px] overflow-y-auto">
+                                                {autocompleteProducts.map((product) => (
+                                                    <Link
+                                                        key={product.id}
+                                                        href={`/products/${product.handle}`}
+                                                        onClick={() => { setDropdownOpen(false); setMobileSearchOpen(false); setSearchQuery(''); }}
+                                                        className="block px-4 py-2 hover:bg-gray-50 transition-colors text-xs font-bold text-gray-800 hover:text-leuco-purple"
+                                                    >
+                                                        <div className="font-extrabold truncate">{product.title}</div>
+                                                        <div className="text-[10px] text-gray-400 font-medium">
+                                                            {product.productType} {product.variants.edges[0]?.node?.sku ? `• SKU: ${product.variants.edges[0]?.node?.sku}` : ''}
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                                <div className="border-t border-gray-100 mt-2 pt-2 px-4">
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleTraditionalSearch}
+                                                        className="text-[10px] font-black text-leuco-purple hover:underline"
+                                                    >
+                                                        View all results for "{searchQuery}"
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+
+                                <button
+                                    onClick={() => { triggerAiQuery(searchQuery); setMobileSearchOpen(false); }}
+                                    className="w-full flex items-center justify-center gap-2 bg-leuco-purple text-white py-2.5 text-xs font-black transition-colors hover:bg-leuco-purple/95 rounded-sm"
+                                >
+                                    <Sparkles size={14} />
+                                    ASK AI TOOL ADVISOR
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </nav>
 
             {/* Mobile Menu */}
@@ -220,7 +439,7 @@ export default function Layout({ children }: LayoutProps) {
                             </button>
                         </div>
                         <div className="p-6 space-y-6">
-                            {navLinks.map(link => (
+                            {filteredNavLinks.map(link => (
                                 <div key={link.name} className="space-y-3">
                                     <Link
                                         href={link.href}
@@ -247,7 +466,7 @@ export default function Layout({ children }: LayoutProps) {
                                     )}
                                 </div>
                             ))}
-                            
+
                             {/* Mobile Customer Login */}
                             <div className="pt-6 border-t border-gray-100">
                                 <a
@@ -311,38 +530,7 @@ export default function Layout({ children }: LayoutProps) {
                             </div>
                         </div>
 
-                        {[
-                            {
-                                title: 'TOOLS',
-                                links: [
-                                    { label: 'HighlineXP', href: '/collections/highlinexp-industrial-series' },
-                                    { label: 'Circular Saws', href: '/collections/circular-saw-blades' },
-                                    { label: 'Cutter Heads', href: '/collections/cutter-heads' },
-                                    { label: 'Spirals & Drills', href: '/collections/spiral-tools' },
-                                    { label: 'Custom Tooling', href: '/pages/custom-tooling' },
-                                ],
-                            },
-                                {
-                                title: 'SUPPORT',
-                                links: [
-                                    { label: 'Contact Us', href: '/pages/contact-leuco' },
-                                    { label: 'Search', href: '/search' },
-                                    { label: 'Safety', href: '/pages/safety' },
-                                    { label: 'Resharpening', href: 'https://shopleuco.com/apps/bundles/bundle/131486' },
-                                    { label: 'Resharpening FAQ', href: '/pages/tool-resharpening-faq' },
-                                ],
-                            },
-                            {
-                                title: 'COMPANY',
-                                links: [
-                                    { label: 'About LEUCO', href: '/pages/about-leuco' },
-                                    { label: 'Careers', href: '/pages/leuco-careers' },
-                                    { label: 'News', href: '/blogs/leuco-news' },
-                                    { label: 'Catalogs', href: '/pages/catalogs' },
-                                    { label: 'Locations', href: '/pages/contact-leuco' },
-                                ],
-                            },
-                        ].map((col, i) => (
+                        {footerCols.map((col, i) => (
                             <div key={i}>
                                 <h4 className="text-sm font-black tracking-widest mb-8 uppercase text-leuco-purple">{col.title}</h4>
                                 <ul className="space-y-4">

@@ -23,9 +23,9 @@ export default function SharpeningServicesClient() {
                         Restore your LEUCO tools to factory-fresh performance. Our certified technicians use precision grinding equipment to bring your tooling back to original manufacturer specifications.
                     </p>
                     <div className="flex flex-wrap gap-4">
-                        <Link href="/pages/contact-leuco" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
+                        <a href="https://shopleuco.com/pages/sharpening-services" target="_blank" rel="noopener" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
                             REQUEST SERVICE <ArrowRight size={18} />
-                        </Link>
+                        </a>
                         <Link href="/pages/tool-resharpening-faq" className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all">
                             VIEW FAQ
                         </Link>

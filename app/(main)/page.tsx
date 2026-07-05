@@ -20,9 +20,9 @@ export default function Home() {
 
     const systems = [
         {
-            title: 'HP+ SPIRALS',
+            title: 'HP+ SPIRALS & DRILLS',
             subtitle: 'HIGH PERFORMANCE CUTTING',
-            cta: 'SHOP SPIRALS',
+            cta: 'SHOP SPIRALS & DRILLS',
             image: categoryImages.spirals,
             href: '/collections/spiral-tools',
         },
@@ -30,7 +30,7 @@ export default function Home() {
             title: 'CUTTER HEADS',
             subtitle: 'PRECISION SHAPING',
             cta: 'SHOP CUTTER HEADS',
-            image: categoryImages.diamond,
+            image: '/cutterhead-airface.png',
             href: '/collections/cutter-heads',
         },
         {

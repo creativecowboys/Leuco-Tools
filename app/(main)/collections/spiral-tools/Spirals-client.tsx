@@ -29,7 +29,12 @@ export default function SpiralsClient({ initialProducts }: Props) {
             </div>
 
             <div id="products-grid" className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
-                <CollectionGrid initialProducts={initialProducts} title="Spiral Tools" />
+                <CollectionGrid
+                    initialProducts={initialProducts}
+                    title="Spiral Tools"
+                    productTypeSort={['Shank-Type Cutters', 'Boring Tools']}
+                    productTypeLabel="Tool Type"
+                />
             </div>
         </div>
     );

@@ -10,6 +10,10 @@ type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-d
 interface CollectionGridProps {
     initialProducts: ShopifyProduct[];
     title: string;
+    /** Optional ordered list of productType values — listed first in 'featured' sort */
+    productTypeSort?: string[];
+    /** Optional label for the product type filter section */
+    productTypeLabel?: string;
 }
 
 const SORT_LABELS: Record<SortOption, string> = {
@@ -344,7 +348,7 @@ function FilterSection({ title, values, selected, onChange }: {
 
 // ─── Main CollectionGrid Component ────────────────────────────────────────────
 
-export default function CollectionGrid({ initialProducts, title }: CollectionGridProps) {
+export default function CollectionGrid({ initialProducts, title, productTypeSort, productTypeLabel }: CollectionGridProps) {
     const [search, setSearch] = useState('');
     const [sort, setSort] = useState<SortOption>('featured');
     const [inStockOnly, setInStockOnly] = useState(false);
@@ -358,6 +362,7 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
     const [selectedFlutes, setSelectedFlutes] = useState<string[]>([]);
     const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
     const [selectedApplications, setSelectedApplications] = useState<string[]>([]);
+    const [selectedProductTypes, setSelectedProductTypes] = useState<string[]>([]);
 
     // 1. Pre-parse all products
     const parsedProducts = useMemo(() => {
@@ -478,6 +483,9 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
         if (selectedApplications.length > 0) {
             result = result.filter(item => item.applications.some(a => selectedApplications.includes(a)));
         }
+        if (selectedProductTypes.length > 0) {
+            result = result.filter(item => selectedProductTypes.includes(item.product.productType));
+        }
 
         if (search.trim()) {
             const q = search.toLowerCase();
@@ -513,12 +521,22 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
             case 'name-desc':
                 productsToReturn.sort((a, b) => b.title.localeCompare(a.title));
                 break;
+            case 'featured':
             default:
+                if (productTypeSort && productTypeSort.length > 0) {
+                    productsToReturn.sort((a, b) => {
+                        const ai = productTypeSort.indexOf(a.productType);
+                        const bi = productTypeSort.indexOf(b.productType);
+                        const aRank = ai === -1 ? productTypeSort.length : ai;
+                        const bRank = bi === -1 ? productTypeSort.length : bi;
+                        return aRank - bRank;
+                    });
+                }
                 break;
         }
 
         return productsToReturn;
-    }, [parsedProducts, search, sort, inStockOnly, selectedDiameters, selectedBores, selectedTeeth, selectedFlutes, selectedMaterials, selectedApplications]);
+    }, [parsedProducts, search, sort, inStockOnly, selectedDiameters, selectedBores, selectedTeeth, selectedFlutes, selectedMaterials, selectedApplications, selectedProductTypes, productTypeSort]);
 
     const hasActiveFilters =
         search.trim() !== '' ||
@@ -529,7 +547,8 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
         selectedTeeth.length > 0 ||
         selectedFlutes.length > 0 ||
         selectedMaterials.length > 0 ||
-        selectedApplications.length > 0;
+        selectedApplications.length > 0 ||
+        selectedProductTypes.length > 0;
 
     const clearAll = () => {
         setSearch('');
@@ -541,11 +560,22 @@ export default function CollectionGrid({ initialProducts, title }: CollectionGri
         setSelectedFlutes([]);
         setSelectedMaterials([]);
         setSelectedApplications([]);
+        setSelectedProductTypes([]);
     };
 
     // Shared filter layout
     const renderFilterPanel = () => (
         <div className="space-y-2">
+            {productTypeSort && productTypeSort.length > 0 && (
+                <FilterSection
+                    title={productTypeLabel ?? 'Product Type'}
+                    values={productTypeSort.filter(pt =>
+                        parsedProducts.some(item => item.product.productType === pt)
+                    )}
+                    selected={selectedProductTypes}
+                    onChange={toggleFilter(selectedProductTypes, setSelectedProductTypes)}
+                />
+            )}
             {showDiameterFilter && (
                 <FilterSection
                     title={diameterLabel}

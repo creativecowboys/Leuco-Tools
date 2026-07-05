@@ -144,7 +144,7 @@ export default function Home() {
                 ))}
 
                 {/* Content */}
-                <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-12 flex flex-col justify-center items-start md:pb-48" style={{ zIndex: 1 }}>
+                <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-12 flex flex-col justify-center items-start md:pt-16 md:pb-36" style={{ zIndex: 1 }}>
                     <motion.div
                         key={heroIndex}
                         initial={{ opacity: 0, y: 20 }}
@@ -155,7 +155,7 @@ export default function Home() {
                         <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">
                             {currentSlide.eyebrow}
                         </span>
-                        <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
+                        <h1 className="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
                             {currentSlide.headline}
                         </h1>
                         <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">

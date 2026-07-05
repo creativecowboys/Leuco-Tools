@@ -144,7 +144,7 @@ export default function Home() {
                 ))}
 
                 {/* Content */}
-                <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-12 flex flex-col justify-center items-start" style={{ zIndex: 1 }}>
+                <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-12 flex flex-col justify-center items-start md:pb-48" style={{ zIndex: 1 }}>
                     <motion.div
                         key={heroIndex}
                         initial={{ opacity: 0, y: 20 }}

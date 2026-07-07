@@ -9,7 +9,7 @@ interface UseShopifyCategoryImagesResult {
 }
 
 const FALLBACKS: CategoryImages = {
-    spirals: 'https://cdn.shopify.com/s/files/1/2239/2465/products/3-7A_B_f6c34fce-489a-45e5-8e95-ff82161e99f1.png?v=1651774348',
+    spirals: 'https://cdn.shopify.com/s/files/1/2239/2465/collections/top-feature-shank-type-cutters.jpg?v=1671562867',
     diamond: 'https://cdn.shopify.com/s/files/1/2239/2465/products/PIC_1-9_sizing-edited.jpg?v=1648565919',
     sawBlades: 'https://cdn.shopify.com/s/files/1/2239/2465/collections/13.jpg?v=1621543042',
     knives: 'https://cdn.shopify.com/s/files/1/2239/2465/collections/leuco_knives.jpg?v=1709323733',

@@ -544,8 +544,8 @@ export interface CategoryImages {
 }
 
 const CATEGORY_IMAGES_QUERY = /* GraphQL */ `{
-  spirals: products(first: 1, query: "spiral") {
-    edges { node { images(first: 1) { edges { node { url } } } } }
+  spirals: collection(handle: "spiral-tools") {
+    image { url }
   }
   diamond: products(first: 1, query: "diamond") {
     edges { node { images(first: 1) { edges { node { url } } } } }
@@ -563,7 +563,7 @@ const CATEGORY_IMAGES_QUERY = /* GraphQL */ `{
 
 export async function fetchCategoryImages(): Promise<CategoryImages> {
   const data = await shopifyFetch<{
-    spirals: { edges: Array<{ node: { images: { edges: Array<{ node: { url: string } }> } } }> };
+    spirals: { image: { url: string } | null } | null;
     diamond: { edges: Array<{ node: { images: { edges: Array<{ node: { url: string } }> } } }> };
     sawBlades: { image: { url: string } | null } | null;
     knives: { image: { url: string } | null } | null;
@@ -571,7 +571,7 @@ export async function fetchCategoryImages(): Promise<CategoryImages> {
   }>(CATEGORY_IMAGES_QUERY, {});
 
   return {
-    spirals: data.spirals?.edges[0]?.node?.images?.edges[0]?.node?.url ?? null,
+    spirals: data.spirals?.image?.url ?? null,
     diamond: data.diamond?.edges[0]?.node?.images?.edges[0]?.node?.url ?? null,
     sawBlades: data.sawBlades?.image?.url ?? null,
     knives: data.knives?.image?.url ?? null,

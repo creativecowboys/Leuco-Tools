@@ -16,7 +16,7 @@ export default function AISearchBar() {
             </div>
 
             <Script
-                src="https://leuco-tools.replit.app/embed.js"
+                src="https://leuco.leadlasso.ai/embed.js"
                 data-mode="inline"
                 data-target="#leuco-chat"
                 data-max-width="980px"

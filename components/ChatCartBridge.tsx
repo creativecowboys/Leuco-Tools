@@ -23,7 +23,7 @@ import { useCart } from '@/context/CartContext';
  *   payload: { ok: boolean, error?: string }
  */
 
-const ALLOWED_ORIGIN = 'https://leuco-tools.replit.app';
+const ALLOWED_ORIGIN = 'https://leuco.leadlasso.ai';
 
 export function ChatCartBridge() {
   const { addToCart } = useCart();

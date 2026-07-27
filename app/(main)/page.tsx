@@ -375,9 +375,7 @@ export default function Home() {
                                 Our world-class service centers restore your tools to original manufacturer specifications using advanced CNC grinding technology.
                             </p>
                             <Link
-                                href="https://shopleuco.com/apps/bundles/bundle/131486"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href="/pages/sharpening-services#send-in"
                                 className="bg-leuco-purple text-white font-black px-8 py-4 flex items-center gap-2 group-hover:bg-white group-hover:text-leuco-purple transition-all w-fit"
                             >
                                 BOOK SERVICE <ArrowRight size={18} />

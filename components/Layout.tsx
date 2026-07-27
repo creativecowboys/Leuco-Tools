@@ -23,7 +23,7 @@ import {
     Sparkles,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
+import { fetchProducts, ShopifyProduct, SHOPIFY_ACCOUNT_LOGIN_URL } from '@/lib/shopify';
 import { FLAGS } from '@/lib/flags';
 
 const LeucoLogo = () => (
@@ -52,7 +52,7 @@ const navLinks = [
         name: 'SERVICES',
         href: '/pages/services',
         items: [
-            { label: 'Sharpening', href: 'https://shopleuco.com/apps/bundles/bundle/131486' },
+            { label: 'Sharpening', href: '/pages/sharpening-services' },
             { label: 'Engineering', href: '/pages/leuco-engineering' },
             { label: 'Custom Tooling', href: '/pages/custom-tooling' },
         ],
@@ -201,7 +201,7 @@ export default function Layout({ children }: LayoutProps) {
                     { label: 'Contact Us', href: '/pages/contact-leuco' },
                     { label: 'Search', href: '/search' },
                     { label: 'Safety', href: '/pages/safety' },
-                    { label: 'Resharpening', href: 'https://shopleuco.com/apps/bundles/bundle/131486' },
+                    { label: 'Resharpening', href: '/pages/sharpening-services' },
                     { label: 'Resharpening FAQ', href: '/pages/tool-resharpening-faq' },
                 ],
             },
@@ -329,7 +329,7 @@ export default function Layout({ children }: LayoutProps) {
                                 <Globe size={16} />
                                 <span className="text-xs font-bold">EN/US</span>
                             </div>
-                            <a href="https://shopleuco.com/account/login" target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                            <a href={SHOPIFY_ACCOUNT_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                                 <User size={22} />
                             </a>
                             <button onClick={openCart} className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
@@ -470,7 +470,7 @@ export default function Layout({ children }: LayoutProps) {
                             {/* Mobile Customer Login */}
                             <div className="pt-6 border-t border-gray-100">
                                 <a
-                                    href="https://shopleuco.com/account/login"
+                                    href={SHOPIFY_ACCOUNT_LOGIN_URL}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-lg font-black text-gray-800 hover:text-leuco-purple flex items-center gap-2"

@@ -3,8 +3,11 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import {
     ShopifyCart,
+    CartLineInput,
     createCart,
+    createCartWithLines,
     addCartLines,
+    addCartLinesBatch,
     removeCartLines,
     updateCartLines,
     fetchCart,
@@ -69,6 +72,7 @@ interface CartContextValue {
     openCart: () => void;
     closeCart: () => void;
     addToCart: (variantId: string) => Promise<void>;
+    addLinesToCart: (lines: CartLineInput[]) => Promise<void>;
     removeFromCart: (lineId: string) => Promise<void>;
     updateQuantity: (lineId: string, quantity: number) => Promise<void>;
 }
@@ -125,6 +129,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
     }, [state.cart]);
 
+    const addLinesToCart = useCallback(async (lines: CartLineInput[]) => {
+        if (lines.length === 0) return;
+        dispatch({ type: 'SET_LOADING', loading: true });
+        try {
+            let updatedCart: ShopifyCart;
+            if (state.cart) {
+                updatedCart = await addCartLinesBatch(state.cart.id, lines);
+            } else {
+                updatedCart = await createCartWithLines(lines);
+                setCartIdCookie(updatedCart.id);
+            }
+            dispatch({ type: 'SET_CART', cart: updatedCart });
+            dispatch({ type: 'SET_OPEN', isOpen: true });
+        } finally {
+            dispatch({ type: 'SET_LOADING', loading: false });
+        }
+    }, [state.cart]);
+
     const removeFromCart = useCallback(async (lineId: string) => {
         if (!state.cart) return;
         dispatch({ type: 'SET_LOADING', loading: true });
@@ -158,6 +180,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 openCart,
                 closeCart,
                 addToCart,
+                addLinesToCart,
                 removeFromCart,
                 updateQuantity,
             }}

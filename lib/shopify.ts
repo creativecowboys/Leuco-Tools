@@ -1,8 +1,17 @@
-const SHOPIFY_STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shopleuco.com';
+// NOTE: use the permanent *.myshopify.com domain here, NOT shopleuco.com.
+// After the domain cutover, shopleuco.com points at this Next.js app, so any
+// Shopify API call or account link routed through it would break.
+const SHOPIFY_STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'leucotool2000.myshopify.com';
 const SHOPIFY_STOREFRONT_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN || '4c63f364024c9f77e57d965ffd9be499';
 const API_VERSION = '2024-10';
 
 export const STOREFRONT_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/${API_VERSION}/graphql.json`;
+
+/** Shopify-hosted customer account login on the permanent store domain. */
+export const SHOPIFY_ACCOUNT_LOGIN_URL = `https://${SHOPIFY_STORE_DOMAIN}/account/login`;
+
+/** Handle of the real "Tool Sharpening Service" product powering the send-in builder. */
+export const SHARPENING_PRODUCT_HANDLE = 'tool-sharpening';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -298,6 +307,27 @@ export async function fetchProducts(count = 8, query?: string): Promise<ShopifyP
 }
 
 // ─── Cart ─────────────────────────────────────────────────────────────────────
+
+export interface CartLineInput {
+  merchandiseId: string;
+  quantity: number;
+}
+
+export async function createCartWithLines(lines: CartLineInput[]): Promise<ShopifyCart> {
+  const data = await shopifyFetch<{ cartCreate: { cart: ShopifyCart } }>(
+    CART_CREATE_MUTATION,
+    { input: { lines } }
+  );
+  return data.cartCreate.cart;
+}
+
+export async function addCartLinesBatch(cartId: string, lines: CartLineInput[]): Promise<ShopifyCart> {
+  const data = await shopifyFetch<{ cartLinesAdd: { cart: ShopifyCart } }>(
+    CART_LINES_ADD_MUTATION,
+    { cartId, lines }
+  );
+  return data.cartLinesAdd.cart;
+}
 
 export async function createCart(variantId?: string, quantity = 1): Promise<ShopifyCart> {
   const input = variantId

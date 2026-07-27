@@ -4,12 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { Wrench, Clock, ArrowRight, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import SharpeningBuilder from '@/components/SharpeningBuilder';
 
 const steps = [
-    { step: '01', title: 'Pack Your Tools', desc: 'Safely package your tools with appropriate padding. Use original packaging when possible.' },
-    { step: '02', title: 'Ship to Nearest Location', desc: 'Send to the LEUCO service center nearest to you for fastest turnaround.' },
-    { step: '03', title: 'Expert Resharpening', desc: 'Our technicians restore your tools to original spec on precision grinding equipment.' },
-    { step: '04', title: 'Return Shipping', desc: 'Typical turnaround: 1 week for carbide tools, 2 weeks for diamond tools. Rush service available on request.' },
+    { step: '01', title: 'Build Your Package', desc: 'Select the tool types and quantities you want sharpened, then check out with the flat $15 inspection fee.' },
+    { step: '02', title: 'Ship Your Tools', desc: 'We email you a shipping label after checkout. Pack safely with appropriate padding — original packaging when possible.' },
+    { step: '03', title: 'Triage & Quote', desc: 'Tools are ultrasonically cleaned and inspected. We send an invoice for the sharpening work before anything proceeds.' },
+    { step: '04', title: 'Sharpen & Return', desc: 'Tools are ground back to OEM spec, quality checked, wax-coated, and shipped back. Typical turnaround 1–2 weeks.' },
 ];
 
 export default function SharpeningServicesClient() {
@@ -23,7 +24,7 @@ export default function SharpeningServicesClient() {
                         Restore your LEUCO tools to factory-fresh performance. Our certified technicians use precision grinding equipment to bring your tooling back to original manufacturer specifications.
                     </p>
                     <div className="flex flex-wrap gap-4">
-                        <a href="https://shopleuco.com/pages/sharpening-services" target="_blank" rel="noopener" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
+                        <a href="#send-in" className="bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all inline-flex items-center gap-3">
                             REQUEST SERVICE <ArrowRight size={18} />
                         </a>
                         <Link href="/pages/tool-resharpening-faq" className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all">
@@ -46,6 +47,8 @@ export default function SharpeningServicesClient() {
                     ))}
                 </div>
             </div>
+
+            <SharpeningBuilder />
 
             <div className="py-20 px-4 md:px-12 max-w-[1440px] mx-auto">
                 <div className="mb-12">

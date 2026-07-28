@@ -94,17 +94,15 @@ export default function SearchClient() {
                                     {loading ? 'Searching catalog...' : `${results.length} results for "${initialQuery}"`}
                                 </h2>
                                 <p className="text-sm text-gray-500 font-medium">
-                                    Can't find a specific part number? You can also query the main store directly.
+                                    Can't find a specific part number? Our team can track it down for you.
                                 </p>
                             </div>
-                            <a
-                                href={`https://shopleuco.com/search?q=${encodeURIComponent(initialQuery)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <Link
+                                href="/pages/contact-leuco"
                                 className="bg-leuco-purple hover:bg-leuco-black text-white font-black px-6 py-3.5 inline-flex items-center gap-2 transition-colors text-sm rounded-sm shrink-0"
                             >
-                                SEARCH LEUCO SHOP <ArrowRight size={16} />
-                            </a>
+                                CONTACT US <ArrowRight size={16} />
+                            </Link>
                         </div>
 
                         {/* Search State rendering */}
@@ -121,14 +119,12 @@ export default function SearchClient() {
                             <div className="py-20 text-center border border-dashed border-gray-200">
                                 <p className="text-2xl font-black text-gray-300 mb-2">No products found</p>
                                 <p className="text-sm text-gray-400 font-medium mb-6">We couldn't find any products on the storefront matching "{initialQuery}".</p>
-                                <a
-                                    href={`https://shopleuco.com/search?q=${encodeURIComponent(initialQuery)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <Link
+                                    href="/pages/contact-leuco"
                                     className="bg-leuco-purple text-white px-8 py-3.5 font-black text-sm transition-colors hover:bg-leuco-purple/95 inline-flex items-center gap-2"
                                 >
-                                    Search on shopleuco.com <ArrowRight size={16} />
-                                </a>
+                                    Ask our team <ArrowRight size={16} />
+                                </Link>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

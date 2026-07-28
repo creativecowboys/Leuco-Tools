@@ -7,13 +7,15 @@ export const metadata: Metadata = {
 };
 
 export default function CatalogsPage() {
+    // pdfUrl: direct download link. Entries without one show a "request" CTA
+    // instead of linking back to the old Shopify-rendered catalogs page.
     const catalogs = [
-        { title: 'LEUCO General Program Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2024', comingSoon: false },
-        { title: 'LEUCO Mini Catalog', desc: 'Most popular North American products for quick lookup.', year: '2024', comingSoon: false },
-        { title: 'HighlineXP Industrial Series', desc: 'Full product catalog for the HighlineXP industrial tooling line.', year: '2024', comingSoon: false },
-        { title: 'HP+ Spirals', desc: 'Our highest performing spirals for customers who need the longest edge life.', year: '2024', comingSoon: false },
-        { title: 'Circular Saw Blades', desc: 'Complete circular saw blade range including specifications, applications, and ordering information.', year: '2024', comingSoon: true },
-        { title: 'CNC Tooling', desc: 'Spirals, drills, clamping and more for your routing and machining centers.', year: '2024', comingSoon: true },
+        { title: 'LEUCO General Program Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2024', comingSoon: false, pdfUrl: null },
+        { title: 'LEUCO Mini Catalog', desc: 'Most popular North American products for quick lookup.', year: '2024', comingSoon: false, pdfUrl: 'https://www.dropbox.com/scl/fi/fcxdi91imt4ws1v3sj340/Mini-3.2_052019_Full.pdf?rlkey=ql9wk1o5xzx9xx4zn6n704mb3&st=jsxcwcc7&dl=0' },
+        { title: 'HighlineXP Industrial Series', desc: 'Full product catalog for the HighlineXP industrial tooling line.', year: '2024', comingSoon: false, pdfUrl: null },
+        { title: 'HP+ Spirals', desc: 'Our highest performing spirals for customers who need the longest edge life.', year: '2024', comingSoon: false, pdfUrl: null },
+        { title: 'Circular Saw Blades', desc: 'Complete circular saw blade range including specifications, applications, and ordering information.', year: '2024', comingSoon: true, pdfUrl: null },
+        { title: 'CNC Tooling', desc: 'Spirals, drills, clamping and more for your routing and machining centers.', year: '2024', comingSoon: true, pdfUrl: null },
     ];
 
     return (
@@ -41,10 +43,15 @@ export default function CatalogsPage() {
                                 <p className="text-gray-500 font-medium text-sm mb-4">{cat.desc}</p>
                                 {cat.comingSoon ? (
                                     <span className="font-black text-xs text-gray-400 tracking-widest">COMING SOON</span>
-                                ) : (
-                                    <a href="https://shopleuco.com/pages/catalogs" target="_blank" rel="noopener noreferrer"
+                                ) : cat.pdfUrl ? (
+                                    <a href={cat.pdfUrl} target="_blank" rel="noopener noreferrer"
                                         className="font-black text-xs flex items-center gap-1 text-leuco-purple hover:text-leuco-black transition-colors">
                                         DOWNLOAD PDF <ArrowRight size={12} />
+                                    </a>
+                                ) : (
+                                    <a href="/pages/contact-leuco"
+                                        className="font-black text-xs flex items-center gap-1 text-leuco-purple hover:text-leuco-black transition-colors">
+                                        REQUEST CATALOG <ArrowRight size={12} />
                                     </a>
                                 )}
                             </div>
@@ -55,7 +62,7 @@ export default function CatalogsPage() {
                 <div className="mt-16 bg-gray-50 p-12 text-center">
                     <h2 className="text-2xl font-black mb-4">Need a Printed Catalog?</h2>
                     <p className="text-gray-500 font-medium mb-6">Contact your LEUCO representative to request printed catalogs for your team.</p>
-                    <a href="https://shopleuco.com/pages/contact-leuco" target="_blank" rel="noopener noreferrer"
+                    <a href="/pages/contact-leuco"
                         className="bg-leuco-purple text-white font-black px-8 py-4 inline-flex items-center gap-2 hover:bg-leuco-black transition-colors">
                         REQUEST PRINT CATALOG <ArrowRight size={18} />
                     </a>

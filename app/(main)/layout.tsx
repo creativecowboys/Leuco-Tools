@@ -13,7 +13,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <ChatCartBridge />
       {/* Leuco AI Tool Advisor (floating bubble) */}
       <Script
-        src="https://leuco.leadlasso.ai/embed.js"
+        src="https://leuco-chat.vercel.app/embed.js"
         data-mode="bubble"
         strategy="afterInteractive"
       />

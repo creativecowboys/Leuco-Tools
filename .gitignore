@@ -6,3 +6,7 @@ node_modules
 next-env.d.ts
 .vercel
 .env*.local
+
+.DS_Store
+*.tsbuildinfo
+_to_delete/

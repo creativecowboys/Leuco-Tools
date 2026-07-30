@@ -320,6 +320,7 @@ export default function Layout({ children }: LayoutProps) {
                             {/* Mobile search toggle button */}
                             <button
                                 onClick={() => setMobileSearchOpen(o => !o)}
+                                aria-label={mobileSearchOpen ? 'Close search' : 'Search'}
                                 className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors relative"
                             >
                                 {mobileSearchOpen ? <X size={22} /> : <Search size={22} />}
@@ -329,10 +330,10 @@ export default function Layout({ children }: LayoutProps) {
                                 <Globe size={16} />
                                 <span className="text-xs font-bold">EN/US</span>
                             </div>
-                            <a href={SHOPIFY_ACCOUNT_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                            <a href={SHOPIFY_ACCOUNT_LOGIN_URL} target="_blank" rel="noopener noreferrer" aria-label="Account" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                                 <User size={22} />
                             </a>
-                            <button onClick={openCart} className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+                            <button onClick={openCart} aria-label="Cart" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
                                 <ShoppingCart size={22} />
                                 {cartCount > 0 && (
                                     <span className="absolute top-0 right-0 bg-leuco-purple text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -343,6 +344,7 @@ export default function Layout({ children }: LayoutProps) {
                             <button
                                 className="lg:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
                                 onClick={() => setIsMenuOpen(true)}
+                                aria-label="Open menu"
                             >
                                 <Menu size={22} />
                             </button>

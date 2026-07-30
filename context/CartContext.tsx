@@ -71,7 +71,7 @@ interface CartContextValue {
     addingVariantId: string | null;
     openCart: () => void;
     closeCart: () => void;
-    addToCart: (variantId: string) => Promise<void>;
+    addToCart: (variantId: string, opts?: { openDrawer?: boolean }) => Promise<void>;
     addLinesToCart: (lines: CartLineInput[]) => Promise<void>;
     removeFromCart: (lineId: string) => Promise<void>;
     updateQuantity: (lineId: string, quantity: number) => Promise<void>;
@@ -112,7 +112,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const openCart = useCallback(() => dispatch({ type: 'SET_OPEN', isOpen: true }), []);
     const closeCart = useCallback(() => dispatch({ type: 'SET_OPEN', isOpen: false }), []);
 
-    const addToCart = useCallback(async (variantId: string) => {
+    const addToCart = useCallback(async (variantId: string, opts?: { openDrawer?: boolean }) => {
         dispatch({ type: 'SET_ADDING', variantId });
         try {
             let updatedCart: ShopifyCart;
@@ -123,7 +123,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 setCartIdCookie(updatedCart.id);
             }
             dispatch({ type: 'SET_CART', cart: updatedCart });
-            dispatch({ type: 'SET_OPEN', isOpen: true });
+            // The AI chat adds quietly (openDrawer: false); site buttons keep the drawer.
+            if (opts?.openDrawer !== false) {
+                dispatch({ type: 'SET_OPEN', isOpen: true });
+            }
         } finally {
             dispatch({ type: 'SET_ADDING', variantId: null });
         }

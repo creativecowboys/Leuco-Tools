@@ -23,7 +23,7 @@ import { useCart } from '@/context/CartContext';
  *   payload: { ok: boolean, error?: string }
  */
 
-const ALLOWED_ORIGIN = 'https://leuco.leadlasso.ai';
+const ALLOWED_ORIGIN = 'https://leuco-chat.vercel.app';
 
 export function ChatCartBridge() {
   const { addToCart } = useCart();
@@ -57,13 +57,13 @@ export function ChatCartBridge() {
       }
 
       try {
-        // addToCart in CartContext adds one unit at a time; loop for quantity > 1
+        // addToCart in CartContext adds one unit at a time; loop for quantity > 1.
+        // openDrawer: false — chat adds stay quiet; the badge count updates only.
         for (let i = 0; i < quantity; i++) {
-          await addToCartRef.current(variantId);
+          await addToCartRef.current(variantId, { openDrawer: false });
         }
 
-        // Cart drawer opens automatically inside CartContext on success.
-        // Notify the widget so it can show its own confirmation too.
+        // Notify the widget so it can show its own confirmation.
         event.source?.postMessage(
           { type: 'leuco-embed:cart-add-result', ok: true },
           { targetOrigin: ALLOWED_ORIGIN }

@@ -155,7 +155,7 @@ export default function Home() {
                         <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">
                             {currentSlide.eyebrow}
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
+                        <h1 className="text-[40px] sm:text-5xl md:text-7xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
                             {currentSlide.headline}
                         </h1>
                         <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">
@@ -194,8 +194,8 @@ export default function Home() {
                     </motion.div>
                 </div>
 
-                {/* Slide Dots */}
-                <div className="absolute bottom-24 right-6 md:right-12 flex gap-3 z-10">
+                {/* Slide Dots — kept below the CTA row on phones so they never overlap it */}
+                <div className="absolute bottom-6 right-4 md:bottom-24 md:right-12 flex gap-3 z-10">
                     {heroSlides.map((_, i) => (
                         <button
                             key={i}
@@ -253,7 +253,7 @@ export default function Home() {
                         <motion.div
                             key={i}
                             whileHover={{ y: -10 }}
-                            className="group relative h-[500px] overflow-hidden cursor-pointer bg-gray-100"
+                            className="group relative h-[500px] overflow-hidden cursor-pointer bg-leuco-black"
                         >
                             <Link href={system.href} className="block w-full h-full">
                                 <img

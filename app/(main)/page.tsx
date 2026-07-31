@@ -76,7 +76,7 @@ export default function Home() {
             extra: (
                 <button
                     onClick={() => window.postMessage({ type: 'leuco-embed:open' }, '*')}
-                    className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                    className="border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-7 py-4 md:px-10 md:py-5 transition-all duration-300 flex items-center gap-3 group"
                 >
                     <Sparkles size={18} className="group-hover:text-leuco-purple transition-colors" />
                     SEARCH WITH AI
@@ -155,10 +155,10 @@ export default function Home() {
                         <span className="inline-block bg-leuco-purple text-white text-xs font-black px-3 py-1 mb-6 tracking-widest">
                             {currentSlide.eyebrow}
                         </span>
-                        <h1 className="text-[40px] sm:text-5xl md:text-7xl font-black text-white leading-[0.9] mb-8 tracking-tighter">
+                        <h1 className="text-[32px] sm:text-5xl md:text-7xl font-black text-white leading-[0.9] mb-6 md:mb-8 tracking-tighter">
                             {currentSlide.headline}
                         </h1>
-                        <p className="text-xl text-gray-300 mb-10 font-medium max-w-lg">
+                        <p className="text-base sm:text-xl text-gray-300 mb-8 md:mb-10 font-medium max-w-lg">
                             {currentSlide.body}
                         </p>
                         <div className="flex flex-wrap gap-4">
@@ -170,8 +170,8 @@ export default function Home() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={cta.primary
-                                            ? "bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
-                                            : "border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                                            ? "bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-7 py-4 md:px-10 md:py-5 transition-all duration-300 flex items-center gap-3 group"
+                                            : "border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-7 py-4 md:px-10 md:py-5 transition-all duration-300 flex items-center gap-3 group"
                                         }
                                     >
                                         {cta.label} <ArrowRight className="group-hover:translate-x-2 transition-transform" />
@@ -181,8 +181,8 @@ export default function Home() {
                                         key={ci}
                                         href={cta.href}
                                         className={cta.primary
-                                            ? "bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
-                                            : "border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-10 py-5 transition-all duration-300 flex items-center gap-3 group"
+                                            ? "bg-leuco-purple hover:bg-white hover:text-leuco-purple text-white font-black px-7 py-4 md:px-10 md:py-5 transition-all duration-300 flex items-center gap-3 group"
+                                            : "border-2 border-white text-white hover:bg-white hover:text-leuco-black font-black px-7 py-4 md:px-10 md:py-5 transition-all duration-300 flex items-center gap-3 group"
                                         }
                                     >
                                         {cta.label} <ArrowRight className="group-hover:translate-x-2 transition-transform" />

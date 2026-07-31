@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   },
   description: "North America's highest quality precision tooling and re-sharpening service provider for over 40 years.",
   metadataBase: new URL('https://shopleuco.com'),
+  openGraph: {
+    type: 'website',
+    siteName: 'LEUCO Tool Corporation',
+    url: 'https://shopleuco.com',
+    title: 'LEUCO Tool Corporation | Precision Tooling',
+    description: "North America's highest quality precision tooling and re-sharpening service provider for over 40 years.",
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'LEUCO Tool Corporation | Precision Tooling',
+    description: "North America's highest quality precision tooling and re-sharpening service provider for over 40 years.",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -13,12 +13,32 @@ const locations = [
 ];
 
 export default function ContactClient() {
-    const [formState, setFormState] = useState({ name: '', company: '', email: '', phone: '', subject: '', message: '' });
+    const [formState, setFormState] = useState({ name: '', company: '', email: '', phone: '', subject: '', message: '', website: '' });
     const [submitted, setSubmitted] = useState(false);
+    const [sending, setSending] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitted(true);
+        if (sending) return;
+        setSending(true);
+        setError(null);
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formState),
+            });
+            if (!res.ok) {
+                const data = await res.json().catch(() => null);
+                throw new Error(data?.error || 'Something went wrong. Please try again.');
+            }
+            setSubmitted(true);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+        } finally {
+            setSending(false);
+        }
     };
 
     return (
@@ -44,6 +64,10 @@ export default function ContactClient() {
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6">
+                                {/* Honeypot — hidden from real users, bots fill it and get silently dropped */}
+                                <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true"
+                                    className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                                    value={formState.website} onChange={e => setFormState({ ...formState, website: e.target.value })} />
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label className="block text-xs font-black tracking-widest mb-2 uppercase">Name *</label>
@@ -85,8 +109,14 @@ export default function ContactClient() {
                                     <textarea required rows={5} value={formState.message} onChange={e => setFormState({ ...formState, message: e.target.value })}
                                         className="w-full border border-gray-200 p-4 font-medium focus:outline-none focus:border-leuco-purple transition-colors resize-none" />
                                 </div>
-                                <button type="submit" className="bg-leuco-purple text-white font-black px-10 py-4 flex items-center gap-2 hover:bg-leuco-black transition-colors">
-                                    SEND MESSAGE <ArrowRight size={18} />
+                                {error && (
+                                    <div className="border border-red-300 bg-red-50 text-red-700 p-4 font-medium text-sm">
+                                        {error}
+                                    </div>
+                                )}
+                                <button type="submit" disabled={sending}
+                                    className="bg-leuco-purple text-white font-black px-10 py-4 flex items-center gap-2 hover:bg-leuco-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+                                    {sending ? 'SENDING...' : 'SEND MESSAGE'} <ArrowRight size={18} />
                                 </button>
                             </form>
                         )}

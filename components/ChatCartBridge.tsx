@@ -40,12 +40,20 @@ export function ChatCartBridge() {
       if (event.origin !== ALLOWED_ORIGIN) return;
       if (!event.data || event.data.type !== 'leuco-embed:cart-add') return;
 
-      const { variantId, quantity = 1 } = event.data as {
+      const { variantId, quantity = 1, properties } = event.data as {
         variantId: string;
         quantity?: number;
         productTitle?: string;
         variantTitle?: string;
+        properties?: Record<string, string>;
       };
+      // Line-item properties (e.g. "Sharpening for: …") flow to the order.
+      const attributes = properties
+        ? Object.entries(properties)
+            .filter(([k, v]) => typeof k === 'string' && typeof v === 'string' && k && v)
+            .slice(0, 5)
+            .map(([key, value]) => ({ key: key.slice(0, 100), value: value.slice(0, 250) }))
+        : undefined;
 
       if (!variantId) {
         // Reply with error if no variantId was provided
@@ -60,7 +68,7 @@ export function ChatCartBridge() {
         // addToCart in CartContext adds one unit at a time; loop for quantity > 1.
         // openDrawer: false — chat adds stay quiet; the badge count updates only.
         for (let i = 0; i < quantity; i++) {
-          await addToCartRef.current(variantId, { openDrawer: false });
+          await addToCartRef.current(variantId, { openDrawer: false, attributes });
         }
 
         // Notify the widget so it can show its own confirmation.

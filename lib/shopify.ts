@@ -311,6 +311,8 @@ export async function fetchProducts(count = 8, query?: string): Promise<ShopifyP
 export interface CartLineInput {
   merchandiseId: string;
   quantity: number;
+  /** Line-item properties shown on the order (e.g. sharpening item details). */
+  attributes?: Array<{ key: string; value: string }>;
 }
 
 export async function createCartWithLines(lines: CartLineInput[]): Promise<ShopifyCart> {
@@ -329,9 +331,13 @@ export async function addCartLinesBatch(cartId: string, lines: CartLineInput[]):
   return data.cartLinesAdd.cart;
 }
 
-export async function createCart(variantId?: string, quantity = 1): Promise<ShopifyCart> {
+export async function createCart(
+  variantId?: string,
+  quantity = 1,
+  attributes?: Array<{ key: string; value: string }>
+): Promise<ShopifyCart> {
   const input = variantId
-    ? { lines: [{ merchandiseId: variantId, quantity }] }
+    ? { lines: [{ merchandiseId: variantId, quantity, ...(attributes?.length ? { attributes } : {}) }] }
     : {};
 
   const data = await shopifyFetch<{ cartCreate: { cart: ShopifyCart } }>(
@@ -341,10 +347,15 @@ export async function createCart(variantId?: string, quantity = 1): Promise<Shop
   return data.cartCreate.cart;
 }
 
-export async function addCartLines(cartId: string, variantId: string, quantity = 1): Promise<ShopifyCart> {
+export async function addCartLines(
+  cartId: string,
+  variantId: string,
+  quantity = 1,
+  attributes?: Array<{ key: string; value: string }>
+): Promise<ShopifyCart> {
   const data = await shopifyFetch<{ cartLinesAdd: { cart: ShopifyCart } }>(
     CART_LINES_ADD_MUTATION,
-    { cartId, lines: [{ merchandiseId: variantId, quantity }] }
+    { cartId, lines: [{ merchandiseId: variantId, quantity, ...(attributes?.length ? { attributes } : {}) }] }
   );
   return data.cartLinesAdd.cart;
 }

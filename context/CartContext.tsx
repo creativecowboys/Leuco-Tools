@@ -71,7 +71,7 @@ interface CartContextValue {
     addingVariantId: string | null;
     openCart: () => void;
     closeCart: () => void;
-    addToCart: (variantId: string, opts?: { openDrawer?: boolean }) => Promise<void>;
+    addToCart: (variantId: string, opts?: { openDrawer?: boolean; attributes?: Array<{ key: string; value: string }> }) => Promise<void>;
     addLinesToCart: (lines: CartLineInput[]) => Promise<void>;
     removeFromCart: (lineId: string) => Promise<void>;
     updateQuantity: (lineId: string, quantity: number) => Promise<void>;
@@ -112,14 +112,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const openCart = useCallback(() => dispatch({ type: 'SET_OPEN', isOpen: true }), []);
     const closeCart = useCallback(() => dispatch({ type: 'SET_OPEN', isOpen: false }), []);
 
-    const addToCart = useCallback(async (variantId: string, opts?: { openDrawer?: boolean }) => {
+    const addToCart = useCallback(async (variantId: string, opts?: { openDrawer?: boolean; attributes?: Array<{ key: string; value: string }> }) => {
         dispatch({ type: 'SET_ADDING', variantId });
         try {
             let updatedCart: ShopifyCart;
             if (state.cart) {
-                updatedCart = await addCartLines(state.cart.id, variantId);
+                updatedCart = await addCartLines(state.cart.id, variantId, 1, opts?.attributes);
             } else {
-                updatedCart = await createCart(variantId);
+                updatedCart = await createCart(variantId, 1, opts?.attributes);
                 setCartIdCookie(updatedCart.id);
             }
             dispatch({ type: 'SET_CART', cart: updatedCart });

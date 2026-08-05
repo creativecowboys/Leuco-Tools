@@ -36,8 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         {/* Search Atlas (Wrangler SEO) dynamic optimization pixel */}
         <script
-          nowprocket=""
-          nitro-exclude=""
+          {...({ nowprocket: '', 'nitro-exclude': '' } as Record<string, string>)}
           type="text/javascript"
           id="sa-dynamic-optimization"
           data-uuid="3b0a39cc-283c-4342-810b-50e23b06b371"

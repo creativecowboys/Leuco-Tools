@@ -34,6 +34,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
           rel="stylesheet"
         />
+        {/* Search Atlas (Wrangler SEO) dynamic optimization pixel */}
+        <script
+          nowprocket=""
+          nitro-exclude=""
+          type="text/javascript"
+          id="sa-dynamic-optimization"
+          data-uuid="3b0a39cc-283c-4342-810b-50e23b06b371"
+          src="https://mydash.creativecowboys.co/scripts/dynamic_optimization.js"
+        />
       </head>
       <body>
         {children}

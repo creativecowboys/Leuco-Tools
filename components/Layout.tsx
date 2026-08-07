@@ -557,6 +557,19 @@ export default function Layout({ children }: LayoutProps) {
                         <div className="text-gray-500 text-xs font-bold">
                             © 2026 LEUCO TOOL CORPORATION. ALL RIGHTS RESERVED.
                         </div>
+                        <a
+                            href="https://creativecowboys.co"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 group"
+                        >
+                            <span className="text-gray-500 text-xs font-bold tracking-widest group-hover:text-white transition-colors">POWERED BY</span>
+                            <img
+                                src="/creative-cowboys-logo-white.png"
+                                alt="Creative Cowboys"
+                                className="h-8 w-auto opacity-60 group-hover:opacity-100 transition-opacity"
+                            />
+                        </a>
                         <div className="flex gap-8 text-gray-500 text-xs font-bold">
                             <Link href="/pages/privacy-policy" className="hover:text-white">PRIVACY POLICY</Link>
                             <Link href="/pages/terms-of-use" className="hover:text-white">TERMS OF USE</Link>

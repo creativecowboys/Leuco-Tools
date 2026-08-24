@@ -7,15 +7,19 @@ export const metadata: Metadata = {
 };
 
 export default function CatalogsPage() {
-    // pdfUrl: direct download link. Entries without one show a "request" CTA
-    // instead of linking back to the old Shopify-rendered catalogs page.
+    // pdfUrl: direct download link — local /catalogs/ files are served from
+    // public/; leuco.com links are the parent company's hosted catalogs.
     const catalogs = [
-        { title: 'LEUCO General Program Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2024', comingSoon: false, pdfUrl: null },
+        { title: 'LEUCO General Program Catalog', desc: 'Complete overview of LEUCO tooling systems, product ranges, and technical specifications.', year: '2026', comingSoon: false, pdfUrl: 'https://www.leuco.com/EN/US/media/DOK_MKD_General-program_DL.pdf' },
         { title: 'LEUCO Mini Catalog', desc: 'Most popular North American products for quick lookup.', year: '2024', comingSoon: false, pdfUrl: 'https://www.dropbox.com/scl/fi/fcxdi91imt4ws1v3sj340/Mini-3.2_052019_Full.pdf?rlkey=ql9wk1o5xzx9xx4zn6n704mb3&st=jsxcwcc7&dl=0' },
-        { title: 'HighlineXP Industrial Series', desc: 'Full product catalog for the HighlineXP industrial tooling line.', year: '2024', comingSoon: false, pdfUrl: null },
-        { title: 'HP+ Spirals', desc: 'Our highest performing spirals for customers who need the longest edge life.', year: '2024', comingSoon: false, pdfUrl: null },
-        { title: 'Circular Saw Blades', desc: 'Complete circular saw blade range including specifications, applications, and ordering information.', year: '2024', comingSoon: true, pdfUrl: null },
-        { title: 'CNC Tooling', desc: 'Spirals, drills, clamping and more for your routing and machining centers.', year: '2024', comingSoon: true, pdfUrl: null },
+        { title: 'USD HighlineXP Program', desc: 'HighlineXP industrial series program with US dollar pricing.', year: '2026', comingSoon: false, pdfUrl: '/catalogs/leuco-highlinexp-program-usd.pdf' },
+        { title: 'CAD HighlineXP Program', desc: 'HighlineXP industrial series program with Canadian dollar pricing.', year: '2026', comingSoon: false, pdfUrl: '/catalogs/leuco-highlinexp-program-cad.pdf' },
+        { title: 'HP+ Spirals Program', desc: 'Our highest performing spirals for customers who need the longest edge life.', year: '2026', comingSoon: false, pdfUrl: '/catalogs/leuco-hp-plus-spirals-program.pdf' },
+        { title: 'Solid Carbide Spiral Program', desc: 'Solid carbide shank tools for routing and machining applications.', year: '2026', comingSoon: false, pdfUrl: '/catalogs/leuco-solid-carbide-spiral-program.pdf' },
+        { title: 'Saw Blades', desc: 'Complete US circular saw blade range including specifications, applications, and ordering information.', year: '2026', comingSoon: false, pdfUrl: '/catalogs/leuco-us-saw-blades-catalog.pdf' },
+        { title: 'CNC Tooling', desc: 'Spirals, drills, clamping and more for your routing and machining centers.', year: '2026', comingSoon: false, pdfUrl: '/catalogs/leuco-cnc-tooling-catalog.pdf' },
+        { title: 'Solid Wood Catalog', desc: 'Sawing, planing, and dovetail tooling for solid wood processing.', year: '2026', comingSoon: false, pdfUrl: 'https://www.leuco.com/EN/US/media/DOK_MKD_LEUCO-Saege-Hobel-Zinkenwerk-Katalog_DL.pdf' },
+        { title: 'LEUCOLine Customer Magazine: Innovations 2026', desc: 'The latest LEUCO product innovations and application stories.', year: '2026', comingSoon: false, pdfUrl: 'https://www.leuco.com/EN/US/media/DOK_MBR_LEUCOline-Highlights-2026_DL.pdf' },
     ];
 
     return (

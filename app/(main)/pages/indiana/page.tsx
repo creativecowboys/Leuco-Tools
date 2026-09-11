@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import LocationPage from '@/components/LocationPage';
 
 export const metadata: Metadata = {
-    title: 'Indiana - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/indiana' },
+    title: 'Indiana',
     description: 'LEUCO Indiana service center. 613 E. 7th Street, Huntingburg, IN 47542. Contact our Indiana team for tool sales and re-sharpening services.',
 };
 

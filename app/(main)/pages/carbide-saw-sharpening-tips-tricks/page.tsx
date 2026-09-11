@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Carbide Saw Sharpening Tips - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/carbide-saw-sharpening-tips-tricks' },
+    title: 'Carbide Saw Sharpening Tips',
     description: 'Are you getting upwards of 20 sharpenings on your saws? Learn carbide saw sharpening tips and tricks from the professionals at LEUCO.',
 };
 

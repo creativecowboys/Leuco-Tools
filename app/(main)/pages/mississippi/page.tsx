@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import LocationPage from '@/components/LocationPage';
 
 export const metadata: Metadata = {
-    title: 'Mississippi - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/mississippi' },
+    title: 'Mississippi',
     description: 'LEUCO Mississippi service center location and contact details. Contact our Mississippi team for local tool sales and sharpening services.',
 };
 

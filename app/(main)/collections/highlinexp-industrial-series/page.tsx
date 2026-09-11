@@ -5,7 +5,8 @@ import HighlineXPClient from './HighlineXP-client';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-    title: 'HighlineXP Industrial Series - LEUCO Tool Corporation',
+    alternates: { canonical: '/collections/highlinexp-industrial-series' },
+    title: 'HighlineXP Industrial Series',
     description: 'The LEUCO HighlineXP industrial saw blade series. Premium blades engineered for high-volume production panel sizing.',
 };
 

@@ -3,7 +3,7 @@ import { fetchProducts } from '@/lib/shopify';
 
 import { FLAGS } from '@/lib/flags';
 
-const BASE_URL = 'https://shopleuco.com';
+const BASE_URL = 'https://www.shopleuco.com';
 
 // Static routes — listed manually so we control priority and changefreq per page type.
 // When adding a new page, add it here too.

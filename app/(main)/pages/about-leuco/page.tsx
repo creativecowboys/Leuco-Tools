@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'About LEUCO - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/about-leuco' },
+    title: 'About LEUCO',
     description: 'Learn about LEUCO Tool Corporation - over 70 years of German precision engineering and 40+ years serving North American woodworking and manufacturing industries.',
 };
 

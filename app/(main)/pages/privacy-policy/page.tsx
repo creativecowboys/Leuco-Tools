@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Privacy Policy - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/privacy-policy' },
+    title: 'Privacy Policy',
     description: 'Privacy policy for LEUCO Tool Corporation. How we collect, use, and protect your personal information.',
 };
 

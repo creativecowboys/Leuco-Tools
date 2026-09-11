@@ -5,7 +5,8 @@ import CutterHeadsClient from './CutterHeads-client';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-    title: 'Cutter Heads - LEUCO Tool Corporation',
+    alternates: { canonical: '/collections/cutter-heads' },
+    title: 'Cutter Heads',
     description: 'LEUCO cutter heads for jointing, profiling, edge trimming, and more. Premium carbide and diamond cutting solutions for through-feed and stationary machines.',
 };
 

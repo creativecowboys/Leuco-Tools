@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import LocationPage from '@/components/LocationPage';
 
 export const metadata: Metadata = {
-    title: 'Canada - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/canada' },
+    title: 'Canada',
     description: 'LEUCO Canada location. 6295 Shawson Drive Unit #9, Mississauga, Ontario, L5T 1H4. Contact details for our Ontario service center.',
 };
 

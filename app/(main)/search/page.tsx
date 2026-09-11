@@ -3,6 +3,8 @@ import { Suspense } from 'react';
 import SearchClient from './Search-client';
 
 export const metadata: Metadata = {
+    // Query-results page: never a landing page, but keep the links crawlable.
+    robots: { index: false, follow: true },
     title: 'Search Results',
     description: 'Search results for LEUCO Tool Corporation products and services.',
 };

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         return { title: 'Product Not Found' };
     }
 
-    const title = product.seo?.title || `${product.title} - LEUCO Tool Corporation`;
+    const title = product.seo?.title || product.title;
     const description =
         product.seo?.description ||
         product.description?.slice(0, 160) ||
@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const firstImage = product.images.edges[0]?.node.url;
 
     return {
+        alternates: { canonical: `/products/${handle}` },
         title,
         description,
         openGraph: {

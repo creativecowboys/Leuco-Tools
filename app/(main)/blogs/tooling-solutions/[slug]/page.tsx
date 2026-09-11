@@ -18,7 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const article = blogArticles[slug];
     if (!article || article.blog !== 'tooling-solutions') return {};
     return {
-        title: `${article.title} | LEUCO Tool Corporation`,
+        alternates: { canonical: `/blogs/tooling-solutions/${slug}` },
+        title: article.title,
         description: article.intro.slice(0, 160),
     };
 }

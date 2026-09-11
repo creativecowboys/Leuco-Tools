@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ShieldCheck, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Safety - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/safety' },
+    title: 'Safety',
     description: 'LEUCO safety information and guidelines for safe use of cutting tools and machinery.',
 };
 

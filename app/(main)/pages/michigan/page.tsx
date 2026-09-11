@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import LocationPage from '@/components/LocationPage';
 
 export const metadata: Metadata = {
-    title: 'Michigan - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/michigan' },
+    title: 'Michigan',
     description: 'LEUCO Michigan service center. 6480 Technology Ave Ste C, Kalamazoo, MI 49009. Contact our Michigan team for tool sales and sharpening.',
 };
 

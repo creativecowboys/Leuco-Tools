@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
     ChevronRight,
     ArrowRight,
@@ -30,7 +31,7 @@ export default function Home() {
             title: 'CUTTER HEADS',
             subtitle: 'PRECISION SHAPING',
             cta: 'SHOP CUTTER HEADS',
-            image: '/cutterhead-airface.png',
+            image: '/cutterhead-airface.webp',
             href: '/collections/cutter-heads',
         },
         {
@@ -66,7 +67,7 @@ export default function Home() {
         extra?: React.ReactNode;
     }> = [
         {
-            image: '/Leuco Hero Image 2.png',
+            image: '/leuco-hero-highlinexp.webp',
             eyebrow: 'ALL NEW HIGHLINEXP',
             headline: <>ENGINEERED PERFORMANCE.<br /><span className="text-leuco-purple">EVERYDAY PRICE.</span></>,
             body: "Premium carbide, pro-grade tolerances, and a price that doesn't punish you for picking quality. Highline XP delivers ultra-fine finish on hardwood, softwood, and laminated panels, and is re-sharpenable 8 to 10 times — so every blade earns its keep.",
@@ -107,10 +108,13 @@ export default function Home() {
                         className="absolute inset-0 transition-opacity duration-1000"
                         style={{ opacity: i === heroIndex ? 1 : 0, zIndex: 0 }}
                     >
-                        <img
+                        <Image
                             src={slide.image}
-                            className="w-full h-full object-cover opacity-50"
                             alt=""
+                            fill
+                            priority={i === 0}
+                            sizes="100vw"
+                            className="object-cover opacity-50"
                         />
                         <div className="absolute inset-0 bg-gradient-to-r from-leuco-black via-leuco-black/60 to-transparent" />
                     </div>

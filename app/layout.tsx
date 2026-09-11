@@ -7,11 +7,17 @@ export const metadata: Metadata = {
     template: '%s | LEUCO Tool Corporation',
   },
   description: "North America's highest quality precision tooling and re-sharpening service provider for over 40 years.",
-  metadataBase: new URL('https://shopleuco.com'),
+  metadataBase: new URL('https://www.shopleuco.com'),
+  alternates: {
+    // Home only — every other route sets its own canonical, so this default
+    // is never inherited. Next normalises it to the bare origin, which Google
+    // treats as identical to the sitemap's trailing-slash root entry.
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     siteName: 'LEUCO Tool Corporation',
-    url: 'https://shopleuco.com',
+    url: 'https://www.shopleuco.com',
     title: 'LEUCO Tool Corporation | Precision Tooling',
     description: "North America's highest quality precision tooling and re-sharpening service provider for over 40 years.",
   },

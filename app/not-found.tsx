@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Page Not Found - LEUCO Tool Corporation',
+  title: 'Page Not Found',
 };
 
 export default function NotFound() {

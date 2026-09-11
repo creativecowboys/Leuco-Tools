@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Saw Blade Sharpening - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/saw-blade-sharpening' },
+    title: 'Saw Blade Sharpening',
     description: "Can I find high-quality, professional saw blade sharpening near me for my industrial saw blades? LEUCO has the tools, experience, and expertise.",
 };
 

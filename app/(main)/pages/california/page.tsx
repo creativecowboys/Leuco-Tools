@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import LocationPage from '@/components/LocationPage';
 
 export const metadata: Metadata = {
-    title: 'California - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/california' },
+    title: 'California',
     description: 'LEUCO California service center. 690 N. Berry St, Suite A, Brea, CA 92821. Contact our California team for cutting tool sales and sharpening services.',
 };
 

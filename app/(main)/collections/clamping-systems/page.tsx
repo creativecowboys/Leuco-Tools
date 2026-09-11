@@ -5,7 +5,8 @@ import ClampingSystemsClient from './ClampingSystems-client';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-    title: 'Clamping Systems - LEUCO Tool Corporation',
+    alternates: { canonical: '/collections/clamping-systems' },
+    title: 'Clamping Systems',
     description: 'LEUCO clamping systems and tool holding solutions for CNC machining centers. Hydro chucks, shrink-fit systems, and collet chucks.',
 };
 

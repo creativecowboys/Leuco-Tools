@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Leuco Careers - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/leuco-careers' },
+    title: 'Leuco Careers',
     description: 'At Leuco Tool Corporation, our vision is to be the highest quality cutting tool and cutting tool service provider. Join our team.',
 };
 

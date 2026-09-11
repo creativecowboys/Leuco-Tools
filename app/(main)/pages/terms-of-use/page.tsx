@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Terms of Use - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/terms-of-use' },
+    title: 'Terms of Use',
     description: 'Terms and conditions for use of the LEUCO Tool Corporation website and purchase of products.',
 };
 

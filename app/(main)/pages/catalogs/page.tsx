@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { ArrowRight, Download } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Catalogs - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/catalogs' },
+    title: 'Catalogs',
     description: 'Download the LEUCO Mini Catalog and explore our full product range. Contact us for custom tooling, service needs, or technical assistance.',
 };
 

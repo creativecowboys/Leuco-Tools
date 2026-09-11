@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Custom Tooling - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/custom-tooling' },
+    title: 'Custom Tooling',
     description: 'LEUCO custom tooling solutions. Our engineers design application-specific cutting tools when standard tools cannot meet your requirements.',
 };
 

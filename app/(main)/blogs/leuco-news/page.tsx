@@ -4,7 +4,8 @@ import { FLAGS } from '@/lib/flags';
 import NewsClient from './News-client';
 
 export const metadata: Metadata = {
-    title: 'News - LEUCO Tool Corporation',
+    alternates: { canonical: '/blogs/leuco-news' },
+    title: 'News',
     description: 'Latest news and announcements from LEUCO Tool Corporation.',
 };
 

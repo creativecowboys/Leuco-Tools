@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Tool Sharpening - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/tool-sharpening' },
+    title: 'Tool Sharpening',
     description: 'Professional tool sharpening services from LEUCO. We sharpen saw blades, cutter heads, spiral tools, and more back to factory specifications.',
 };
 

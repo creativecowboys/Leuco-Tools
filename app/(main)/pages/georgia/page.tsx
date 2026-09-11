@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import LocationPage from '@/components/LocationPage';
 
 export const metadata: Metadata = {
-    title: 'Georgia - LEUCO Tool Corporation',
+    alternates: { canonical: '/pages/georgia' },
+    title: 'Georgia',
     description: 'LEUCO Georgia headquarters location. 500 W. Industrial Court, Villa Rica, GA 30180. Contact our Georgia team for tool sales and sharpening services.',
 };
 

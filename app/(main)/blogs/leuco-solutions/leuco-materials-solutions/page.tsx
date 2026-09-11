@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Material Solutions - LEUCO Tool Corporation',
+    alternates: { canonical: '/blogs/leuco-solutions/leuco-materials-solutions' },
+    title: 'Material Solutions',
     description: 'Not every material cuts the same. LEUCO Material Solutions pairs each substrate with the exact cutting geometry, tooth count, and tip grade engineered for it.',
 };
 

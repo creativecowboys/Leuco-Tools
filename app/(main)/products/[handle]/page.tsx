@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchProductByHandle, productToJsonLd } from '@/lib/shopify';
+import { leucoSpecJsonLd } from '@/components/product/LeucoSpecs';
 import ProductPageClient from './ProductPage-client';
 
 interface PageProps {
@@ -51,7 +52,18 @@ export default async function ProductPage({ params }: PageProps) {
     }
 
     const canonicalUrl = `https://shopleuco.com/products/${product.handle}`;
-    const jsonLd = productToJsonLd(product, canonicalUrl);
+    const baseJsonLd = productToJsonLd(product, canonicalUrl);
+
+    // Fold LEUCO's technical data in as PropertyValue pairs. Spec and
+    // part-number queries are what this data is here to capture, so the
+    // structured data matters as much as the visible table. Falls back to the
+    // untouched JSON-LD for products with no German record.
+    const specProperties = leucoSpecJsonLd(
+        product.variants.edges.map((e) => e.node.sku),
+    );
+    const jsonLd = specProperties.length
+        ? { ...baseJsonLd, additionalProperty: specProperties }
+        : baseJsonLd;
 
     return (
         <>

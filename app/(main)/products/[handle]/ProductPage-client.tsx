@@ -1,6 +1,14 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import {
+    getLeucoSpec,
+    getFamilySpec,
+    LeucoSpecTable,
+    LeucoApplicationNotes,
+    LeucoDocuments,
+} from '@/components/product/LeucoSpecs';
+import ProductTabs from '@/components/product/ProductTabs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -224,6 +232,231 @@ export default function ProductPageClient({ product }: Props) {
     const compareAt = selectedVariant?.compareAtPrice;
     const inStock = selectedVariant?.availableForSale ?? false;
 
+    // ── Tabbed panels ────────────────────────────────────────────────────────
+    // Built here rather than inline so the JSX below stays readable. Each is
+    // null when it has nothing to show, and ProductTabs drops empty tabs — so
+    // a SKU with no LEUCO record simply has fewer tabs rather than empty ones.
+    // Specs are per-variant; application notes and documents are per family.
+    const leucoSpec = getLeucoSpec(selectedVariant?.sku);
+    const familySpec = getFamilySpec(
+        variants.map((v) => v.sku),
+        selectedVariant?.sku,
+    );
+
+    const technicalPanel = selectedVariant
+        ? (() => {
+                    const sizeOpt = selectedVariant.selectedOptions.find(o =>
+                        o.name.toLowerCase() === 'size' || o.name.toLowerCase() === 'title'
+                    );
+                    const sizeVal = sizeOpt?.value ?? selectedVariant.title;
+                    const parsed = parseVariantSpecs(sizeVal);
+                    const sku = selectedVariant.sku;
+                    // LEUCO's own catalog data, where we have it. It is
+                    // authoritative and far fuller than what can be read
+                    // back out of a size label, so it wins; parseVariantSpecs
+                    // stays as the fallback for the SKUs LEUCO has no
+                    // record of.
+                    const leuco = getLeucoSpec(sku);
+
+                    return (
+                        <div className="mb-8 border border-gray-200 rounded-sm overflow-hidden">
+                            {/* Header */}
+                            <div className="bg-gray-50 border-b border-gray-200 px-5 py-3">
+                                {sku ? (
+                                    <p className="text-sm text-gray-600">
+                                        Specifications for SKU: <span className="font-black text-gray-900">{sku}</span>
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-gray-500">
+                                        Select a size above to see its specifications
+                                    </p>
+                                )}
+                            </div>
+
+                            {leuco && leuco.specs.length > 0 ? (
+                                <LeucoSpecTable entry={leuco} />
+                            ) : parsed ? (
+                                <table className="w-full text-sm">
+                                    <tbody>
+                                        {Object.entries(parsed).map(([label, value], i) => (
+                                            <tr key={label} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                <td className="px-5 py-3 font-black text-gray-700 w-1/2">{label}</td>
+                                                <td className="px-5 py-3 text-gray-600">{value}</td>
+                                            </tr>
+                                        ))}
+                                        {/* Also show all selectedOptions that don't have a parsed equivalent */}
+                                        {selectedVariant.selectedOptions
+                                            .filter(o => o.name.toLowerCase() !== 'title' && o.name.toLowerCase() !== 'size')
+                                            .map((o, i) => (
+                                                <tr key={o.name} className={(Object.keys(parsed).length + i) % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                    <td className="px-5 py-3 font-black text-gray-700 w-1/2">{o.name}</td>
+                                                    <td className="px-5 py-3 text-gray-600">{o.value}</td>
+                                                </tr>
+                                            ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                /* No blade-pattern match — show raw options as key/value */
+                                <table className="w-full text-sm">
+                                    <tbody>
+                                        {selectedVariant.selectedOptions
+                                            .filter(o => o.name.toLowerCase() !== 'title')
+                                            .map((o, i) => (
+                                                <tr key={o.name} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                    <td className="px-5 py-3 font-black text-gray-700 w-1/2">{o.name}</td>
+                                                    <td className="px-5 py-3 text-gray-600">{o.value}</td>
+                                                </tr>
+                                            ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    );
+                })()
+        : variants.length === 0
+          ? <p className="text-sm text-gray-400">No specification data available.</p>
+          : null;
+
+    const sizesPanel = variants.length > 1 && (
+                    <div className="overflow-x-auto">
+                            <table className="w-full text-sm border-collapse">
+                            <thead>
+                                <tr className="bg-gray-50">
+                                    <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200 whitespace-nowrap">Size / Variant</th>
+                                    <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200 whitespace-nowrap">Price</th>
+                                    <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200 whitespace-nowrap">SKU</th>
+                                    <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200">Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {variants.map((v) => (
+                                    <tr
+                                        key={v.id}
+                                        onClick={() => {
+                                            const opts: Record<string, string> = {};
+                                            v.selectedOptions.forEach((o) => { opts[o.name] = o.value; });
+                                            setSelectedOptions(opts);
+                                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                                        }}
+                                        className={`cursor-pointer hover:bg-leuco-purple/5 transition-colors ${selectedVariant?.id === v.id ? 'bg-leuco-purple/10' : ''}`}
+                                    >
+                                        <td className="px-4 py-3 font-bold border border-gray-200 whitespace-nowrap">
+                                            {v.title === 'Default Title' ? product.title : v.title}
+                                        </td>
+                                        <td className="px-4 py-3 font-black text-leuco-purple border border-gray-200 whitespace-nowrap">
+                                            {formatMoney(v.price.amount, v.price.currencyCode)}
+                                        </td>
+                                        <td className="px-4 py-3 border border-gray-200 text-gray-500 text-xs font-mono whitespace-nowrap">
+                                            {v.sku || '—'}
+                                        </td>
+                                        <td className="px-4 py-3 border border-gray-200">
+                                            <span className={`text-xs font-black ${v.availableForSale ? 'text-green-600' : 'text-red-400'}`}>
+                                                {v.availableForSale ? 'In Stock' : 'Out of Stock'}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                );
+
+    const applicationPanel =
+        familySpec &&
+        (familySpec.application || familySpec.machines || familySpec.design || familySpec.advantages)
+            ? <LeucoApplicationNotes entry={familySpec} />
+            : null;
+
+    const documentsPanel =
+        familySpec && familySpec.documents.length > 0 ? <LeucoDocuments entry={familySpec} /> : null;
+
+    // First <p> is the short description for the buy column; everything after
+    // it (feature lists, notes, machine-fit tables) renders in the Details tab.
+    const descriptionHtml = product.descriptionHtml ?? '';
+    const firstParagraph = descriptionHtml.match(/<p[\s>][\s\S]*?<\/p>/i)?.[0] ?? descriptionHtml;
+    const shortDescriptionHtml = firstParagraph;
+    const hasMoreDescription = descriptionHtml.length > firstParagraph.length + 20;
+
+    const detailsPanel = <div className="flex flex-col gap-10">
+                    {hasMoreDescription && (
+                        <div
+                            className={[
+                                'prose prose-sm max-w-none text-gray-600 font-medium leading-relaxed',
+                                '[&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1',
+                                '[&_table]:w-full [&_table]:border-collapse [&_table]:text-sm',
+                                '[&_th]:text-left [&_th]:text-[11px] [&_th]:font-black [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-gray-400 [&_th]:pb-2 [&_th]:pr-4',
+                                '[&_td]:py-2.5 [&_td]:pr-4 [&_td]:border-t [&_td]:border-gray-100 [&_td]:align-top',
+                                '[&_table]:block [&_table]:overflow-x-auto md:[&_table]:table',
+                            ].join(' ')}
+                            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                        />
+                    )}
+                    <dl className="flex flex-col gap-5">
+                    {product.productType && (
+                        <div>
+                            <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Product Type</dt>
+                            <dd className="text-sm font-bold text-gray-800">{product.productType}</dd>
+                        </div>
+                    )}
+                    {product.vendor && (
+                        <div>
+                            <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Vendor</dt>
+                            <dd className="text-sm font-bold text-gray-800">{product.vendor}</dd>
+                        </div>
+                    )}
+                    {/* Parse tags into grouped detail fields */}
+                    {(() => {
+                        const tags = product.tags ?? [];
+                        const applications = tags.filter(t => t.toLowerCase().startsWith('application:') || t.toLowerCase().startsWith('app:')).map(t => t.split(':').slice(1).join(':').trim());
+                        const machineTypes = tags.filter(t => t.toLowerCase().startsWith('machine:') || t.toLowerCase().startsWith('machine type:')).map(t => t.split(':').slice(1).join(':').trim());
+                        const materials = tags.filter(t => t.toLowerCase().startsWith('material:') || t.toLowerCase().startsWith('material type:')).map(t => t.split(':').slice(1).join(':').trim());
+                        const otherTags = tags.filter(t =>
+                            !t.toLowerCase().startsWith('application:') &&
+                            !t.toLowerCase().startsWith('app:') &&
+                            !t.toLowerCase().startsWith('machine:') &&
+                            !t.toLowerCase().startsWith('machine type:') &&
+                            !t.toLowerCase().startsWith('material:') &&
+                            !t.toLowerCase().startsWith('material type:')
+                        );
+
+                        return (
+                            <>
+                                {applications.length > 0 && (
+                                    <div>
+                                        <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Applications</dt>
+                                        <dd className="text-sm font-bold text-gray-800">{applications.join(', ')}</dd>
+                                    </div>
+                                )}
+                                {machineTypes.length > 0 && (
+                                    <div>
+                                        <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Machine Types</dt>
+                                        <dd className="text-sm font-bold text-gray-800">{machineTypes.join(', ')}</dd>
+                                    </div>
+                                )}
+                                {materials.length > 0 && (
+                                    <div>
+                                        <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Material Types</dt>
+                                        <dd className="text-sm font-bold text-gray-800">{materials.join(', ')}</dd>
+                                    </div>
+                                )}
+                                {otherTags.length > 0 && (
+                                    <div>
+                                        <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Tags</dt>
+                                        <dd className="flex flex-wrap gap-2">
+                                            {otherTags.map(tag => (
+                                                <span key={tag} className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </dd>
+                                    </div>
+                                )}
+                            </>
+                        );
+                    })()}
+                </dl>
+    </div>;
+
     return (
         <div>
             {/* Breadcrumb */}
@@ -414,16 +647,24 @@ export default function ProductPageClient({ product }: Props) {
                             </button>
                         </div>
 
-                        {/* Description */}
-                        {product.descriptionHtml && (
+                        {/* Short description — first paragraph only. The full
+                            write-up (features, notes, fit tables) lives in the
+                            Details tab so this column stays scannable. */}
+                        {shortDescriptionHtml && (
                             <div className="border-t border-gray-100 pt-6">
                                 <h3 className="text-xs font-black tracking-widest text-gray-400 uppercase mb-4">
                                     Description
                                 </h3>
                                 <div
-                                    className="prose prose-sm max-w-none text-gray-600 font-medium leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1"
-                                    dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                                    className="prose prose-sm max-w-none text-gray-600 font-medium leading-relaxed"
+                                    dangerouslySetInnerHTML={{ __html: shortDescriptionHtml }}
                                 />
+                                {hasMoreDescription && (
+                                    <p className="text-xs font-bold text-gray-400 mt-3">
+                                        Full details, features, and machine fit are under{' '}
+                                        <span className="text-leuco-purple">Details</span> below.
+                                    </p>
+                                )}
                             </div>
                         )}
 
@@ -436,202 +677,31 @@ export default function ProductPageClient({ product }: Props) {
                     </div>
                 </div>
 
-                {/* ── Full-width Specs / Details / Description panels ── */}
-                <div className="mt-16 border-t border-gray-100 pt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                    {/* SPECIFICATIONS */}
-                    <div className="lg:col-span-2">
-                        <h2 className="text-xs font-black tracking-widest text-gray-400 uppercase mb-6 flex items-center gap-3">
-                            <span className="w-6 h-px bg-leuco-purple inline-block" />
-                            Specifications
-                        </h2>
-
-                        {/* ── Selected variant detail card ── */}
-                        {selectedVariant && (() => {
-                            const sizeOpt = selectedVariant.selectedOptions.find(o =>
-                                o.name.toLowerCase() === 'size' || o.name.toLowerCase() === 'title'
-                            );
-                            const sizeVal = sizeOpt?.value ?? selectedVariant.title;
-                            const parsed = parseVariantSpecs(sizeVal);
-                            const sku = selectedVariant.sku;
-
-                            return (
-                                <div className="mb-8 border border-gray-200 rounded-sm overflow-hidden">
-                                    {/* Header */}
-                                    <div className="bg-gray-50 border-b border-gray-200 px-5 py-3">
-                                        {sku ? (
-                                            <p className="text-sm text-gray-600">
-                                                Specifications for SKU: <span className="font-black text-gray-900">{sku}</span>
-                                            </p>
-                                        ) : (
-                                            <p className="text-sm text-gray-500">
-                                                Select a size above to see its specifications
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    {parsed ? (
-                                        <table className="w-full text-sm">
-                                            <tbody>
-                                                {Object.entries(parsed).map(([label, value], i) => (
-                                                    <tr key={label} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                                        <td className="px-5 py-3 font-black text-gray-700 w-1/2">{label}</td>
-                                                        <td className="px-5 py-3 text-gray-600">{value}</td>
-                                                    </tr>
-                                                ))}
-                                                {/* Also show all selectedOptions that don't have a parsed equivalent */}
-                                                {selectedVariant.selectedOptions
-                                                    .filter(o => o.name.toLowerCase() !== 'title' && o.name.toLowerCase() !== 'size')
-                                                    .map((o, i) => (
-                                                        <tr key={o.name} className={(Object.keys(parsed).length + i) % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                                            <td className="px-5 py-3 font-black text-gray-700 w-1/2">{o.name}</td>
-                                                            <td className="px-5 py-3 text-gray-600">{o.value}</td>
-                                                        </tr>
-                                                    ))}
-                                            </tbody>
-                                        </table>
-                                    ) : (
-                                        /* No blade-pattern match — show raw options as key/value */
-                                        <table className="w-full text-sm">
-                                            <tbody>
-                                                {selectedVariant.selectedOptions
-                                                    .filter(o => o.name.toLowerCase() !== 'title')
-                                                    .map((o, i) => (
-                                                        <tr key={o.name} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                                            <td className="px-5 py-3 font-black text-gray-700 w-1/2">{o.name}</td>
-                                                            <td className="px-5 py-3 text-gray-600">{o.value}</td>
-                                                        </tr>
-                                                    ))}
-                                            </tbody>
-                                        </table>
-                                    )}
-                                </div>
-                            );
-                        })()}
-
-                        {/* ── Full variants comparison table ── */}
-                        {variants.length > 1 && (
-                            <div className="overflow-x-auto">
-                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">All Sizes</p>
-                                <table className="w-full text-sm border-collapse">
-                                    <thead>
-                                        <tr className="bg-gray-50">
-                                            <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200 whitespace-nowrap">Size / Variant</th>
-                                            <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200 whitespace-nowrap">Price</th>
-                                            <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200 whitespace-nowrap">SKU</th>
-                                            <th className="text-left px-4 py-3 font-black text-xs text-gray-500 border border-gray-200">Stock</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {variants.map((v) => (
-                                            <tr
-                                                key={v.id}
-                                                onClick={() => {
-                                                    const opts: Record<string, string> = {};
-                                                    v.selectedOptions.forEach((o) => { opts[o.name] = o.value; });
-                                                    setSelectedOptions(opts);
-                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                }}
-                                                className={`cursor-pointer hover:bg-leuco-purple/5 transition-colors ${selectedVariant?.id === v.id ? 'bg-leuco-purple/10' : ''}`}
-                                            >
-                                                <td className="px-4 py-3 font-bold border border-gray-200 whitespace-nowrap">
-                                                    {v.title === 'Default Title' ? product.title : v.title}
-                                                </td>
-                                                <td className="px-4 py-3 font-black text-leuco-purple border border-gray-200 whitespace-nowrap">
-                                                    {formatMoney(v.price.amount, v.price.currencyCode)}
-                                                </td>
-                                                <td className="px-4 py-3 border border-gray-200 text-gray-500 text-xs font-mono whitespace-nowrap">
-                                                    {v.sku || '—'}
-                                                </td>
-                                                <td className="px-4 py-3 border border-gray-200">
-                                                    <span className={`text-xs font-black ${v.availableForSale ? 'text-green-600' : 'text-red-400'}`}>
-                                                        {v.availableForSale ? 'In Stock' : 'Out of Stock'}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-
-                        {variants.length === 0 && (
-                            <p className="text-sm text-gray-400">No specification data available.</p>
-                        )}
-                    </div>
-
-                    {/* DETAILS */}
-                    <div>
-                        <h2 className="text-xs font-black tracking-widest text-gray-400 uppercase mb-6 flex items-center gap-3">
-                            <span className="w-6 h-px bg-leuco-purple inline-block" />
-                            Details
-                        </h2>
-                        <dl className="flex flex-col gap-5">
-                            {product.productType && (
-                                <div>
-                                    <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Product Type</dt>
-                                    <dd className="text-sm font-bold text-gray-800">{product.productType}</dd>
-                                </div>
-                            )}
-                            {product.vendor && (
-                                <div>
-                                    <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Vendor</dt>
-                                    <dd className="text-sm font-bold text-gray-800">{product.vendor}</dd>
-                                </div>
-                            )}
-                            {/* Parse tags into grouped detail fields */}
-                            {(() => {
-                                const tags = product.tags ?? [];
-                                const applications = tags.filter(t => t.toLowerCase().startsWith('application:') || t.toLowerCase().startsWith('app:')).map(t => t.split(':').slice(1).join(':').trim());
-                                const machineTypes = tags.filter(t => t.toLowerCase().startsWith('machine:') || t.toLowerCase().startsWith('machine type:')).map(t => t.split(':').slice(1).join(':').trim());
-                                const materials = tags.filter(t => t.toLowerCase().startsWith('material:') || t.toLowerCase().startsWith('material type:')).map(t => t.split(':').slice(1).join(':').trim());
-                                const otherTags = tags.filter(t =>
-                                    !t.toLowerCase().startsWith('application:') &&
-                                    !t.toLowerCase().startsWith('app:') &&
-                                    !t.toLowerCase().startsWith('machine:') &&
-                                    !t.toLowerCase().startsWith('machine type:') &&
-                                    !t.toLowerCase().startsWith('material:') &&
-                                    !t.toLowerCase().startsWith('material type:')
-                                );
-
-                                return (
-                                    <>
-                                        {applications.length > 0 && (
-                                            <div>
-                                                <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Applications</dt>
-                                                <dd className="text-sm font-bold text-gray-800">{applications.join(', ')}</dd>
-                                            </div>
-                                        )}
-                                        {machineTypes.length > 0 && (
-                                            <div>
-                                                <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Machine Types</dt>
-                                                <dd className="text-sm font-bold text-gray-800">{machineTypes.join(', ')}</dd>
-                                            </div>
-                                        )}
-                                        {materials.length > 0 && (
-                                            <div>
-                                                <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Material Types</dt>
-                                                <dd className="text-sm font-bold text-gray-800">{materials.join(', ')}</dd>
-                                            </div>
-                                        )}
-                                        {otherTags.length > 0 && (
-                                            <div>
-                                                <dt className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Tags</dt>
-                                                <dd className="flex flex-wrap gap-2">
-                                                    {otherTags.map(tag => (
-                                                        <span key={tag} className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                                                            {tag}
-                                                        </span>
-                                                    ))}
-                                                </dd>
-                                            </div>
-                                        )}
-                                    </>
-                                );
-                            })()}
-                        </dl>
-                    </div>
-                </div>
+                {/* ── Tabbed product information ──────────────────────
+                    Follows how LEUCO's own shop splits this: sizes first, then
+                    the detail behind tabs, so the page shows one thing at a
+                    time instead of everything at once. Every panel still ships
+                    in the HTML — see ProductTabs for why that matters here. */}
+                <ProductTabs
+                    className="mt-16 border-t border-gray-100 pt-12"
+                    tabs={[
+                        {
+                            id: 'sizes',
+                            label: 'Sizes & Prices',
+                            badge: variants.length,
+                            content: sizesPanel,
+                        },
+                        { id: 'technical', label: 'Technical Data', content: technicalPanel },
+                        { id: 'application', label: 'Application', content: applicationPanel },
+                        {
+                            id: 'documentation',
+                            label: 'Documentation',
+                            badge: familySpec?.documents.length,
+                            content: documentsPanel,
+                        },
+                        { id: 'details', label: 'Details', content: detailsPanel },
+                    ]}
+                />
             </div>
         </div>
     );

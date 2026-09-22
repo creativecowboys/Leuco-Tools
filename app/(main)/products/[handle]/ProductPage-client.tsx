@@ -381,9 +381,9 @@ export default function ProductPageClient({ product }: Props) {
                     {hasMoreDescription && (
                         <div
                             className={[
-                                'prose prose-sm max-w-none text-gray-600 font-medium leading-relaxed',
-                                '[&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1',
-                                '[&_table]:w-full [&_table]:border-collapse [&_table]:text-sm',
+                                'max-w-none text-sm text-gray-600 font-medium leading-relaxed',
+                                '[&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1',
+                                '[&_table]:mt-8 [&_table]:w-full [&_table]:border-collapse [&_table]:text-sm',
                                 '[&_th]:text-left [&_th]:text-[11px] [&_th]:font-black [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-gray-400 [&_th]:pb-2 [&_th]:pr-4',
                                 '[&_td]:py-2.5 [&_td]:pr-4 [&_td]:border-t [&_td]:border-gray-100 [&_td]:align-top',
                                 '[&_table]:block [&_table]:overflow-x-auto md:[&_table]:table',
@@ -656,7 +656,7 @@ export default function ProductPageClient({ product }: Props) {
                                     Description
                                 </h3>
                                 <div
-                                    className="prose prose-sm max-w-none text-gray-600 font-medium leading-relaxed"
+                                    className="max-w-none text-sm text-gray-600 font-medium leading-relaxed [&_p]:mb-3"
                                     dangerouslySetInnerHTML={{ __html: shortDescriptionHtml }}
                                 />
                                 {hasMoreDescription && (

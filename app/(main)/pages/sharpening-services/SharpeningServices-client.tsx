@@ -4,10 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import { Wrench, Clock, ArrowRight, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import SharpeningBuilder from '@/components/SharpeningBuilder';
+import SharpeningBuilder, { INSPECTION_FEE_WAIVED } from '@/components/SharpeningBuilder';
 
 const steps = [
-    { step: '01', title: 'Build Your Package', desc: 'Select the tool types and quantities you want sharpened, then check out with the flat $15 inspection fee.' },
+    { step: '01', title: 'Build Your Package', desc: INSPECTION_FEE_WAIVED
+        ? 'Select the tool types and quantities you want sharpened, then check out — the $15 inspection fee is waived until the end of the year!'
+        : 'Select the tool types and quantities you want sharpened, then check out with the flat $15 inspection fee.' },
     { step: '02', title: 'Ship Your Tools', desc: 'We email you a shipping label after checkout. Pack safely with appropriate padding — original packaging when possible.' },
     { step: '03', title: 'Triage & Quote', desc: 'Tools are ultrasonically cleaned and inspected. We send an invoice for the sharpening work before anything proceeds.' },
     { step: '04', title: 'Sharpen & Return', desc: 'Tools are ground back to OEM spec, quality checked, wax-coated, and shipped back. Typical turnaround 1–2 weeks.' },

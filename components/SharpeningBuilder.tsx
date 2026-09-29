@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Phone, Truck, PackageCheck, Plus, Minus, X, ShoppingCart, ArrowRight } from 'lucide-react';
+import { Phone, Truck, PackageCheck, Plus, Minus, X, ShoppingCart, ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShopifyProduct } from '@/hooks/useShopifyProduct';
 import { useCart } from '@/context/CartContext';
@@ -37,6 +37,11 @@ const FALLBACK_CATEGORY: CategoryDef = {
 function isInspectionFee(v: ShopifyVariantDetail): boolean {
     return /inspection/i.test(v.title) || /fee/i.test(v.title);
 }
+
+// The "Inspection Waive" automatic discount in Shopify runs through
+// Dec 31, 2026 (11:59 PM ET). This flag keeps the site messaging in
+// lockstep with it and self-retires on Jan 1 — no cleanup deploy needed.
+export const INSPECTION_FEE_WAIVED = Date.now() < Date.parse('2027-01-01T04:59:00Z');
 
 function sizeLabel(title: string, def: CategoryDef): string {
     const stripped = title.replace(def.match, '').replace(/^[\s\-–—:]+/, '').trim();
@@ -150,11 +155,22 @@ export default function SharpeningBuilder() {
                     <h2 className="text-4xl font-black tracking-tighter mb-2">Build Your Sharpening Package</h2>
                     <div className="h-1.5 w-24 bg-leuco-purple" />
                 </div>
+                {INSPECTION_FEE_WAIVED && (
+                    <div className="inline-flex items-center gap-3 bg-leuco-purple text-white font-black px-5 py-3 mb-6 text-sm tracking-wide">
+                        <Sparkles size={16} />
+                        INSPECTION FEE WAIVED UNTIL THE END OF THE YEAR!
+                    </div>
+                )}
                 <p className="text-gray-500 font-medium max-w-3xl mb-12">
                     Tools must be triaged by our experts before determining the cost of your sharpening. Simply add the
-                    tool types you would like to send in and we will email you a shipping label after checkout — you pay
-                    a single <span className="font-black text-leuco-black">$15 inspection fee</span> plus shipping. Once
-                    we receive and triage your tools, we will send an invoice for the sharpening work.
+                    tool types you would like to send in and we will email you a shipping label after checkout — {INSPECTION_FEE_WAIVED ? (
+                        <>the usual <span className="font-black text-leuco-black line-through">$15 inspection fee</span>{' '}
+                        <span className="font-black text-leuco-purple">is waived until the end of the year</span>, so you
+                        pay only shipping today.</>
+                    ) : (
+                        <>you pay a single <span className="font-black text-leuco-black">$15 inspection fee</span> plus
+                        shipping.</>
+                    )} Once we receive and triage your tools, we will send an invoice for the sharpening work.
                 </p>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -292,11 +308,22 @@ export default function SharpeningBuilder() {
                             <div className="flex justify-between text-sm font-bold">
                                 <span className="text-gray-400">Inspection fee</span>
                                 <span>
-                                    {feeAlreadyInCart
-                                        ? 'In cart'
-                                        : feeVariant
-                                            ? formatMoney(feeVariant.price.amount, feeVariant.price.currencyCode)
-                                            : '$15.00'}
+                                    {feeAlreadyInCart ? (
+                                        'In cart'
+                                    ) : INSPECTION_FEE_WAIVED ? (
+                                        <>
+                                            <span className="text-gray-500 line-through mr-2">
+                                                {feeVariant
+                                                    ? formatMoney(feeVariant.price.amount, feeVariant.price.currencyCode)
+                                                    : '$15.00'}
+                                            </span>
+                                            <span className="text-leuco-purple-light">WAIVED</span>
+                                        </>
+                                    ) : feeVariant ? (
+                                        formatMoney(feeVariant.price.amount, feeVariant.price.currencyCode)
+                                    ) : (
+                                        '$15.00'
+                                    )}
                                 </span>
                             </div>
                             <div className="flex justify-between text-sm font-bold">
